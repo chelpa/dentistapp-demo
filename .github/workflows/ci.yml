@@ -1,4 +1,6 @@
-name: DentistApp demo candidate checks
+name: DentistApp checks
+# Pull-request checks: unit tests, types and the static export under the Pages sub-path.
+# Originally uncle-feedback-ci.yml (PR #1/#2); renamed when the lines were integrated.
 on:
   pull_request:
     paths:
@@ -6,9 +8,11 @@ on:
       - 'tests/**'
       - 'scripts/**'
       - 'tsconfig*.json'
+      - 'next.config.ts'
+      - 'tailwind.config.ts'
       - 'package.json'
       - 'package-lock.json'
-      - '.github/workflows/uncle-feedback-ci.yml'
+      - '.github/workflows/ci.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -27,3 +31,4 @@ jobs:
       - run: npm run build:static
         env:
           DENTISTAPP_BASE_PATH: /dentistapp-demo
+          NEXT_TELEMETRY_DISABLED: "1"
