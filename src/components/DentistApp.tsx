@@ -101,7 +101,7 @@ export default function DentistApp() {
 
   function closeMenu() { setMobileMenu(false); menuButton.current?.focus(); }
   function go(next:Page) { if(mobileMenu&&!isDesktop) mainRef.current?.focus({preventScroll:true}); setPage(next); setSelectedId(null); setMobileMenu(false); window.scrollTo({top:0,behavior:"smooth"}); }
-  function openPatient(id:string, tab:ProfileTab="overview") { setPage("patients"); setSelectedId(id); setProfileTab(tab !== "overview" && !canViewClinical(role) ? "overview" : tab); setNewNote(""); setNoteError(""); setNoteLink(data ? noteAppointmentOptions(data, id, professional, today)[0]?.id ?? "" : ""); setTooth(null); setMobileMenu(false); window.scrollTo({top:0,behavior:"smooth"}); }
+  function openPatient(id:string, tab:ProfileTab="overview") { setPage("patients"); setSelectedId(id); setProfileTab(tab !== "overview" && !canViewClinical(role) ? "overview" : tab); setNewNote(""); setNoteError(""); setNoteLink(data ? noteAppointmentOptions(data, id, professional, new Date())[0]?.id ?? "" : ""); setTooth(null); setMobileMenu(false); window.scrollTo({top:0,behavior:"smooth"}); }
   function openModal(patientId?:string, slot?:Slot) { if(!canSchedule(role)) return; setFormError(""); setForm({patientId:patientId??data?.patients[0]?.id??"p1",date:slot?.date??(agendaDate||today),time:slot?.time??"09:00",dentist:slot?.dentist??dentists[0],chair:slot?.chair??"",type:treatmentTypes[0],duration:slot?Math.min(45,DAY_END-minutes(slot.time)):45});setModal(true); }
   function schedule(e:React.FormEvent) {
     e.preventDefault(); if(!data || !canSchedule(role)) return;
@@ -116,8 +116,8 @@ export default function DentistApp() {
   function addNote(e:React.FormEvent) {
     e.preventDefault();if(!data||!selected||!canEditClinical(role)||!newNote.trim())return;
     const note:ClinicalNote={id:crypto.randomUUID(),patientId:selected.id,text:newNote.trim(),date:today,author:professional,...(noteLink?{appointmentId:noteLink}:{})};
-    // Same patient, same professional, not cancelled, not in the future (plan I5). Checked on the full data.
-    const linkError=validateNoteLink(data,note,today);
+    // Same patient, same professional, not cancelled, already started (date and time; plan I5 + review P2). Checked on the full data.
+    const linkError=validateNoteLink(data,note,new Date());
     if(linkError){setNoteError(linkError);return;}
     setData({...data,notes:[note,...data.notes]});setNewNote("");setNoteError("");setNotice("Nota guardada solo en este navegador.");
   }
@@ -157,7 +157,7 @@ export default function DentistApp() {
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#cce6df] bg-[#eef9f6] px-4 py-3"><div><p className="text-xs font-bold text-tealDark">Vista de {demoRoles[role].label.toLowerCase()} · simulación</p><p className="mt-1 text-xs text-[#5a726e]">{demoRoles[role].description} No es autenticación: cualquier visitante puede cambiar de vista.</p></div>{role === "dentist" && <div className="w-full sm:w-auto"><label className="label" htmlFor="demo-professional">Profesional demo</label><select id="demo-professional" value={professional} onChange={e=>switchProfessional(e.target.value)} className="field">{dentists.map(d=><option key={d}>{d}</option>)}</select></div>}</div>
           {page==="dashboard"&&<Dashboard role={role} data={viewData} today={today} appointments={appointmentsToday} pending={pendingTreatments} onPatient={openPatient} onAgenda={()=>go("agenda")} onPatients={()=>go("patients")} onTreatments={()=>go("treatments")} onModal={()=>openModal()}/>}
           {page==="patients"&&!selected&&<PatientsList role={role} data={viewData} search={search} setSearch={setSearch} onPatient={openPatient} onModal={()=>openModal()}/>}
-          {page==="patients"&&selected&&<PatientProfile key={selected.id} role={role} data={viewData} patient={selected} tab={profileTab} setTab={setProfileTab} onBack={()=>setSelectedId(null)} onModal={()=>openModal(selected.id)} tooth={tooth} setTooth={setTooth} setToothStatus={setToothStatus} newNote={newNote} setNewNote={setNewNote} addNote={addNote} setTreatmentStatus={setTreatmentStatus} noteOptions={noteAppointmentOptions(viewData,selected.id,professional,today)} noteLink={noteLink} setNoteLink={setNoteLink} noteError={noteError}/>}
+          {page==="patients"&&selected&&<PatientProfile key={selected.id} role={role} data={viewData} patient={selected} tab={profileTab} setTab={setProfileTab} onBack={()=>setSelectedId(null)} onModal={()=>openModal(selected.id)} tooth={tooth} setTooth={setTooth} setToothStatus={setToothStatus} newNote={newNote} setNewNote={setNewNote} addNote={addNote} setTreatmentStatus={setTreatmentStatus} noteOptions={noteAppointmentOptions(viewData,selected.id,professional,new Date())} noteLink={noteLink} setNoteLink={setNoteLink} noteError={noteError}/>}
           {page==="agenda"&&<Agenda role={role} professional={professional} data={viewData} date={agendaDate||today} setDate={setAgendaDate} onPatient={openPatient} onModal={(slot)=>openModal(undefined,slot)} setStatus={setAppointmentStatus}/>}
           {page==="treatments"&&canViewTreatments(role)&&<Treatments role={role} data={viewData} onPatient={openPatient} setStatus={setTreatmentStatus}/>}
           {page==="finance"&&<Finance key={`${role}-${professional}`} role={role} professional={professional} data={viewData} onAddBudget={addBudget} onUpdateTariff={updateTariff} onPatient={openPatient}/>}

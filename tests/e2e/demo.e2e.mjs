@@ -40,8 +40,11 @@ after(async () => {
 });
 
 // ── helpers ──────────────────────────────────────────────────────────────
-async function open({ width = 1280, height = 900, init } = {}) {
+// Fixed, deterministic clock (a Monday at 12:00 in Santiago); time keeps flowing from there.
+const CLOCK = new Date("2026-10-12T12:00:00-03:00");
+async function open({ width = 1280, height = 900, init, clock = CLOCK } = {}) {
   const context = await browser.newContext({ viewport: { width, height }, locale: "es-CL", timezoneId: "America/Santiago", ...(width < 768 ? { isMobile: true, hasTouch: true } : {}) });
+  await context.clock.install({ time: clock });
   if (init) await context.addInitScript(init);
   const page = await context.newPage();
   const errors = [];
@@ -230,6 +233,28 @@ test("evolutions: linked to own attended appointment; tampered links rejected", 
   await setRole(page, "dentist");
   await openPatient(page, "Sofía Martínez", "Ficha clínica");
   await attempt("x-other", /otro profesional/);
+  assert.deepEqual(errors, []);
+  await close();
+});
+
+test("REVIEW P2: an appointment later the same day cannot be linked before it starts", async () => {
+  // Codex reproduction: clock at 09:00, own confirmed appointment at 19:45 (15 min).
+  const { page, errors, close } = await open({ clock: new Date("2026-10-12T09:00:00-03:00") });
+  await page.evaluate(() => { const k = "dentistapp-mvp-demo-v4"; const s = JSON.parse(localStorage.getItem(k)); Object.assign(s.appointments.find(a => a.id === "a1"), { time: "19:45", duration: 15, status: "Confirmada" }); localStorage.setItem(k, JSON.stringify(s)); });
+  await page.reload({ waitUntil: "networkidle" });
+  await setRole(page, "dentist");
+  await openPatient(page, "Sofía Martínez", "Ficha clínica");
+  assert.deepEqual(await page.getByLabel("Atención").locator("option").allInnerTexts(), ["Sin atención vinculada"], "not offered at 09:00");
+  await page.evaluate(() => { const s = document.getElementById("note-appointment"); const o = document.createElement("option"); o.value = "a1"; s.appendChild(o); s.value = "a1"; s.dispatchEvent(new Event("change", { bubbles: true })); });
+  await page.getByLabel("Observación ficticia").fill("Nota sobre cita futura");
+  await page.getByRole("button", { name: "Guardar nota demo" }).click();
+  assert.match(await page.locator("main [role=alert]").innerText(), /todavía no ocurre/);
+  assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("dentistapp-mvp-demo-v4")).notes.some(n => n.appointmentId === "a1")), false, "not stored");
+  // From its start instant it can be linked.
+  await page.clock.setSystemTime(new Date("2026-10-12T19:45:00-03:00"));
+  await go(page, "Inicio");
+  await openPatient(page, "Sofía Martínez", "Ficha clínica");
+  assert.match((await page.getByLabel("Atención").locator("option").allInnerTexts()).join(" | "), /19:45 · Control/);
   assert.deepEqual(errors, []);
   await close();
 });
