@@ -294,6 +294,43 @@ test("storage: v4 notice, earlier keys untouched, reload and reset in the three 
   await close();
 });
 
+// ── Review P2: incomplete saved data never breaks the demo ─────────────────
+test("REVIEW P2: an incomplete saved patient is set aside, backed up and the demo stays usable", async () => {
+  const { page, errors, close } = await open();
+  const original = await page.evaluate(() => { const k = "dentistapp-mvp-demo-v4"; const s = JSON.parse(localStorage.getItem(k)); s.patients[0] = { id: "p1" }; const raw = JSON.stringify(s); localStorage.setItem(k, raw); return raw; });
+  await page.reload({ waitUntil: "networkidle" });
+  const notice = await page.locator("[role=status]").innerText();
+  assert.match(notice, /1 pacientes guardados están incompletos/);
+  const backupKey = notice.match(/«([^»]+)»/)[1];
+  assert.equal(await page.evaluate(k => localStorage.getItem(k), backupKey), original, "original bytes kept");
+  await go(page, "Pacientes");
+  const names = await page.locator("main .divide-y > button strong").allInnerTexts();
+  assert.equal(names.length, 5);
+  assert.ok(!names.includes("Sofía Martínez"));
+  await go(page, "Agenda");
+  await page.getByRole("button", { name: "Mes", exact: true }).click();
+  assert.deepEqual(errors, [], "no runtime error");
+  await close();
+});
+
+test("REVIEW P2: if rendering still fails, the error screen keeps a copy and restores the demo", async () => {
+  // Defence in depth: make every date formatting call fail during one page load (React retries
+  // a failed render once, so a single throw would be absorbed); the next load is normal.
+  const { page, errors, context } = await open({ init: `if (sessionStorage.getItem("fail") === "1") { sessionStorage.setItem("fail", "0"); Intl.DateTimeFormat = function () { throw new RangeError("forced render failure"); }; }` });
+  await page.waitForFunction(() => localStorage.getItem("dentistapp-mvp-demo-v4") !== null);
+  const original = await page.evaluate(() => { sessionStorage.setItem("fail", "1"); return localStorage.getItem("dentistapp-mvp-demo-v4"); });
+  await page.reload({ waitUntil: "networkidle" });
+  await page.getByRole("alert").filter({ hasText: "no pudo mostrar" }).waitFor();
+  await page.getByRole("button", { name: "Guardar copia y restablecer demo" }).click();
+  await page.getByLabel("Rol de demostración").waitFor();
+  const backups = await page.evaluate(() => Object.keys(localStorage).filter(k => k.startsWith("dentistapp-mvp-demo-v4-respaldo-")).map(k => localStorage.getItem(k)));
+  assert.deepEqual(backups, [original], "one byte-for-byte copy of the saved data");
+  assert.equal(await page.locator("main h1").first().innerText(), "Todo listo para recibir pacientes");
+  // Errors here are the intentional ones; they are not added to the global report.
+  assert.ok(errors.length > 0 && errors.every(e => /forced render failure|Minified React error|The above error/.test(e)), errors.join("\n"));
+  await context.close();
+});
+
 // ── AC10 · keyboard (plan §5d) ──────────────────────────────────────────────
 test("keyboard: role selector, menu, tabs and every dialog", async () => {
   const { page, errors, close } = await open();
