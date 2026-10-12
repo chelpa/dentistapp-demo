@@ -1,0 +1,195 @@
+{
+  "case": "DENTISTAPP-CALENDAR-001",
+  "capturedAt": "2026-10-12T19:59:37.731Z",
+  "baseline": "aaa83077c462b4de8b7a509ee76946ce69fdc89a",
+  "checkoutHead": "aaa83077c462b4de8b7a509ee76946ce69fdc89a",
+  "branch": "feature/weekly-calendar-chz-001-20261012",
+  "runtime": {
+    "node": "v24.14.0",
+    "npm": "11.19.1",
+    "timezone": "America/Santiago"
+  },
+  "sourceDigest": "b15486c7a13e9d90a8d873330f77a00acc8750acf44e0ad42a3a6a71e03cd492",
+  "sources": [
+    {
+      "path": ".github/workflows/pages.yml",
+      "sha256": "6921e3677a866ec8fa8f06fb4a70fc721471f6ecde39b85587c9b2d2e2c9d3c2"
+    },
+    {
+      "path": ".github/workflows/uncle-feedback-ci.yml",
+      "sha256": "7d84d1f335587fd88922c279633d64c26bfd2f8b5cfa64ea04561b14ce5c09a5"
+    },
+    {
+      "path": "next.config.ts",
+      "sha256": "5d588c9cd01adb7b0f55c61f58fa8343a15722ac0859f750ea855d7c07778a83"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "36087123bc0f890cb198bdac61aefbdbfbfe8868bfed72b1dc5a7379222ebf05"
+    },
+    {
+      "path": "package.json",
+      "sha256": "a0d09289e9b8b3f9dc87150e26daeedd49286e246cc82145253e080a16415b65"
+    },
+    {
+      "path": "postcss.config.js",
+      "sha256": "fe0d5cf3cb8c1922f71cca2da3796f3e63366623ad6164336655766efe330e6a"
+    },
+    {
+      "path": "scripts/build-static.mjs",
+      "sha256": "0c409263bb970aa0eae4bb9340a2394cc14b7c7c2a40db04b69398a0627e0159"
+    },
+    {
+      "path": "scripts/record-calendar-evidence.mjs",
+      "sha256": "d73b2b6034ad6c21f179cf4b92b99fe1063430af6293a089e54c3ac937cff070"
+    },
+    {
+      "path": "scripts/test.mjs",
+      "sha256": "5580b352153184dbeed212d18a0ea6789a11bd588067ecf3ac78da94feaef8de"
+    },
+    {
+      "path": "src/app/globals.css",
+      "sha256": "8784b63f53c8f6408d0d2b23715f1c5443d94c8e60389e4753120e17d9c1cd8b"
+    },
+    {
+      "path": "src/app/icon.svg",
+      "sha256": "be5e137c01563d46d242aae82918335080e5a523e8c47ff83fa09b9126ea19e3"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "sha256": "0d92402602e7e8a594248d76b100c39a7f8fcf7d8492d5e326deb6a1e90f6768"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "sha256": "2c7f68d30f10a34fb4abcbe670391cdc22b190d3d6caed60002b9eda2f43dbaa"
+    },
+    {
+      "path": "src/components/DentistApp.tsx",
+      "sha256": "17c5632753573db1a0a3522e8f96fb99a75e5e806483976e2d66fab4f1c8ea82"
+    },
+    {
+      "path": "src/components/ModalDialog.tsx",
+      "sha256": "21cf5e2b081fee6edeb0b45c92ca6a43d1f3e78999a401987c2be1b864296e28"
+    },
+    {
+      "path": "src/components/MonthlyCalendar.tsx",
+      "sha256": "c2c88c2bed07a1a8e0ad5d67babfd3fd5e760427cff671a3a541d2e587d61b28"
+    },
+    {
+      "path": "src/components/Odontogram.tsx",
+      "sha256": "ef9a385edede7ff2c8e3e0e7cbfb931a0f6bf3884b5301807bca3b6e70590d4d"
+    },
+    {
+      "path": "src/components/WeeklyCalendar.tsx",
+      "sha256": "c8e175dd58666191241bbb360818899ec94621d9c29536b4c665c6aabcdec5c2"
+    },
+    {
+      "path": "src/lib/calendar.ts",
+      "sha256": "e629150624f9e85e0e54686c8ed4bf2b0cd08ef53d1e525dc402a1727d7a09a0"
+    },
+    {
+      "path": "src/lib/demo.ts",
+      "sha256": "0495e21bbcbec2ce1ef72db0d2e9f914705086a7ef4a53395c09981b27884ffe"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "sha256": "76c17007a6d495f43ea154635954cfd7088bbbf32703ba59cb73cca74fa18d1e"
+    },
+    {
+      "path": "tests/calendar.test.ts",
+      "sha256": "e91e98b49f2a4f3bb0f1496fc51989274e1cbb7da4a0bd3c3ada4f218f060aeb"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "e756e7a5c72c69a2f08d40682ab5294bf555ffa4085f634261da2a49615bab06"
+    },
+    {
+      "path": "tsconfig.tests.json",
+      "sha256": "3b0210bf6f106e449a8db7d575c8cef71abe1d3014cd795a5d4c4d91fde94388"
+    }
+  ],
+  "sourceUnchangedDuringChecks": true,
+  "runs": [
+    {
+      "name": "tests",
+      "command": "npm test",
+      "startedAt": "2026-10-12T19:59:23.996Z",
+      "endedAt": "2026-10-12T19:59:25.022Z",
+      "exitCode": 0,
+      "signal": null,
+      "log": "tests.log",
+      "logSha256": "e6356d5d2c0a6a94375405b0d876975796629595407fb5c9d7ef62fff70cd4c0"
+    },
+    {
+      "name": "typecheck",
+      "command": "npm run typecheck",
+      "startedAt": "2026-10-12T19:59:25.023Z",
+      "endedAt": "2026-10-12T19:59:26.059Z",
+      "exitCode": 0,
+      "signal": null,
+      "log": "typecheck.log",
+      "logSha256": "ba764bb771e5ee9d5e51a350767af2a2cd5b3ed183aa5eb9326125eff284a8a3"
+    },
+    {
+      "name": "static-build",
+      "command": "npm run build:static",
+      "startedAt": "2026-10-12T19:59:26.059Z",
+      "endedAt": "2026-10-12T19:59:36.170Z",
+      "exitCode": 0,
+      "signal": null,
+      "log": "static-build.log",
+      "logSha256": "2a74b760660e16cb55c0f7362b4ff638a9b5e6e128d06612efdfd230b19b556f"
+    },
+    {
+      "name": "dependency-tree",
+      "command": "npm ls next postcss sharp source-map-js",
+      "startedAt": "2026-10-12T19:59:36.170Z",
+      "endedAt": "2026-10-12T19:59:36.643Z",
+      "exitCode": 0,
+      "signal": null,
+      "log": "dependency-tree.log",
+      "logSha256": "544d5a9f2c8287a70f8d09c5c44cfdbe91dc7a2e788045d4f61cf06cf0607bcd"
+    },
+    {
+      "name": "production-audit",
+      "command": "npm audit --omit=dev --json",
+      "startedAt": "2026-10-12T19:59:36.643Z",
+      "endedAt": "2026-10-12T19:59:37.705Z",
+      "exitCode": 1,
+      "signal": null,
+      "log": "production-audit.log",
+      "logSha256": "124d3cddd6c3f27f7e3c7b61f1aebdd5790fabf575d5ad96353ed65cab632fb7"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check",
+      "startedAt": "2026-10-12T19:59:37.706Z",
+      "endedAt": "2026-10-12T19:59:37.728Z",
+      "exitCode": 0,
+      "signal": null,
+      "log": "diff-check.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 1,
+    "high": 1,
+    "critical": 0,
+    "total": 2
+  },
+  "gates": {
+    "G2": "PASS_TECHNICAL",
+    "G3": "HOLD",
+    "G4": "SEE_SEPARATE_BROWSER_EVIDENCE",
+    "G5": "HOLD_B_C_COMPARISON",
+    "G6": "HOLD_NO_PUBLICATION_AUTHORITY"
+  },
+  "limits": [
+    "Source hashes bind these checks; checkoutHead may be the pre-commit base.",
+    "Build PASS does not establish UI, security or authority.",
+    "Audit failure or unavailable metadata is HOLD.",
+    "localStorage provides no atomic concurrent booking guarantee."
+  ]
+}

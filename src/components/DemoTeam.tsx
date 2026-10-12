@@ -12,11 +12,14 @@ export default function DemoTeam({ data, today, onRole }: { data: DemoState; tod
     })}</div>
     <div className="card p-5 sm:p-6"><div className="flex items-center gap-3"><span className="rounded-xl bg-pale p-2.5 text-teal"><Users size={20}/></span><div><h2 className="text-lg font-bold">Tres recorridos para mostrar el producto</h2><p className="text-xs text-muted">Elige una vista para recorrerla durante la presentación.</p></div></div><div className="mt-5 grid gap-3 md:grid-cols-3">{(Object.keys(demoRoles) as DemoRole[]).map(role => <button key={role} onClick={() => onRole(role)} className="rounded-2xl border border-line p-5 text-left transition hover:border-teal"><span className="flex items-center justify-between font-bold text-teal">{demoRoles[role].label}<ArrowRight size={16}/></span><p className="mt-2 text-xs leading-5 text-muted">{demoRoles[role].description}</p></button>)}</div></div>
     <div className="card overflow-hidden"><div className="border-b border-line px-5 py-4"><h2 className="text-lg font-bold">Comportamiento de las vistas demo</h2></div><div className="overflow-x-auto"><table className="w-full min-w-[540px] text-left text-sm"><thead className="bg-canvas text-xs text-muted"><tr>{["Función", "Recepción", "Dentista", "Admin"].map(label => <th key={label} className="px-5 py-3 font-semibold">{label}</th>)}</tr></thead><tbody className="divide-y divide-line">{[
-      ["Agenda", "Toda la clínica", "Profesional elegido", "Toda la clínica"],
-      ["Crear citas", "Sí", "Desde recepción", "Sí"],
+      ["Agenda (mes, semana, día)", "Toda la clínica", "Solo su agenda", "Toda la clínica"],
+      ["Crear citas, duración y sillón", "Sí", "Desde Recepción", "Sí"],
+      ["Estado de citas", "Todas", "Solo las suyas", "Todas"],
       ["Pacientes", "Contacto y citas", "Pacientes vinculados", "Vista general"],
-      ["Ficha y odontograma", "Sin vista clínica", "Consultar y editar", "Sin vista clínica"],
-      ["Tratamientos", "Sin vista clínica", "Consultar y editar", "Consultar estado"],
+      ["Ficha, odontograma y evoluciones", "Sin vista clínica", "Consultar y editar", "Solo lectura"],
+      ["Tratamientos", "Sin vista clínica", "Consultar y editar", "Solo lectura"],
+      ["Aranceles", "Consultar", "Consultar", "Consultar y editar"],
+      ["Presupuestos", "Crear y ver todos", "Crear y ver los de sus pacientes", "Ver todos"],
       ["Equipo", "—", "—", "Consultar"],
     ].map(row => <tr key={row[0]}>{row.map((value, index) => <td key={index} className={`px-5 py-4 text-xs ${index === 0 ? "font-semibold text-ink" : "text-muted"}`}>{value}</td>)}</tr>)}</tbody></table></div></div>
     <div className="flex items-start gap-3 rounded-2xl border border-[#f2dfb7] bg-[#fffbf2] p-5 text-[#9c761f]"><ShieldAlert className="mt-0.5 shrink-0" size={19}/><p className="text-xs leading-5"><strong>Vistas simuladas.</strong> Cualquier visitante puede cambiar de rol. Todavía no existen cuentas, invitaciones ni permisos de servidor.</p></div>

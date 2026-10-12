@@ -1,13 +1,16 @@
-export type AppointmentStatus = "Confirmada" | "En espera" | "Completada";
+export type AppointmentStatus = "Confirmada" | "En espera" | "Completada" | "Cancelada";
 export type TreatmentStatus = "Planificado" | "En curso" | "Finalizado";
 export type ToothStatus = "Sano" | "Observación" | "Tratado";
 export type Patient = { id: string; name: string; initials: string; age: number; phone: string; email: string; lastVisit: string; note: string; color: string };
-export type Appointment = { id: string; patientId: string; date: string; time: string; duration: number; dentist: string; type: string; status: AppointmentStatus };
+export type Appointment = { id: string; patientId: string; date: string; time: string; duration: number; dentist: string; chair?: string; type: string; status: AppointmentStatus };
 export type Treatment = { id: string; patientId: string; name: string; tooth: number | null; status: TreatmentStatus; dentist: string; date: string };
-export type ClinicalNote = { id: string; patientId: string; text: string; date: string; author: string };
+export type ClinicalNote = { id: string; patientId: string; text: string; date: string; author: string; appointmentId?: string };
 export type ToothRecord = { patientId: string; tooth: number; status: ToothStatus };
 export type ToothEvent = { id: string; patientId: string; tooth: number; status: ToothStatus; date: string; author: string };
-export type DemoState = { patients: Patient[]; appointments: Appointment[]; treatments: Treatment[]; notes: ClinicalNote[]; teeth: ToothRecord[]; toothEvents: ToothEvent[] };
+export type Tariff = { id: string; name: string; price: number };
+export type BudgetLine = { tariffId: string; quantity: number; tooth: number | null; unitPrice: number };
+export type Budget = { id: string; patientId: string; date: string; lines: BudgetLine[]; discount: number; status: "Borrador" | "Entregado" | "Aceptado"; createdBy?: string };
+export type DemoState = { patients: Patient[]; appointments: Appointment[]; treatments: Treatment[]; notes: ClinicalNote[]; teeth: ToothRecord[]; toothEvents: ToothEvent[]; tariffs: Tariff[]; budgets: Budget[] };
 export const dentists = ["Dra. Valentina Rojas", "Dr. Tomás Fuentes", "Dra. Camila Muñoz"];
 export const treatmentTypes = ["Evaluación", "Limpieza dental", "Control", "Restauración", "Endodoncia", "Ortodoncia"];
 export const toDay = (date: Date) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
@@ -24,12 +27,12 @@ export const seedDemo = (): DemoState => ({
     { id:"p6", name:"Vicente Herrera", initials:"VH", age:52, phone:"+56 9 0000 1006", email:"vicente.demo@example.com", lastVisit:dayOffset(-17), note:"Plan de rehabilitación de ejemplo.", color:"sand" }
   ],
   appointments: [
-    { id:"a1", patientId:"p1", date:dayOffset(0), time:"09:00", duration:45, dentist:dentists[0], type:"Control", status:"Confirmada" },
-    { id:"a2", patientId:"p2", date:dayOffset(0), time:"10:30", duration:60, dentist:dentists[1], type:"Evaluación", status:"Confirmada" },
-    { id:"a3", patientId:"p3", date:dayOffset(0), time:"12:00", duration:45, dentist:dentists[0], type:"Restauración", status:"En espera" },
-    { id:"a4", patientId:"p4", date:dayOffset(0), time:"15:00", duration:30, dentist:dentists[2], type:"Limpieza dental", status:"Confirmada" },
-    { id:"a5", patientId:"p5", date:dayOffset(1), time:"09:30", duration:45, dentist:dentists[1], type:"Control", status:"Confirmada" },
-    { id:"a6", patientId:"p6", date:dayOffset(2), time:"11:00", duration:60, dentist:dentists[2], type:"Endodoncia", status:"En espera" }
+    { id:"a1", patientId:"p1", date:dayOffset(0), time:"09:00", duration:45, dentist:dentists[0], chair:"Sillón 1", type:"Control", status:"Confirmada" },
+    { id:"a2", patientId:"p2", date:dayOffset(0), time:"10:30", duration:60, dentist:dentists[1], chair:"Sillón 2", type:"Evaluación", status:"Confirmada" },
+    { id:"a3", patientId:"p3", date:dayOffset(0), time:"12:00", duration:45, dentist:dentists[0], chair:"Sillón 1", type:"Restauración", status:"En espera" },
+    { id:"a4", patientId:"p4", date:dayOffset(0), time:"15:00", duration:30, dentist:dentists[2], chair:"Sillón 3", type:"Limpieza dental", status:"Confirmada" },
+    { id:"a5", patientId:"p5", date:dayOffset(1), time:"09:30", duration:45, dentist:dentists[1], chair:"Sillón 2", type:"Control", status:"Confirmada" },
+    { id:"a6", patientId:"p6", date:dayOffset(2), time:"11:00", duration:60, dentist:dentists[2], chair:"Sillón 3", type:"Endodoncia", status:"En espera" }
   ],
   treatments: [
     { id:"t1", patientId:"p1", name:"Limpieza preventiva", tooth:null, status:"Planificado", dentist:dentists[0], date:dayOffset(0) },
@@ -43,6 +46,14 @@ export const seedDemo = (): DemoState => ({
     { id:"n2", patientId:"p3", text:"Se revisa pieza 16. Plan de restauración conversado en esta simulación.", date:dayOffset(-12), author:dentists[0] }
   ],
   toothEvents: [],
+  tariffs: [
+    {id:"tar1",name:"Evaluación inicial",price:25000},
+    {id:"tar2",name:"Profilaxis",price:32000},
+    {id:"tar3",name:"Restauración simple",price:55000},
+    {id:"tar4",name:"Endodoncia",price:160000},
+    {id:"tar5",name:"Radiografía dental",price:15000}
+  ],
+  budgets: [],
   teeth: [
     { patientId:"p3", tooth:16, status:"Observación" },
     { patientId:"p3", tooth:26, status:"Tratado" },
