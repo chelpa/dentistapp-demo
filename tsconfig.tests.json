@@ -16,6 +16,7 @@
     "src/lib/calendar.ts",
     "src/lib/demo.ts",
     "src/lib/demoRoles.ts",
-    "src/lib/storage.ts"
+    "src/lib/storage.ts",
+    "src/lib/clinical.ts"
   ]
 }
