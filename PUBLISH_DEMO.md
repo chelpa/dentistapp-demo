@@ -1,6 +1,6 @@
 # Publicar DentistApp como demo
 
-Esta versión usa exclusivamente datos ficticios y `localStorage`. Cada visitante ve y modifica su propia copia local de la demo. No hay cuentas ni datos compartidos. El selector de roles es visual; no controla acceso.
+Esta versión usa exclusivamente datos ficticios y `localStorage`. Cada visitante ve y modifica su propia copia local de la demo. No hay cuentas ni datos compartidos. El selector ofrece vistas distintas de Recepción, Dentista y Admin, pero no autentica ni protege los datos. Cualquier visitante puede elegir las tres.
 
 ## Opción sencilla: Cloudflare Pages Direct Upload
 

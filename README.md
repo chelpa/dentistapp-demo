@@ -27,9 +27,13 @@ npm run build
 - **Agenda:** alternar entre mes y día, navegar entre meses, seleccionar una fecha, crear una cita ficticia y cambiar su estado. La demo comprueba cruces en el navegador para el mismo profesional.
 - **Ficha clínica:** notas de ejemplo y odontograma interactivo de 32 piezas organizado por cuadrantes, con tres estados, tratamientos asociados y una lista local de cambios de la demo.
 - **Tratamientos:** vista general y cambio de estado.
-- **Rol demo:** selector visual de recepción, dentista y admin. **No autentica ni aplica permisos.**
+- **Recepción:** inicio operativo, agenda de toda la clínica, creación de citas y contacto de pacientes. La ficha clínica no se muestra en esta vista.
+- **Dentista:** selector de profesional, agenda y pacientes vinculados; notas, odontograma y cambios de estado de tratamientos.
+- **Admin:** resumen general, consulta del estado de tratamientos y equipo con comparación de las tres vistas.
 
-Los cambios se guardan en `localStorage` de este navegador. El botón **Restablecer demo** recupera los datos ficticios iniciales. No hay servidor de datos, cuenta de usuario ni sincronización entre personas o dispositivos.
+Las vistas cambian navegación, contenido y acciones de interfaz. **No autentican ni aplican autorización en el servidor.** Cualquier visitante puede cambiar de rol y los datos ficticios siguen en su navegador.
+
+Los cambios se guardan en `localStorage` de este navegador. La versión 0.3 usa una nueva clave de almacenamiento para iniciar un recorrido actualizado con datos ficticios; no sobrescribe los registros locales de la versión anterior. El botón **Restablecer demo** recupera los datos ficticios iniciales. No hay servidor de datos, cuenta de usuario ni sincronización entre personas o dispositivos.
 
 ## Publicar una demo para clientes
 
@@ -41,6 +45,8 @@ Se incluye una guía [PUBLISH_DEMO.md](PUBLISH_DEMO.md) y un ZIP estático separ
 - **Tailwind CSS:** diseño responsive y componentes de presentación.
 - **`src/lib/demo.ts`:** tipos, datos ficticios y funciones de fecha.
 - **`src/components/DentistApp.tsx`:** navegación y flujo interactivo de la demo.
+- **`src/lib/demoRoles.ts`:** definición de vistas y filtrado de datos de demostración; no es autorización.
+- **`src/components/DemoTeam.tsx`:** resumen del equipo y comparativa de vistas.
 - **`src/components/MonthlyCalendar.tsx`:** calendario mensual y selección de día.
 - **`src/components/Odontogram.tsx`:** representación de piezas y detalle interactivo.
 - **`reference/schema.prisma`:** copia sin integrar del esquema Prisma incluido en el baseline. Es referencia de dominio, no se migra ni se conecta a una base de datos en este MVP.
@@ -57,3 +63,11 @@ No se necesitan claves, variables de entorno ni PostgreSQL para ejecutar la demo
 6. Backups, recuperación probada, observabilidad, controles de archivos y pruebas de seguridad.
 
 Véase [AUDIT_NOTE.md](AUDIT_NOTE.md) para el contraste con el baseline y el orden sugerido de trabajo.
+
+## Recorrido sugerido para una presentación
+
+1. Comienza en Recepción: abre la agenda mensual, selecciona una fecha y crea una cita ficticia.
+2. Cambia a Dentista y elige al profesional de la cita. Abre un paciente, selecciona Ficha clínica, marca una pieza y guarda una nota inventada.
+3. Abre Tratamientos y cambia un plan de En curso a Finalizado.
+4. Cambia a Admin para mostrar el resumen, el equipo y la comparación de vistas.
+5. Usa Restablecer demo antes de una nueva presentación para recuperar citas relativas al día actual.
