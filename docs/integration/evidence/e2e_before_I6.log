@@ -1,0 +1,324 @@
+
+> dentistapp-mvp@0.3.0 test:e2e
+> node --test --test-concurrency=1 tests/e2e/demo.e2e.mjs
+
+TAP version 13
+# Subtest: roles: each view matches the approved permission matrix
+not ok 1 - roles: each view matches the approved permission matrix
+  ---
+  duration_ms: 1727.80849
+  type: 'test'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:104:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    reception has no clinical tabs
+    + actual - expected
+    
+    + []
+    - [
+    -   'Resumen'
+    - ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Resumen'
+  actual:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:114:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: booking: chair and professional conflicts, adjacency, durations
+ok 2 - booking: chair and professional conflicts, adjacency, durations
+  ---
+  duration_ms: 5342.531711
+  type: 'test'
+  ...
+# Subtest: budgets: exact totals, history kept when a tariff changes, no data loss across roles
+ok 3 - budgets: exact totals, history kept when a tariff changes, no data loss across roles
+  ---
+  duration_ms: 2576.855968
+  type: 'test'
+  ...
+# Subtest: evolutions: linked to own attended appointment; tampered links rejected
+ok 4 - evolutions: linked to own attended appointment; tampered links rejected
+  ---
+  duration_ms: 4841.547903
+  type: 'test'
+  ...
+# Subtest: storage: v4 notice, earlier keys untouched, reload and reset in the three roles
+not ok 5 - storage: v4 notice, earlier keys untouched, reload and reset in the three roles
+  ---
+  duration_ms: 2965.791625
+  type: 'test'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:238:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    1 !== 0
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:259:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: keyboard: role selector, menu, tabs and every dialog
+not ok 6 - keyboard: role selector, menu, tabs and every dialog
+  ---
+  duration_ms: 661.10739
+  type: 'test'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:273:1'
+  failureType: 'testCodeFailure'
+  error: 'role selector shows focus'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:278:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: keyboard: mobile menu opens, traps nothing hidden, closes with Escape and returns focus
+not ok 7 - keyboard: mobile menu opens, traps nothing hidden, closes with Escape and returns focus
+  ---
+  duration_ms: 664.342615
+  type: 'test'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:328:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    closed off-canvas menu is not focusable
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:330:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: axe: no automated WCAG violations on any view at 1280px
+not ok 8 - axe: no automated WCAG violations on any view at 1280px
+  ---
+  duration_ms: 36707.88246
+  type: 'test'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:365:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + [
+    +   'reception/inicio: color-contrast×49',
+    +   'reception/agenda-semana: color-contrast×31, target-size×7',
+    +   'reception/agenda-mes: color-contrast×50',
+    +   'reception/agenda-dia: color-contrast×64',
+    +   'reception/pacientes: color-contrast×38',
+    +   'reception/perfil: color-contrast×20',
+    +   'reception/aranceles: color-contrast×18',
+    +   'reception/dialogo-cita: color-contrast×10',
+    +   'reception/dialogo-restablecer: color-contrast×50',
+    +   'reception/dialogo-detalle: color-contrast×2',
+    +   'dentist/inicio: color-contrast×40',
+    +   'dentist/agenda-semana: color-contrast×30',
+    +   'dentist/ficha: color-contrast×73',
+    +   'dentist/perfil-tratamientos: color-contrast×20',
+    +   'dentist/tratamientos: color-contrast×26',
+    +   'dentist/aranceles: color-contrast×19',
+    +   'admin/inicio: color-contrast×49',
+    +   'admin/aranceles: color-contrast×14',
+    +   'admin/ficha-lectura: color-contrast×62',
+    +   'admin/equipo: color-contrast×59'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'reception/inicio: color-contrast×49'
+    1: 'reception/agenda-semana: color-contrast×31, target-size×7'
+    2: 'reception/agenda-mes: color-contrast×50'
+    3: 'reception/agenda-dia: color-contrast×64'
+    4: 'reception/pacientes: color-contrast×38'
+    5: 'reception/perfil: color-contrast×20'
+    6: 'reception/aranceles: color-contrast×18'
+    7: 'reception/dialogo-cita: color-contrast×10'
+    8: 'reception/dialogo-restablecer: color-contrast×50'
+    9: 'reception/dialogo-detalle: color-contrast×2'
+    10: 'dentist/inicio: color-contrast×40'
+    11: 'dentist/agenda-semana: color-contrast×30'
+    12: 'dentist/ficha: color-contrast×73'
+    13: 'dentist/perfil-tratamientos: color-contrast×20'
+    14: 'dentist/tratamientos: color-contrast×26'
+    15: 'dentist/aranceles: color-contrast×19'
+    16: 'admin/inicio: color-contrast×49'
+    17: 'admin/aranceles: color-contrast×14'
+    18: 'admin/ficha-lectura: color-contrast×62'
+    19: 'admin/equipo: color-contrast×59'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:376:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: axe: no automated WCAG violations on any view at 375px
+not ok 9 - axe: no automated WCAG violations on any view at 375px
+  ---
+  duration_ms: 40800.739526
+  type: 'test'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:365:3'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + [
+    +   'reception/inicio: color-contrast×34',
+    +   'reception/agenda-semana: color-contrast×22, target-size×3',
+    +   'reception/agenda-mes: color-contrast×36',
+    +   'reception/agenda-dia: color-contrast×52',
+    +   'reception/pacientes: color-contrast×19',
+    +   'reception/perfil: color-contrast×13',
+    +   'reception/aranceles: color-contrast×11',
+    +   'reception/dialogo-cita: color-contrast×11',
+    +   'reception/dialogo-restablecer: color-contrast×41',
+    +   'reception/dialogo-detalle: color-contrast×2',
+    +   'dentist/inicio: color-contrast×29',
+    +   'dentist/agenda-semana: color-contrast×21',
+    +   'dentist/ficha: color-contrast×66',
+    +   'dentist/perfil-tratamientos: color-contrast×13',
+    +   'dentist/tratamientos: color-contrast×16',
+    +   'dentist/aranceles: color-contrast×12',
+    +   'admin/inicio: color-contrast×34',
+    +   'admin/aranceles: color-contrast×7',
+    +   'admin/ficha-lectura: color-contrast×55',
+    +   'admin/equipo: color-contrast×42, scrollable-region-focusable×1'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: 'reception/inicio: color-contrast×34'
+    1: 'reception/agenda-semana: color-contrast×22, target-size×3'
+    2: 'reception/agenda-mes: color-contrast×36'
+    3: 'reception/agenda-dia: color-contrast×52'
+    4: 'reception/pacientes: color-contrast×19'
+    5: 'reception/perfil: color-contrast×13'
+    6: 'reception/aranceles: color-contrast×11'
+    7: 'reception/dialogo-cita: color-contrast×11'
+    8: 'reception/dialogo-restablecer: color-contrast×41'
+    9: 'reception/dialogo-detalle: color-contrast×2'
+    10: 'dentist/inicio: color-contrast×29'
+    11: 'dentist/agenda-semana: color-contrast×21'
+    12: 'dentist/ficha: color-contrast×66'
+    13: 'dentist/perfil-tratamientos: color-contrast×13'
+    14: 'dentist/tratamientos: color-contrast×16'
+    15: 'dentist/aranceles: color-contrast×12'
+    16: 'admin/inicio: color-contrast×34'
+    17: 'admin/aranceles: color-contrast×7'
+    18: 'admin/ficha-lectura: color-contrast×55'
+    19: 'admin/equipo: color-contrast×42, scrollable-region-focusable×1'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:376:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: responsive: no horizontal scroll at 320–1440 px and a legible role selector
+not ok 10 - responsive: no horizontal scroll at 320–1440 px and a legible role selector
+  ---
+  duration_ms: 60221.733411
+  type: 'test'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:381:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + [
+    +   '320px reception/inicio: role selector text clipped',
+    +   '320px reception/semana: role selector text clipped',
+    +   '320px reception/mes: role selector text clipped',
+    +   '320px reception/dia: role selector text clipped',
+    +   '320px reception/aranceles: role selector text clipped',
+    +   '320px dentist/ficha: role selector text clipped',
+    +   '320px dentist/tratamientos: role selector text clipped',
+    +   '375px reception/inicio: role selector text clipped',
+    +   '375px reception/semana: role selector text clipped',
+    +   '375px reception/mes: role selector text clipped',
+    +   '375px reception/dia: role selector text clipped',
+    +   '375px reception/aranceles: role selector text clipped',
+    +   '375px dentist/ficha: role selector text clipped',
+    +   '375px dentist/tratamientos: role selector text clipped',
+    +   '390px reception/inicio: role selector text clipped',
+    +   '390px reception/semana: role selector text clipped',
+    +   '390px reception/mes: role selector text clipped',
+    +   '390px reception/dia: role selector text clipped',
+    +   '390px reception/aranceles: role selector text clipped',
+    +   '390px dentist/ficha: role selector text clipped',
+    +   '390px dentist/tratamientos: role selector text clipped'
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0: '320px reception/inicio: role selector text clipped'
+    1: '320px reception/semana: role selector text clipped'
+    2: '320px reception/mes: role selector text clipped'
+    3: '320px reception/dia: role selector text clipped'
+    4: '320px reception/aranceles: role selector text clipped'
+    5: '320px dentist/ficha: role selector text clipped'
+    6: '320px dentist/tratamientos: role selector text clipped'
+    7: '375px reception/inicio: role selector text clipped'
+    8: '375px reception/semana: role selector text clipped'
+    9: '375px reception/mes: role selector text clipped'
+    10: '375px reception/dia: role selector text clipped'
+    11: '375px reception/aranceles: role selector text clipped'
+    12: '375px dentist/ficha: role selector text clipped'
+    13: '375px dentist/tratamientos: role selector text clipped'
+    14: '390px reception/inicio: role selector text clipped'
+    15: '390px reception/semana: role selector text clipped'
+    16: '390px reception/mes: role selector text clipped'
+    17: '390px reception/dia: role selector text clipped'
+    18: '390px reception/aranceles: role selector text clipped'
+    19: '390px dentist/ficha: role selector text clipped'
+    20: '390px dentist/tratamientos: role selector text clipped'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:396:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: no console or page errors were recorded
+ok 11 - no console or page errors were recorded
+  ---
+  duration_ms: 1.63178
+  type: 'test'
+  ...
+1..11
+# tests 11
+# suites 0
+# pass 4
+# fail 7
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 156999.778476

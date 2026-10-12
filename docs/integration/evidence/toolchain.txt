@@ -1,0 +1,1 @@
+node v22.22.0 npm 10.9.4 playwright-py 1.56.0 chromium Chromium 141.0.7390.37  axe-core 4.10.3 lighthouse 12.8.2

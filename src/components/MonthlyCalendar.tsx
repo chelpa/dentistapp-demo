@@ -38,11 +38,11 @@ export default function MonthlyCalendar({ data, selected, onSelect }: { data: De
       const items = counts.get(cell.iso) ?? [];
       const isSelected = cell.iso === selected;
       const isToday = cell.iso === today;
-      return <button key={cell.iso} type="button" onClick={() => onSelect(cell.iso)} aria-label={`${cell.day} de ${monthTitle(cell.iso)}, ${items.length} ${items.length === 1 ? "cita" : "citas"}`} aria-pressed={isSelected} className={`min-h-[70px] bg-white p-1.5 text-left transition hover:bg-pale sm:min-h-[112px] sm:p-2.5 ${!cell.current ? "opacity-45" : ""} ${isSelected ? "bg-[#eaf8f5] ring-2 ring-inset ring-teal" : ""}`}>
+      return <button key={cell.iso} type="button" onClick={() => onSelect(cell.iso)} aria-label={`${cell.day} de ${monthTitle(cell.iso)}, ${items.length} ${items.length === 1 ? "cita" : "citas"}`} aria-pressed={isSelected} className={`min-h-[70px] bg-white p-1.5 text-left transition hover:bg-pale sm:min-h-[112px] sm:p-2.5 ${!cell.current ? "bg-canvas" : ""} ${isSelected ? "bg-[#eaf8f5] ring-2 ring-inset ring-teal" : ""}`}>
         <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold sm:h-7 sm:w-7 ${isToday ? "bg-teal text-white" : "text-[#637587]"}`}>{cell.day}</span>
         {items.length > 0 && <>
           <div className="mt-1 flex gap-1 sm:hidden">{items.slice(0,3).map(a => <span key={a.id} className={`h-1.5 w-1.5 rounded-full ${a.status === "En espera" ? "bg-amber" : "bg-teal"}`}/>)}</div>
-          <div className="mt-1 hidden space-y-1 sm:block">{items.slice(0,2).map(a => <div key={a.id} className={`truncate rounded px-1.5 py-1 text-[10px] font-semibold ${a.status === "En espera" ? "bg-[#fff2dc] text-[#a67b28]" : "bg-pale text-tealDark"}`}>{a.time} · {data.patients.find(p => p.id === a.patientId)?.name.split(" ")[0]}</div>)}{items.length > 2 && <div className="px-1 text-[10px] font-semibold text-muted">+{items.length-2} más</div>}</div>
+          <div className="mt-1 hidden space-y-1 sm:block">{items.slice(0,2).map(a => <div key={a.id} className={`truncate rounded px-1.5 py-1 text-[10px] font-semibold ${a.status === "En espera" ? "bg-[#fff2dc] text-[#8b6722]" : "bg-pale text-tealDark"}`}>{a.time} · {data.patients.find(p => p.id === a.patientId)?.name.split(" ")[0]}</div>)}{items.length > 2 && <div className="px-1 text-[10px] font-semibold text-muted">+{items.length-2} más</div>}</div>
         </>}
       </button>;
     })}</div>

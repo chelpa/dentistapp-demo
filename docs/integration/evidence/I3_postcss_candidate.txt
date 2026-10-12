@@ -1,0 +1,37 @@
+# I3 · PostCSS sobre la candidata exacta (protocolo §5c)
+# Candidata: 5880af1049f806c32b19c6fb160135e7a119c10c (integration/dentistapp-v0.4 tras I1+I2)
+# Entorno: node v22.22.0 · npm 10.9.4 · 2026-10-12T21:02Z
+
+## 1. Línea base (sin override)
+npm ci exit 0 · next>postcss 8.4.31 (anidado) · postcss raíz 8.5.28
+npm audit --omit=dev: 2 (1 moderada next, 1 alta postcss)
+build:static (/dentistapp-demo) exit 0 · CSS sha256 21737916776b3973dce37cbfe3f99c24cc98601583498d9cfc15fa773787e31c
+
+## 2. Variantes probadas (todas con npm install estándar; sin editar el lock a mano)
+overrides {"next":{"postcss":"8.5.28"}} + npm dedupe      -> next>postcss 8.5.28 · raíz 8.5.30 · audit 0 · lock +17/-74 (dos copias)
+overrides {"next":{"postcss":"^8.5.23"}} + npm dedupe     -> next>postcss 8.4.31 · audit 2 (no aplica)
+overrides {"next":{"postcss":"8.5.29"}} + npm dedupe      -> 8.5.29 · raíz 8.5.30 · audit 0 · lock +17/-74 (dos copias)
+overrides {"postcss":"$postcss"} + npm dedupe              -> una sola copia 8.5.30 · audit 0 · lock +10/-96
+overrides {"next":{"postcss":"8.5.30"}} + npm dedupe      -> una sola copia 8.5.30 · audit 0 · lock +10/-96
+overrides {"next":{"postcss":"8.5.28"}} + npm update postcss -> 8.5.28 + raíz 8.5.30 · audit 0 · lock +17/-74
+ELEGIDA: devDependencies.postcss "^8.4.0" -> "^8.5.23" + overrides {"postcss":"$postcss"} + **solo npm install**
+         -> una sola copia postcss 8.5.30 (sin entrada anidada) · npm ls exit 0 · lock +11/-97
+Motivo: mecanismo documentado de npm (override con referencia a dependencia directa), sin pasos extra, sin copias duplicadas,
+y el piso ^8.5.23 deja escrito en package.json que versiones ≤ 8.5.22 no se aceptan.
+
+## 3. Verificación de la elegida (instalación limpia)
+rm -rf node_modules && npm ci: exit 0 · npm ls: exit 0
+npm audit --omit=dev: 0 · npm audit (completo): 7 (2 moderadas, 5 altas; cadena de Tailwind 3, solo desarrollo)
+npm test: 20/20 · typecheck: exit 0 · build:static: exit 0
+
+## 4. Comparación controlada (misma ruta, mismo runtime, con y sin override)
+CSS: idéntico byte a byte (21737916…e31c)
+Todos los .js y .css de out/: idénticos byte a byte
+index.html / 404.html: difieren solo en el buildId aleatorio de Next
+
+## 5. Diff del lock, entrada por entrada
+(root) devDependencies.postcss ^8.4.0 -> ^8.5.23
+node_modules/next/node_modules/postcss 8.4.31 -> (eliminada; usa la copia raíz)
+node_modules/postcss 8.5.28 -> 8.5.30 (parche)
+node_modules/nanoid 3.3.19 -> 3.3.20 (dependencia de postcss, parche)
+20 paquetes de plataforma (@img/sharp-*, @next/swc-linux-*): solo el campo "libc" (metadato que escribe npm 10; el lock venía de npm 11). Sin cambio de versión.

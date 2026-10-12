@@ -1,0 +1,106 @@
+{
+ "version": "B_v03_zip",
+ "url": "http://127.0.0.1:8771/",
+ "checks": {
+  "roles": {
+   "per_role": [
+    {
+     "option": "Recepción · demo",
+     "nav": [
+      "Inicio",
+      "Agenda",
+      "Pacientes"
+     ],
+     "h1": "Todo listo para recibir pacientes"
+    },
+    {
+     "option": "Dentista · demo",
+     "nav": [
+      "Inicio",
+      "Agenda",
+      "Pacientes",
+      "Tratamientos"
+     ],
+     "h1": "Tu jornada clínica"
+    },
+    {
+     "option": "Admin · demo",
+     "nav": [
+      "Inicio",
+      "Agenda",
+      "Pacientes",
+      "Tratamientos",
+      "Equipo y vistas"
+     ],
+     "h1": "La clínica, de un vistazo"
+    }
+   ],
+   "roles_change_ui": true
+  },
+  "agenda_views": {
+   "views": [
+    "Mes",
+    "Día"
+   ],
+   "week_view": false,
+   "day_time_grid_15min": false
+  },
+  "new_appointment_fields": {
+   "labels": [
+    "PACIENTE",
+    "FECHA",
+    "HORA",
+    "PROFESIONAL",
+    "MOTIVO"
+   ],
+   "variable_duration": false,
+   "duration_options": []
+  },
+  "overlap_rule": {
+   "rejects_overlap_with_confirmed": true,
+   "rejects_overlap_with_completed": true
+  },
+  "finance_tariffs_budgets": {
+   "present": false,
+   "nav": [
+    "Inicio",
+    "Agenda",
+    "Pacientes"
+   ]
+  },
+  "clinical_note_and_tooth": {
+   "note_block": "12 oct 2026 · Dra. Valentina Rojas\n\nNota de prueba automatizada",
+   "tooth_16": "Pieza 16, Tratado"
+  },
+  "modal_keyboard": {
+   "focus_moves_into_dialog": false,
+   "escape_closes": false
+  },
+  "reset_flow": {
+   "native_confirm": false,
+   "in_app_dialog": true,
+   "dialog_name": "Restablecer datos ficticios",
+   "buttons": [
+    "Conservar cambios",
+    "Restablecer datos ficticios"
+   ],
+   "focus_in_dialog": true,
+   "escape_closes": false,
+   "note": "re-run separately: probe's cancel-button regex didn't match 'Conservar cambios'"
+  },
+  "storage": {
+   "keys": [
+    "dentistapp-mvp-demo-v3"
+   ]
+  },
+  "axe_dashboard": {
+   "color-contrast": 49
+  },
+  "mobile_overflow_375": {
+   "Inicio": 0,
+   "Agenda": 0,
+   "Pacientes": 0
+  }
+ },
+ "page_errors": []
+}

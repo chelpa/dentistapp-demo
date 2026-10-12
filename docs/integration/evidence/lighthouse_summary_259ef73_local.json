@@ -1,0 +1,17 @@
+{
+ "url": "http://127.0.0.1:8766/dentistapp-demo/",
+ "fetchTime": "2026-10-12T19:40:08.512Z",
+ "lighthouseVersion": "12.8.2",
+ "scores": {
+  "performance": 86,
+  "accessibility": 95,
+  "best-practices": 100,
+  "seo": 60
+ },
+ "metrics": {
+  "first-contentful-paint": "0.9\u00a0s",
+  "largest-contentful-paint": "3.4\u00a0s",
+  "total-blocking-time": "270\u00a0ms",
+  "cumulative-layout-shift": "0"
+ }
+}

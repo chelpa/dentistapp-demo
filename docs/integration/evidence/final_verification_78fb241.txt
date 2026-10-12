@@ -1,0 +1,30 @@
+# Verificación final · 2026-10-12T21:28Z · node v22.22.0 · npm 10.9.4
+commit 78fb241e78db949a4e66781313c61eaa1eef8f25
+árbol de código: a60c31fd189c939f
+AC1 ancestro 562514aa46eaddb4987ee7b72447beedabe6da8b: sí
+AC1 ancestro aaa83077c462b4de8b7a509ee76946ce69fdc89a: sí
+AC1 ancestro 134fd46: sí
+AC1 ancestro 259ef732683745713f50deae7e786e888f8e484e: sí
+npm ci exit 0
+npm ls exit 0
+postcss efectivo: postcss@8.5.30 
+audit prod: {'info': 0, 'low': 0, 'moderate': 0, 'high': 0, 'critical': 0, 'total': 0}
+audit completo: 7 (desarrollo)
+# tests 34 # pass 34 # fail 0 
+typecheck exit 0
+build:static exit 0 · ┌ ○ / 24.8 kB 128 kB
+test:e2e exit 0
+ok 1 - roles: each view matches the approved permission matrix
+ok 2 - booking: chair and professional conflicts, adjacency, durations
+ok 3 - budgets: exact totals, history kept when a tariff changes, no data loss across roles
+ok 4 - evolutions: linked to own attended appointment; tampered links rejected
+ok 5 - storage: v4 notice, earlier keys untouched, reload and reset in the three roles
+ok 6 - keyboard: role selector, menu, tabs and every dialog
+ok 7 - keyboard: mobile menu opens, traps nothing hidden, closes with Escape and returns focus
+ok 8 - axe: no automated WCAG violations on any view at 1280px
+ok 9 - axe: no automated WCAG violations on any view at 375px
+ok 10 - responsive: no horizontal scroll at 320–1440 px and a legible role selector
+ok 11 - no console or page errors were recorded
+# tests 11 # pass 11 # fail 0 
+axe vistas 40 · violaciones 0 · desbordes 0 de 40 · errores 0
+git diff --check (código): limpio

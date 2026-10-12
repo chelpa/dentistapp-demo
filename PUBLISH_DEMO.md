@@ -1,6 +1,8 @@
 # Publicar DentistApp como demo
 
-Esta versión usa exclusivamente datos ficticios y `localStorage`. Cada visitante ve y modifica su propia copia local de la demo. No hay cuentas ni datos compartidos. El selector de roles es visual; no controla acceso.
+En GitHub, la publicación es automática al integrar en `main` (workflow `pages.yml`). Esta guía cubre además hosting estático manual.
+
+Esta versión usa exclusivamente datos ficticios y `localStorage`. Cada visitante ve y modifica su propia copia local de la demo. No hay cuentas ni datos compartidos. El selector ofrece vistas distintas de Recepción, Dentista y Admin, pero no autentica ni protege los datos. Cualquier visitante puede elegir las tres.
 
 ## Opción sencilla: Cloudflare Pages Direct Upload
 
@@ -27,7 +29,7 @@ El sitio publicable queda en `out/`. Comprime **el contenido de `out/`**, de mod
 
 - Usa solo datos ficticios. No ingreses nombres, teléfonos, RUT ni historias clínicas reales.
 - Comprueba el enlace público y el aviso **PROTOTIPO** desde un navegador sin sesión previa.
-- `noindex` y `robots.txt` reducen la indexación por buscadores, pero **no restringen el acceso**. Cualquiera que tenga el enlace puede abrirlo.
+- `noindex` reduce la indexación por buscadores, pero **no restringe el acceso**: cualquiera que tenga el enlace puede abrirlo. El `robots.txt` incluido solo tiene efecto si el sitio está en la raíz de su dominio (en GitHub Pages de proyecto, como `usuario.github.io/dentistapp-demo/`, los buscadores no lo leen).
 - Si el cliente necesita acceso privado, configura protección en la plataforma de hosting antes de compartirlo.
 - Cambia el nombre y dominio de la demo cuando definas la marca comercial.
 

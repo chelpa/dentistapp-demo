@@ -1,0 +1,110 @@
+{
+ "version": "C_pr_aaa8307",
+ "url": "http://127.0.0.1:8772/",
+ "checks": {
+  "roles": {
+   "per_role": [
+    {
+     "option": "Recepción · demo",
+     "nav": [
+      "Inicio",
+      "Agenda",
+      "Pacientes",
+      "Tratamientos",
+      "Aranceles y presupuestos"
+     ],
+     "h1": "Buenos días, equipo 👋"
+    },
+    {
+     "option": "Dentista · demo",
+     "nav": [
+      "Inicio",
+      "Agenda",
+      "Pacientes",
+      "Tratamientos",
+      "Aranceles y presupuestos"
+     ],
+     "h1": "Buenos días, equipo 👋"
+    },
+    {
+     "option": "Admin · demo",
+     "nav": [
+      "Inicio",
+      "Agenda",
+      "Pacientes",
+      "Tratamientos",
+      "Aranceles y presupuestos"
+     ],
+     "h1": "Buenos días, equipo 👋"
+    }
+   ],
+   "roles_change_ui": false
+  },
+  "agenda_views": {
+   "views": [
+    "Mes",
+    "Día"
+   ],
+   "week_view": false,
+   "day_time_grid_15min": true
+  },
+  "new_appointment_fields": {
+   "labels": [
+    "PACIENTE",
+    "FECHA",
+    "HORA",
+    "PROFESIONAL",
+    "MOTIVO",
+    "DURACIÓN DE LA ATENCIÓN"
+   ],
+   "variable_duration": true,
+   "duration_options": [
+    "15 minutos",
+    "30 minutos",
+    "45 minutos",
+    "60 minutos",
+    "75 minutos",
+    "90 minutos",
+    "120 minutos",
+    "150 minutos",
+    "180 minutos",
+    "240 minutos"
+   ]
+  },
+  "overlap_rule": {
+   "rejects_overlap_with_confirmed": true,
+   "rejects_overlap_with_completed": true
+  },
+  "finance_tariffs_budgets": {
+   "present": true,
+   "saved_section": "Presupuestos guardados en este navegador\nSofía Martínez\n$130.000\nBorrador · 12 oct 2026"
+  },
+  "clinical_note_and_tooth": {
+   "note_block": "12 oct 2026 · Profesional demo\n\nNota de prueba automatizada",
+   "tooth_16": "Pieza 16, Tratado"
+  },
+  "modal_keyboard": {
+   "focus_moves_into_dialog": false,
+   "escape_closes": false
+  },
+  "reset_flow": {
+   "native_confirm": true,
+   "in_app_dialog": false
+  },
+  "storage": {
+   "keys": [
+    "dentistapp-mvp-demo-v1"
+   ]
+  },
+  "axe_dashboard": {
+   "color-contrast": 48
+  },
+  "mobile_overflow_375": {
+   "Inicio": 0,
+   "Agenda": 0,
+   "Pacientes": 0,
+   "Arancel": 0
+  }
+ },
+ "page_errors": []
+}

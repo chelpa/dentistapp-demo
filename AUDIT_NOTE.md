@@ -23,7 +23,7 @@ El ZIP original contiene planificación y un `schema.prisma` con pacientes, prof
 
 ## Riesgos y bloqueos de producción
 
-- **Auth/roles:** el selector actual es decorativo. Falta autenticación, sesiones y autorización en cada lectura/mutación, con alcance por sede y paciente. El plan adicional advierte una incompatibilidad entre Credentials de Auth.js y la estrategia de sesión de base de datos propuesta; esa decisión necesita cerrarse al implementar auth.
+- **Auth/roles:** el selector actual cambia las vistas de interfaz, pero no autentica ni protege los datos. Falta autenticación, sesiones y autorización en cada lectura/mutación, con alcance por sede y paciente. El plan adicional advierte una incompatibilidad entre Credentials de Auth.js y la estrategia de sesión de base de datos propuesta; esa decisión necesita cerrarse al implementar auth.
 - **Agenda:** el chequeo local de citas duplicadas puede fallar con usuarios concurrentes. Se necesita una restricción de PostgreSQL para solapamientos, además de pruebas de concurrencia, zona horaria y reglas de cancelación.
 - **Datos de salud:** falta revisión de privacidad y cumplimiento chileno, controles de acceso, cifrado, política de retención y manejo de solicitudes del paciente.
 - **Consentimiento:** no hay captura, firma, versión ni vínculo verificable con el tratamiento.
@@ -43,3 +43,31 @@ Estos cambios siguen siendo **interfaz de prototipo**. La lista local de cambios
 ## Preparación de demo online
 
 Se generó una exportación estática separada para mostrar únicamente los flujos con datos ficticios. Se añadió `noindex`/`robots.txt` como señal para buscadores, sin tratarlo como protección de acceso. Publicar el ZIP exige elegir una cuenta y dirección de hosting; ningún dato clínico real debe ingresarse en esta demo.
+
+## Iteración 0.3 · recorridos por rol
+
+Se conservó el stack y la agenda/odontograma. Se reemplazó el selector decorativo por tres vistas simuladas: Recepción coordina citas y contactos; Dentista filtra por profesional y edita la ficha y tratamientos; Admin consulta operación, tratamientos y equipo. Al cambiar de rol/profesional se descarta cualquier borrador de nota y se cierra la ficha abierta. La demo estrena una clave de almacenamiento local para mantener los datos de la versión anterior intactos.
+
+La revisión también corrigió la comprobación local de agenda: una cita marcada como Completada sigue reservando su intervalo. Esa corrección no aporta garantías frente a concurrencia, porque continúa siendo un cálculo en el navegador.
+
+Los controles de interfaz y filtros sirven para explicar el producto, no para proteger datos. Continúan pendientes autenticación, autorización de servidor, base de datos y restricciones de solapamiento, privacidad, consentimiento, historial auditable y backups. No se publicó un sitio externo en esta iteración.
+
+### Verificación de la iteración 0.3
+
+Probada en navegador con la exportación estática: Recepción sin ficha clínica, creación de cita con la hora elegida, rechazo de solapamiento incluso con una cita completada, Dentista filtrado por profesional, cambio de pieza 16, guardado de nota con autor elegido, actualización de tratamiento, Admin en consulta sin controles de edición clínica, equipo y restablecimiento de demo. Se comprobó la navegación móvil y ausencia de desbordamiento horizontal del documento a 390 px. Los cambios ficticios de prueba se restablecieron.
+
+## Iteración 0.4 · integración de líneas paralelas
+
+El 2026-10-12 coexistían tres versiones de la demo: `main` publicado (0.2.1), la v0.3 local con vistas por rol (ZIP sha256 `40f16f97…`) y los PR #1/#2 con agenda diaria y semanal, sillones, duración variable, aranceles y presupuestos. La 0.4 las integra en la rama `integration/dentistapp-v0.4`, conservando la historia de las tres. Procedencia, decisiones y evidencia en [docs/integration/](docs/integration/INTEGRATION_PLAN.md).
+
+Cambios de producto: permisos de interfaz por vista para todo lo nuevo (las pantallas usan datos filtrados; los cruces se calculan sobre todos los datos), evoluciones vinculadas a una atención con validación, almacenamiento `v4` que no toca datos anteriores, y correcciones de accesibilidad (contraste por tokens, diálogos nativos, menú, pestañas, foco visible, objetivos táctiles en la semana).
+
+Seguridad de dependencias: `npm audit --omit=dev` en cero mediante `overrides` de npm para el PostCSS anidado de Next, verificado con una compilación controlada (JS y CSS idénticos byte a byte). Persisten 7 alertas en herramientas de desarrollo (Tailwind 3).
+
+### Verificación de la iteración 0.4
+
+`npm test` 40/40 (incluidas las 20 de agenda del PR #2); typecheck; exportación estática en `/dentistapp-demo`; `npm run test:e2e` 14/14 con reloj fijo: matriz de permisos, reglas de reserva, presupuestos, evoluciones con rechazos (incluida una cita posterior del mismo día), persistencia y restablecimiento en los tres roles, datos guardados incompletos y pantalla de recuperación, teclado, axe sin violaciones automáticas en 40 vistas (1280 y 375 px) y sin desbordes de 320 a 1440 px. Un axe en cero no equivale a cumplimiento integral de accesibilidad.
+
+Siguen pendientes, como antes: autenticación y autorización en servidor, base de datos con restricciones de agenda bajo concurrencia, privacidad de datos de salud, consentimiento, historial clínico auditable y backups.
+
+La revisión independiente del PR #3 encontró dos fallas que las pruebas no cubrían: un paciente guardado sin todos sus campos rompía la página entera, y la regla de vínculo de evoluciones comparaba solo el día. Ambas se repararon con pruebas que fallan en la versión anterior (detalle en `docs/integration/RADO_LOG.md`, R-15 a R-17).

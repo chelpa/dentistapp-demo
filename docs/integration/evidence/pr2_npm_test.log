@@ -1,0 +1,134 @@
+
+> dentistapp-mvp@0.2.1 test
+> node scripts/test.mjs
+
+TAP version 13
+# Subtest: Sunday anchors to Monday; work week excludes weekend
+ok 1 - Sunday anchors to Monday; work week excludes weekend
+  ---
+  duration_ms: 4.005315
+  type: 'test'
+  ...
+# Subtest: week navigation crosses months and years
+ok 2 - week navigation crosses months and years
+  ---
+  duration_ms: 0.333186
+  type: 'test'
+  ...
+# Subtest: civil date navigation does not drift across Chile daylight saving
+ok 3 - civil date navigation does not drift across Chile daylight saving
+  ---
+  duration_ms: 0.237139
+  type: 'test'
+  ...
+# Subtest: date validation rejects empty, malformed, nonexistent and rollover dates
+ok 4 - date validation rejects empty, malformed, nonexistent and rollover dates
+  ---
+  duration_ms: 0.414192
+  type: 'test'
+  ...
+# Subtest: valid bounds: 08:00, 19:45 plus 15 min, end exactly 20:00
+ok 5 - valid bounds: 08:00, 19:45 plus 15 min, end exactly 20:00
+  ---
+  duration_ms: 0.42049
+  type: 'test'
+  ...
+# Subtest: reject invalid times, hours and duration granularity
+ok 6 - reject invalid times, hours and duration granularity
+  ---
+  duration_ms: 0.517805
+  type: 'test'
+  ...
+# Subtest: same dentist conflicts even on different chair and patient
+ok 7 - same dentist conflicts even on different chair and patient
+  ---
+  duration_ms: 0.528538
+  type: 'test'
+  ...
+# Subtest: same chair conflicts with different dentist
+ok 8 - same chair conflicts with different dentist
+  ---
+  duration_ms: 0.240297
+  type: 'test'
+  ...
+# Subtest: adjacent appointments do not conflict; overlap by 15 minutes does
+ok 9 - adjacent appointments do not conflict; overlap by 15 minutes does
+  ---
+  duration_ms: 0.541942
+  type: 'test'
+  ...
+# Subtest: different date or both independent resources permit simultaneous appointments
+ok 10 - different date or both independent resources permit simultaneous appointments
+  ---
+  duration_ms: 0.58834
+  type: 'test'
+  ...
+# Subtest: cancelled appointments release resources but reactivating must recheck conflicts
+ok 11 - cancelled appointments release resources but reactivating must recheck conflicts
+  ---
+  duration_ms: 0.397732
+  type: 'test'
+  ...
+# Subtest: waiting and completed appointments still occupy their reserved time
+ok 12 - waiting and completed appointments still occupy their reserved time
+  ---
+  duration_ms: 0.212003
+  type: 'test'
+  ...
+# Subtest: a status update excludes its own appointment
+ok 13 - a status update excludes its own appointment
+  ---
+  duration_ms: 1.319416
+  type: 'test'
+  ...
+# Subtest: legacy appointments keep no fabricated chair; dentist conflicts remain enforced
+ok 14 - legacy appointments keep no fabricated chair; dentist conflicts remain enforced
+  ---
+  duration_ms: 0.667099
+  type: 'test'
+  ...
+# Subtest: resource filters combine and expose unassigned legacy bookings
+ok 15 - resource filters combine and expose unassigned legacy bookings
+  ---
+  duration_ms: 0.40166
+  type: 'test'
+  ...
+# Subtest: simultaneous appointments occupy separate lanes
+ok 16 - simultaneous appointments occupy separate lanes
+  ---
+  duration_ms: 9.092636
+  type: 'test'
+  ...
+# Subtest: nested and chained overlaps receive safe shared lane counts
+ok 17 - nested and chained overlaps receive safe shared lane counts
+  ---
+  duration_ms: 0.557363
+  type: 'test'
+  ...
+# Subtest: lane calculation skips invalid entries without mutating appointments
+ok 18 - lane calculation skips invalid entries without mutating appointments
+  ---
+  duration_ms: 0.251691
+  type: 'test'
+  ...
+# Subtest: creation rejects past time today and historical dates with injectable clock
+ok 19 - creation rejects past time today and historical dates with injectable clock
+  ---
+  duration_ms: 0.211738
+  type: 'test'
+  ...
+# Subtest: RADO evidence logs retain the exact bytes bound by the manifest
+ok 20 - RADO evidence logs retain the exact bytes bound by the manifest
+  ---
+  duration_ms: 0.918762
+  type: 'test'
+  ...
+1..20
+# tests 20
+# suites 0
+# pass 20
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 130.899916

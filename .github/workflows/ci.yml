@@ -1,0 +1,46 @@
+name: DentistApp checks
+# Pull-request checks: unit tests, types and the static export under the Pages sub-path.
+# Originally uncle-feedback-ci.yml (PR #1/#2); renamed when the lines were integrated.
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'scripts/**'
+      - 'tsconfig*.json'
+      - 'next.config.ts'
+      - 'tailwind.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run build:static
+        env:
+          DENTISTAPP_BASE_PATH: /dentistapp-demo
+          NEXT_TELEMETRY_DISABLED: "1"
+      # End-to-end: roles, booking rules, budgets, evolutions, storage, keyboard,
+      # axe (WCAG 2.2 AA automated rules) and 320–1440 px layouts.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+        env:
+          E2E_REPORT: e2e-report.json
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report
+          path: e2e-report.json
+          if-no-files-found: ignore
