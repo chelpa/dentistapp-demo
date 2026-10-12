@@ -92,8 +92,32 @@ Herramientas: `evidence/toolchain.txt` (Node v22.22.0, npm 10.9.4, Chromium 141.
 - **Nota de nomenclatura:** el PR #2 llama «A» a la línea del repo y la auditoría paralela habla de «B con autenticación/usuarios» y «C con vistas de roles». Para no chocar, en estos documentos no uso letras.
 - **Riesgo materializado:** dos agentes trabajan a la vez sobre el mismo repo (R0 / D0).
 
-## R-09 · Estado y compuertas
+## R-09 · Revisión independiente de Codex (recibida 17:26)
 
-- **STATE:** MAIN, PR1, PR2 y ROLES sin cambios. Sitio publicado = MAIN.
-- **AUTHORITY:** el usuario aceptó AUDIT, PLAN, ORGANIZE y DIRECT; autorizó leer la carpeta del proyecto ChatGPT y borrar los 4 archivos de R-07.
-- **Compuertas:** EXECUTE = PENDIENTE · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD · PUSH de la rama de integración = PENDIENTE. Que un build pase no autoriza publicar.
+- **CLAIM** (Codex, «REVISION-PLAN-INTEGRACION-DENTISTAPP.md»):
+  - Bundle sha256 `2a39cb5f…c26ac0`, verificación PASS, historial completo.
+  - 24/24 archivos del import `134fd46` coinciden byte a byte con el ZIP `40f16f97…`.
+  - HEAD de preparación `01f32f2`; los adjuntos coinciden con el bundle.
+  - PR1 y PR2 sin cambios y congelados por Codex.
+  - «B» localizada: `/Users/chelpa/Proyectos/dental-portal`, rama `v2`, `fe594d947869e0d99691662a04a0109bb4c2fcff`, Auth.js + Prisma + Next 16, sin remoto.
+  - Dictamen: «plan viable con ajustes; no concede autoridad humana».
+- **EVIDENCE propia:** no revisé AUTH-PORTAL (sin acceso a esa carpeta); queda como CLAIM. Revalidé las refs remotas: sin cambios (PR1 `aaa8307`, PR2 `562514a`).
+- **Acción:** los 7 ajustes quedaron en el plan v2 (`INTEGRATION_PLAN.md` §9) y las lecciones se ajustaron en CHZ-LEARN-001.
+
+## R-10 · Camino estándar para el override de PostCSS
+
+- **Motivo:** la revisión pidió no convertir la edición manual del lock en receta.
+- **EVIDENCE** (`evidence/postcss_standard_path.txt`, copia temporal de PR2):
+  - `npm install` solo: 8.4.31 «invalid», `npm ls` exit 1. **Reproduce el ELSPROBLEMS histórico**; el registro anterior sigue siendo válido.
+  - `--package-lock-only`: no corrige.
+  - Override `"$postcss"`: no corrige.
+  - `npm install` + `npm dedupe`, o `npm install` + `npm update postcss` (mismo lock): 8.5.28, `npm ls` exit 0, audit prod 0. Además sube el postcss de raíz a 8.5.29 y cambia metadatos de plataforma según la versión de npm.
+- **STATE:** técnica candidata. G3 de la candidata integrada no está cerrado: se repite sobre ella (plan §5c).
+
+## R-11 · Estado y compuertas
+
+- **STATE:** MAIN, PR1, PR2 y ROLES sin cambios. Sitio publicado = MAIN. Rama local `integration/dentistapp-v0.4` con el plan v2, sin código.
+- **AUTHORITY:**
+  - El usuario aceptó AUDIT, PLAN, ORGANIZE y DIRECT; autorizó leer la carpeta del proyecto ChatGPT y borrar los 4 archivos de R-07.
+  - Codex **recomienda** a Claude como integrador. Una recomendación no es autorización: falta la decisión del usuario.
+- **Compuertas:** EXECUTE = PENDIENTE (decisión humana) · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD · PUSH de la rama de integración = PENDIENTE. Que un build pase no autoriza publicar.

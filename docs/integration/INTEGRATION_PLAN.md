@@ -2,6 +2,8 @@
 
 Fecha: 2026-10-12 (America/Santiago) · Preparado por Claude (Opus 5.5) en una sesión de Claude en la nube · Rama local `integration/dentistapp-v0.4`
 
+**Plan v2:** incorpora la revisión independiente de Codex del 2026-10-12 (§9). Sigue sin ejecutarse.
+
 **Autorizaciones:** EXECUTE = PENDIENTE · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD · PUSH rama de integración = PENDIENTE.
 Este documento cubre AUDIT, PLAN, ORGANIZE y DIRECT. No se implementó ninguna función ni se escribió nada en GitHub.
 
@@ -21,10 +23,9 @@ No uso letras A/B/C, porque el PR #2 ya llama «A» a la línea del repo y la au
 | **PR1** | PR #1, «DentistApp v0.3 candidate · agenda diaria, aranceles y presupuestos» | `aaa83077c462b4de8b7a509ee76946ce69fdc89a`. Draft, base `main`, 5 commits | 0.2.1 | Parte de MAIN |
 | **PR2** | PR #2, «DentistApp A · agenda semanal por profesional y sillón» | `562514aa46eaddb4987ee7b72447beedabe6da8b`. Draft, **base PR1**, 2 commits (16:56 y 17:01) | 0.2.1 | Parte de PR1. Implementación y revisión de Codex |
 
-**Correspondencia con la otra nomenclatura (CLAIM tomado de `docs/calendar-001/AUDIT-PLAN.md` del PR #2):**
-- «Versión A» = la línea del repo (MAIN → PR1 → PR2).
-- La auditoría paralela «reportó B con autenticación/usuarios y C con vistas de roles». **C probablemente es ROLES** (no verificado).
-- **B «con autenticación/usuarios» no lo encontré** en las carpetas accesibles: hay que identificarlo antes de cerrar la comparación (pendiente G5 en el PR #2).
+| AUTH-PORTAL | Portal con autenticación (la «B» de la otra nomenclatura) | `fe594d947869e0d99691662a04a0109bb4c2fcff`, rama `v2`, `/Users/chelpa/Proyectos/dental-portal`, sin remoto | `dental-portal` 2.0.0 (Next 16, Auth.js, Prisma) | **CLAIM de la revisión de Codex; no lo verifiqué.** Queda **fuera** de esta integración porque requiere servidor y base de datos; se inventaría por separado |
+
+**Correspondencia con la otra nomenclatura:** «Versión A» = línea del repo (MAIN → PR1 → PR2); «B» = AUTH-PORTAL; «C» (vistas de roles) = ROLES.
 
 **Causa raíz de la divergencia (EVIDENCE):** ROLES ya existía (10:13) cuando se creó el repo (10:26) con el árbol de la 0.2.1. PR1 y PR2 se construyeron sobre esa base anterior. ROLES y PR1 corrigieron por separado el mismo error de agenda. En las carpetas accesibles no hay ningún clon `.git`.
 
@@ -67,7 +68,7 @@ Todo se probó en navegador (Chromium 141, Playwright, es-CL, America/Santiago) 
 
 ```
 main 259ef73 ─┬─ import/v0.3-local-zip 134fd46  (ROLES literal sobre MAIN; procedencia en el mensaje)
-              │   └─ integration/dentistapp-v0.4 45e4c7a+  (solo documentación; sin código)
+              │   └─ integration/dentistapp-v0.4 45e4c7a → 01f32f2 → (plan v2)  (solo documentación; sin código)
               └─ PR1 aaa8307 ── PR2 562514a
 ```
 
@@ -105,19 +106,67 @@ Rama `integration/dentistapp-v0.4`. Un commit por paso, cada uno verificado.
 
 | Paso | Contenido | Verificación |
 |---|---|---|
-| I0 | Revalidar identidades: `git ls-remote`. Si PR1 o PR2 cambiaron, repetir el merge de prueba sobre los HEAD nuevos | Hashes registrados |
-| I1 | Merge de PR2 resolviendo los 8 bloques y los conflictos semánticos 1–4. Lo nuevo (semana, grilla, sillón, aranceles, presupuestos) queda consciente del rol; los conflictos se siguen calculando sobre todas las citas | `npm test` 20/20 + typecheck + build + sonda |
+| I0 | Partir del HEAD real de esta rama (el commit del plan v2, no `45e4c7a`). Revalidar con `git ls-remote` justo antes de integrar; si PR1 o PR2 cambiaron, repetir el merge de prueba. Conservar el import de ROLES y la historia de PR1/PR2 | Hashes registrados en RADO |
+| I1 | Merge de PR2 resolviendo los 8 bloques y los conflictos semánticos 1–4. Las pantallas reciben `viewData` (filtrado por rol, §5b); **las comprobaciones de reserva usan siempre `data` completo** | `npm test` 20/20 + typecheck + build + sonda |
 | I2 | Recuperar `basePath`. Un solo workflow de Pages más el CI de PR, con tests | Build en subruta, 0 respuestas 4xx |
-| I3 | Override de postcss para Next (`8.5.28`), regenerando solo esa entrada del lock | Viabilidad ya probada sobre PR1: audit prod = 0, CSS idéntico byte a byte |
-| I4 | Clave `…-v4`, con normalización defensiva | Recargar y restablecer |
-| I5 | Evolución vinculada a una atención (campo «Atención»), autor = profesional | e2e |
-| I6 | Accesibilidad: tokens `teal → #0a7a71` (5,2:1) y `muted → #5f6f80` (5,16:1), grises manuales; restablecer con `ModalDialog`; `aria-current`; pestañas; selector de rol legible en móvil | axe = 0 en todas las vistas, prueba de teclado |
-| I7 | Pruebas: suite de PR2 + e2e por rol (la sonda) + axe en CI | CI verde |
+| I3 | PostCSS **sobre la candidata integrada exacta**, con comandos estándar de npm (protocolo en §5c). No se edita el lock a mano | `npm ls` exit 0, `npm ci` limpio, audit prod, tests/build, CSS comparado contra la misma candidata sin override |
+| I4 | Clave `…-v4`. **No** se borran ni sobrescriben `…-v1` ni `…-v3`; si existen, un aviso único explica que la demo empieza de nuevo. La normalización no inventa sillones (la falta de sillón sigue como «sin asignar») y no descarta registros en silencio: los inválidos se marcan y se informan | Recargar y restablecer con cada uno de los 3 roles |
+| I5 | Evolución vinculada a una atención: el campo «Atención» solo ofrece citas **del mismo paciente y del profesional activo**, y el guardado valida las tres condiciones; el autor sale del profesional activo. Sigue siendo una nota demo, sin firma ni auditoría sanitaria | e2e positivo + 3 rechazos (otro paciente, otro profesional, cita inexistente) |
+| I6 | Accesibilidad: tokens `teal → #0a7a71` (5,2:1) y `muted → #5f6f80` (5,16:1), grises manuales; restablecer y detalle de cita con `ModalDialog`; `aria-current`; pestañas con semántica y flechas; selector de rol legible en móvil | axe sin violaciones automáticas en las pantallas probadas + pruebas de teclado (§5d). Se guardan los hallazgos de antes y de después |
+| I7 | Pruebas: suite de PR2 + e2e por rol + teclado + axe en CI, con versiones de herramientas fijadas (axe-core 4.10.3, Playwright 1.56.0, Chromium 141) | CI verde |
 | I8 | Versión `0.4.0`, README, AUDIT_NOTE y CHANGELOG con procedencia | Revisión |
 
 Después de I8 me detengo y, si autorizas el push, abro un PR en borrador `integration → main`. PR1 y PR2 no se fusionan por separado.
 
-**Fuera de alcance:** Tailwind 4 (7 alertas de desarrollo), backend, autenticación real, firma de evoluciones, concurrencia entre pestañas (riesgo A17 de PR2) y la versión «B con autenticación» hasta identificarla.
+**Fuera de alcance:** Tailwind 4 (7 alertas de desarrollo), backend, autenticación real, sesiones, firma de evoluciones, concurrencia entre pestañas (riesgo A17 de PR2), datos reales y AUTH-PORTAL. Un audit de producción en cero cierra solo ese gate, no la seguridad global.
+
+### 5b. Matriz de permisos de presentación (propuesta para D2)
+
+Son permisos **de interfaz**, no autorización real: cualquier visitante puede cambiar de rol.
+
+| Función | Recepción | Dentista (profesional activo) | Admin |
+|---|---|---|---|
+| Agenda Mes/Semana/Día y grilla | Ver todo; filtrar | Ver solo su agenda (filtro fijo) | Ver todo; filtrar |
+| Crear cita, duración, sillón | ✅ | ❌ | ✅ |
+| Cambiar estado de cita | ✅ | Solo las suyas | ✅ |
+| Ficha, odontograma, evoluciones | ❌ | ✅ Sus pacientes | Solo lectura |
+| Tratamientos | ❌ | ✅ Sus pacientes | Solo lectura |
+| Aranceles | Ver | Ver | Ver y editar |
+| Presupuestos | Crear y ver todos | Crear y ver los de **sus pacientes** (D2b) | Ver todos |
+| Equipo y vistas | ❌ | ❌ | ✅ |
+
+D2b: hoy `Budget` no tiene autor. «De sus pacientes» se filtra por paciente sin cambiar el modelo. «Solo los que creó él» exigiría un campo `createdBy`. Propongo filtrar por paciente y, además, registrar `createdBy` solo para mostrarlo.
+
+### 5c. Protocolo PostCSS (I3)
+
+Prueba previa sobre una copia de PR2 (`evidence/postcss_standard_path.txt`), con `overrides.next.postcss` fijado:
+
+| Camino | postcss bajo Next | `npm ls` | Audit prod |
+|---|---|---|---|
+| `npm install` | 8.4.31 «invalid» (reproduce el ELSPROBLEMS histórico) | exit 1 | 2 |
+| `npm install --package-lock-only` + `npm ci` | 8.4.31 | exit 1 | 2 |
+| Override `"$postcss"` | 8.4.31 | exit 0 | 2 |
+| `npm install` + **`npm dedupe`** | **8.5.28** | **exit 0** | **0** |
+| `npm install` + `npm update postcss` | 8.5.28 (lock idéntico al de `dedupe`) | exit 0 | 0 |
+
+Los caminos que funcionan también suben el postcss de raíz de 8.5.28 a 8.5.29 (parche) y cambian metadatos de paquetes de plataforma según la versión de npm.
+
+Pasos sobre la candidata integrada:
+1. Compilar **sin** override y guardar el hash del CSS (mismo código y mismo runtime).
+2. Agregar el override a la versión corregida, luego `npm install` + `npm dedupe`.
+3. Verificar `npm ls` (exit 0), `npm ci` limpio y audit prod; correr tests, typecheck y build.
+4. Comparar el hash del CSS con el paso 1.
+5. Registrar el diff del lock entrada por entrada y explicar cada cambio. Usar la misma versión de npm que el CI.
+
+G3 se decide aparte, con esa evidencia.
+
+### 5d. Pruebas de teclado (I6/I7)
+
+- Selector de rol: se alcanza con Tab, foco visible y cambio con flechas.
+- Menú: en escritorio, Tab recorre el menú y la sección activa tiene `aria-current`. En móvil: abrir, recorrer, cerrar con su botón y con Escape, con el foco devuelto.
+- Pestañas del paciente: flechas izquierda/derecha y `aria-selected`.
+- Todos los diálogos (nueva cita, restablecer, detalle de cita en la semana): el foco entra, Tab queda atrapado, Escape cierra y el foco vuelve al botón que lo abrió.
+- Agenda semanal: bloque libre con Enter (escenario A07 de PR2).
 
 ---
 
@@ -127,14 +176,14 @@ Después de I8 me detengo y, si autorizas el push, abro un PR en borrador `integ
 |---|---|---|
 | AC1 | La historia contiene el import de ROLES (sha del ZIP) y los commits de PR1 y PR2 | `git merge-base --is-ancestor 562514a HEAD` |
 | AC2 | `npm ci`, `npm test`, `typecheck` y `build:static` (con `/dentistapp-demo`) pasan; servido en subruta sin 4xx | Script |
-| AC3 | `npm audit --omit=dev` = 0; postcss efectivo ≥ 8.5.23; CSS igual al build sin override | `npm audit`, `npm ls`, sha |
-| AC4 | Roles: Recepción sin ficha clínica; Dentista ve solo lo suyo (semana, grilla, presupuestos); Admin ve Equipo y Aranceles; aviso «simulación, no autenticación» visible | e2e por rol |
+| AC3 | Sobre la candidata exacta: `npm ls` exit 0, postcss efectivo ≥ 8.5.23, `npm audit --omit=dev` = 0, CSS igual al de la misma candidata sin override y diff del lock explicado. Cierra solo el gate de dependencias de producción | §5c |
+| AC4 | Cada celda de la matriz §5b se cumple; aviso «simulación, no autenticación» visible en las 3 vistas; las reservas se validan contra todas las citas aunque la vista esté filtrada | e2e por rol |
 | AC5 | Agenda Mes/Semana/Día; escenarios A01–A13 de PR2 siguen pasando | Tests + navegador |
 | AC6 | Cruces: rechaza el mismo profesional o el mismo sillón, también sobre una Completada; permite contiguas y recursos distintos (pruebas 2 y 3 del tío; A08–A10) | e2e |
 | AC7 | Presupuesto: 2 prestaciones, cantidad y descuento dan un total exacto; el presupuesto conserva su precio al cambiar el arancel (prueba 5 del tío) | e2e |
-| AC8 | Evolución vinculada a una cita, con autor = profesional | e2e |
-| AC9 | Persistencia y restablecer con diálogo accesible (prueba 6 del tío) | e2e |
-| AC10 | axe (wcag2a/aa, 2.1aa, 2.2aa) = 0 en todas las vistas, escritorio y móvil; todos los diálogos con foco dentro, Tab atrapado, Escape y foco devuelto | axe + teclado |
+| AC8 | Evolución vinculada a una cita del mismo paciente y profesional, con autor = profesional activo; se rechazan otro paciente, otro profesional y una cita inexistente | e2e positivo y negativo |
+| AC9 | Persistencia y restablecer, con diálogo accesible, en los 3 roles (prueba 6 del tío). Las claves `v1`/`v3` siguen intactas; no se inventan sillones ni se pierden registros sin aviso | e2e |
+| AC10 | Sin violaciones automáticas de axe (wcag2a/aa, 2.1aa, 2.2aa) en las pantallas probadas, escritorio y móvil, y todas las pruebas de teclado de §5d. **No equivale a cumplimiento integral de accesibilidad** | axe + teclado, con hallazgos de antes y después |
 | AC11 | 320/375/390/768/1440 px sin scroll horizontal; selector de rol legible | Sonda móvil |
 | AC12 | 0 errores de consola o de página | Sonda |
 | AC13 | Ningún push a `main`, merge ni despliegue sin tu autorización | RADO |
@@ -145,12 +194,12 @@ Después de I8 me detengo y, si autorizas el push, abro un PR en borrador `integ
 
 | ID | Riesgo | Mitigación |
 |---|---|---|
-| **R0** | **Dos agentes (Codex y Claude) trabajan a la vez en el mismo repo.** PR2 apareció durante esta auditoría | Un solo integrador (D0); congelar PR1/PR2 o repetir I0 justo antes de integrar |
+| R0 | Divergencia accidental mientras otro agente trabaja en ramas vecinas. PR2 se creó en rama aparte y con coordinación registrada, así que no es un conflicto en sí | Un solo responsable de esta integración (D0); PR1/PR2 congelados como fuentes; revalidar refs en I0 |
 | R1 | `DentistApp.tsx` pasa de unos 40 a 45 KB y 8 bloques en conflicto | Tests de PR2 + sonda antes y después; dividir el archivo en un PR aparte |
 | R2 | Conflictos semánticos (§4) | Typecheck + e2e por rol |
 | R3 | El override de postcss sale de la versión que fija Next | Solo se usa al compilar; CSS idéntico verificado; repetir en cada actualización de Next |
 | R4 | 7 alertas de desarrollo (Tailwind 3) | Se compila en CI con entrada confiable; Tailwind 4 aparte |
-| R5 | La versión «B con autenticación» no está identificada | Ubicarla (D8) antes de dar la comparación por cerrada |
+| R5 | AUTH-PORTAL (`fe594d9`) solo está identificada por la revisión de Codex | Inventariarla aparte; no afecta a esta integración |
 | R6 | Repo público: commits con tu Gmail; notas internas visibles | Usar el correo noreply en los commits nuevos |
 | R7 | Roles filtrados solo en el navegador; localStorage sin atomicidad | Avisos visibles; documentado |
 | R8 | La clave nueva reinicia los datos demo | Aceptable; avisar en el changelog |
@@ -162,12 +211,27 @@ Después de I8 me detengo y, si autorizas el push, abro un PR en borrador `integ
 
 | ID | Decisión | Recomendación |
 |---|---|---|
-| **D0** | ¿Quién integra? | Uno solo. Si soy yo, Codex no empuja a PR1/PR2 mientras dure la integración; si es Codex, le paso este plan |
+| **D0** | ¿Quién integra? | La revisión de Codex recomienda Claude como único integrador y Codex como revisor independiente. **Pendiente de tu decisión** |
 | D1 | Versión integrada | `0.4.0` |
-| D2 | Permisos de lo nuevo | Aranceles: los edita Admin, los ve Recepción. Presupuestos: los crean Recepción y Dentista (este, de sus pacientes); Admin ve todos. Semana y grilla: todos, con Dentista fijo en su profesional. Agendar y sillón: Recepción y Admin. Evoluciones: Dentista |
-| D3 | Almacenamiento | Clave `v4`, empezar limpio |
+| D2 | Permisos de lo nuevo | La matriz §5b |
+| D2b | Presupuestos del Dentista | Filtrar por sus pacientes y registrar `createdBy` solo para mostrarlo |
+| D3 | Almacenamiento | Clave `v4`, empezar limpio, sin tocar `v1`/`v3` |
 | D4 | Despliegue | Un solo workflow de Pages, solo desde `main` (RELEASE en HOLD) |
 | D5 | Push de la rama de integración y PR en borrador | Sí, al terminar I8 |
 | D6 | Alertas de desarrollo de Tailwind 3 | Aceptar para la demo; Tailwind 4 aparte |
 | D7 | Sillón como recurso obligatorio (PR2) | Mantenerlo y confirmarlo con tu tío |
-| D8 | Versión «B con autenticación/usuarios» | Dime dónde está, o confirma que no entra en esta integración |
+| D8 | AUTH-PORTAL | ~~Pendiente~~ → resuelto: localizada por Codex y fuera de esta integración |
+
+---
+
+## 9. Ajustes de la revisión independiente (Codex) y dónde quedaron
+
+| # | Ajuste pedido | Incorporado en |
+|---|---|---|
+| 1 | Usar el HEAD real y revalidar refs; conservar la historia | I0 |
+| 2 | Matriz de roles concreta; `viewData` para pantallas, `data` para reservas; autor de presupuestos | §5b, I1, D2b, AC4 |
+| 3 | Evoluciones: misma cita, paciente y profesional, con pruebas positivas y de rechazo | I5, AC8 |
+| 4 | PostCSS sobre la candidata exacta, diff mínimo, comparación controlada y sin recetas manuales | I3, §5c, AC3. Probé además el camino estándar (`npm dedupe` / `npm update`) |
+| 5 | axe cero ≠ cumplimiento; teclado de selector, menú, pestañas y diálogos; herramientas fijadas | I6, I7, §5d, AC10 |
+| 6 | `v4` sin borrar `v1`/`v3`; sin sillones inventados ni pérdidas silenciosas; probar los 3 roles | I4, AC9 |
+| 7 | Gates separados; audit cero no es seguridad global | Fuera de alcance, AC3 |

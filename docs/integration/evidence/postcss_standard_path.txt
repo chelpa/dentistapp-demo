@@ -1,0 +1,17 @@
+# Prueba de caminos estándar de npm para el override de PostCSS (copia temporal de PR2 562514a)
+# Fecha: 2026-10-12T20:30Z · npm 10.9.4 · node v22.22.0
+# Base: package.json/package-lock.json de 562514a + overrides.next.postcss = "8.5.28" (salvo 'ref')
+
+install   : npm install                                   -> next>postcss 8.4.31 (invalid) · npm ls exit 1 · audit prod 2 · lock +0/-60
+lockonly  : npm install --package-lock-only && npm ci     -> next>postcss 8.4.31          · npm ls exit 1 · audit prod 2 · lock +0/-60
+ref       : overrides.next.postcss = "$postcss" + install + dedupe -> next>postcss 8.4.31 (overridden) · npm ls exit 0 · audit prod 2
+dedupe    : npm install && npm dedupe                     -> next>postcss 8.5.28          · npm ls exit 0 · audit prod 0 · lock +13/-71
+update    : npm install && npm update postcss             -> next>postcss 8.5.28          · npm ls exit 0 · audit prod 0 · lock +13/-71 (idéntico a dedupe)
+
+# Cambios de versión en el lock (dedupe/update):
+#   node_modules/next/node_modules/postcss: 8.4.31 -> 8.5.28
+#   node_modules/postcss:                   8.5.28 -> 8.5.29
+# Además, 20 entradas de paquetes de plataforma (@img/sharp-*, @next/swc-linux-*) cambian solo metadatos, según la versión de npm.
+# Salida del caso 'install' (npm ls postcss):
+| `-- postcss@8.4.31 invalid: "8.5.28" from node_modules/next overridden
+npm error invalid: postcss@8.4.31 /tmp/claude-0/-home-claude/***/scratchpad/pcss/install/node_modules/next/node_modules/postcss

@@ -15,7 +15,7 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 
 **Qué pasó.** El repo se creó a las 10:26 con el árbol de la 0.2.1 (idéntico al ZIP v0.2.1 y a la carpeta `dentistapp-mvp 4`), cuando el ZIP v0.3 existía desde las 10:13. Todo lo que se construyó después en GitHub (PR #1 y PR #2) partió de una base anterior. Las dos líneas corrigieron por separado el mismo error de agenda: un síntoma típico de trabajo duplicado.
 
-**Control (BASELINE COMPARISON).** Antes de crear un repo, una rama o un PR, comparar el árbol base con el último artefacto conocido del proyecto (por fecha y por versión). Si existe un artefacto más nuevo sin registrar en el repo, bloquear y pedir decisión.
+**Control (BASELINE COMPARISON).** Antes de crear un repo, una rama o un PR, comparar el árbol base con los demás artefactos conocidos del proyecto. «Más nuevo» no significa «base aceptada»: una fecha o una versión mayor **no bloquean** automáticamente una base anterior autorizada. El control marca la diferencia, compara capacidades y evidencia, y pide (o cita) la decisión humana que eligió la base.
 
 ## L3 · Copias de carpetas sin control de versiones
 
@@ -31,17 +31,20 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 
 ## L5 · Incidente PostCSS: el override que no se aplicaba
 
+**Relación con registros anteriores.** Esta lección complementa el registro histórico del incidente (`postcss@8.4.31 invalid` / ELSPROBLEMS); no lo reemplaza. La evidencia nueva es de una técnica distinta.
+
 **Qué pasó.** `npm audit --omit=dev` reportaba postcss anidado 8.4.31 bajo Next 15.5.x (GHSA-qx2v-qp2m-jg93, GHSA-6g55-p6wh-862q, GHSA-fxqj-rqcc-2cmp, GHSA-r28c-9q8g-f849).
 - Subir Next a 15.5.27 no lo resolvía, porque Next fija esa versión de postcss.
 - `npm audit fix --force` proponía saltos mayores (Next 16, Tailwind 4).
 - Un `overrides` en `package.json` **no tuvo efecto** mientras el lock conservaba la entrada anidada: `npm ls` la marcaba «invalid» y seguía en 8.4.31.
-- Funcionó al borrar solo esa entrada del lock: 0 vulnerabilidades en producción y CSS idéntico byte a byte.
+- En una copia de prueba funcionó borrar solo esa entrada del lock: 0 vulnerabilidades en producción y CSS idéntico byte a byte. **No es una receta:** con comandos estándar (`npm install` seguido de `npm dedupe`, o de `npm update postcss`) se llega al mismo árbol. `npm install` solo reproduce el «invalid» (ELSPROBLEMS), y tampoco sirven `--package-lock-only` ni `"$postcss"`.
 
 **Controles.**
 1. Verificar el árbol instalado (`npm ls <paquete>`), no solo lo declarado en `package.json`.
 2. No aceptar `--force` sin revisar qué versiones mayores introduce.
-3. Toda remediación de dependencias se acompaña de una prueba de no regresión del artefacto, como el hash del CSS o JS compilado o una prueba visual.
-4. Separar el riesgo de producción del de herramientas de desarrollo; en un sitio estático, postcss solo se usa al compilar.
+3. Toda remediación de dependencias se repite sobre la **candidata exacta** y lleva una prueba de no regresión controlada: mismo código y mismo runtime, con y sin el cambio, comparando el hash del CSS/JS o con una prueba visual. Se registra el diff del lock entrada por entrada.
+4. Usar mecanismos documentados (`overrides` de npm) y los comandos estándar; una edición manual del lock solo sirve como diagnóstico.
+5. Separar el riesgo de producción del de herramientas de desarrollo; en un sitio estático, postcss solo se usa al compilar.
 
 ## L6 · Errores de agenda
 
@@ -63,8 +66,10 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 - axe y Lighthouse (accesibilidad 95) **no** detectaron que el diálogo «Nueva cita» no recibe el foco, no atrapa Tab y no se cierra con Escape. Eso salió solo con una prueba de teclado escrita a mano.
 
 **Controles.**
+- axe en cero acredita que no hay violaciones automáticas en las pantallas probadas; **no** acredita cumplimiento integral.
 - Medir contraste a nivel de tokens de diseño.
-- Agregar a cada suite pruebas de teclado: el foco entra al abrir, Tab queda dentro, Escape cierra y el foco vuelve al disparador.
+- Agregar a cada suite pruebas de teclado: el foco entra al abrir, Tab queda dentro, Escape cierra y el foco vuelve al disparador. Cubrir también el selector de rol, el menú y las pestañas.
+- Fijar las versiones de las herramientas (axe, navegador) y guardar los hallazgos de antes y de después.
 - Un puntaje alto de Lighthouse no equivale a «accesible».
 
 ## L8 · Un build exitoso no prueba el comportamiento
@@ -81,6 +86,8 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 
 ## L10 · Agentes en paralelo y nombres que chocan
 
+**Matiz (revisión de Codex).** Que haya varios agentes no es, por sí solo, un conflicto: el PR #2 se creó en una rama aparte y la coordinación con la auditoría paralela quedó registrada. El riesgo es la divergencia accidental, que se evita con un solo responsable por integración y revalidando refs.
+
 **Qué pasó.** Mientras esta auditoría comparaba versiones, otro agente (Codex) empujó el PR #2 (agenda semanal), apilado sobre el PR #1. El `ls-remote` de las 19:51Z no lo mostraba; el fetch de las ~20:05Z sí. Además, cada agente usaba sus propias letras: el PR #2 llama «A» a la línea del repo y la auditoría paralela usa «B» para una versión con autenticación y «C» para la de roles; esta auditoría había usado A/B/C con otro sentido.
 
 **Controles.**
@@ -90,6 +97,12 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 - Un agente que encuentra trabajo nuevo de otro no lo descarta ni lo sobrescribe: lo identifica, reproduce su evidencia y lo incorpora a la comparación.
 
 ---
+
+## L11 · `noindex` no es control de acceso
+
+**Qué pasó.** La demo usa `noindex` y un `robots.txt` en la subcarpeta. El `robots.txt` de subcarpeta no tiene efecto, porque los buscadores leen el de la raíz del dominio. `noindex` solo regula la indexación: cualquiera con el enlace puede entrar. Referencia: https://developers.google.com/search/docs/crawling-indexing/block-indexing
+
+**Control.** En los informes, separar «indexación» de «acceso». Una demo «privada» exige protección en el hosting (autenticación o enlace restringido), no metaetiquetas.
 
 ## Propuesta de control CHAZEWARE
 
@@ -108,4 +121,4 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 - detectar que el repo nació de `c7653b5e…` (0.2.1) cuando ya existía `d4b3b2c6…` (0.3.0);
 - detectar un candidato nuevo (`562514a…`) que apareció entre la auditoría y la decisión;
 - reportar, para ROLES + PR2, 1 archivo con 8 bloques en conflicto más un error de tipos semántico (TS2739);
-- dejar abierta la versión «B con autenticación», que se menciona pero no tiene identidad localizada.
+- inventariar AUTH-PORTAL (`fe594d9`, identificada después por la revisión de Codex) como una línea separada, sin forzarla en la integración estática.
