@@ -1,143 +1,143 @@
 # DentistApp · Auditoría de versiones y plan de integración
 
-Fecha: 2026-10-12 (America/Santiago) · Preparado por Claude (Opus 5.5) · Rama local `import/v0.3-local-zip`
+Fecha: 2026-10-12 (America/Santiago) · Preparado por Claude (Opus 5.5) en una sesión de Claude en la nube · Rama local `integration/dentistapp-v0.4`
 
-**Estado de autorizaciones:** EXECUTE = PENDIENTE · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD · PUSH rama de integración = PENDIENTE.
-Este documento cubre AUDIT, PLAN, ORGANIZE y DIRECT. No se implementó ninguna función ni se escribió en GitHub.
+**Autorizaciones:** EXECUTE = PENDIENTE · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD · PUSH rama de integración = PENDIENTE.
+Este documento cubre AUDIT, PLAN, ORGANIZE y DIRECT. No se implementó ninguna función ni se escribió nada en GitHub.
+
+> **Cambio durante la auditoría.** A las 16:56–17:01 apareció en GitHub el PR #2 (`562514a`, agenda semanal, de Codex), apilado sobre el PR #1. Lo incorporé: lo identifiqué, reproduje sus pruebas y lo sondeé en navegador. Es la evidencia de que hay dos agentes trabajando a la vez en el mismo repo (ver D0).
 
 ---
 
-## 1. AUDIT · Identidad de cada versión
+## 1. AUDIT · Identidades
 
-El nombre «v0.3» lo usan dos artefactos distintos. Desde aquí cada versión se nombra por su identidad y no por su etiqueta.
+No uso letras A/B/C, porque el PR #2 ya llama «A» a la línea del repo y la auditoría paralela usa B y C con otro sentido. Cada versión se nombra por lo que es y por su hash.
 
-| ID | Qué es | Identidad verificable | `package.json` | Procedencia |
+| ID | Qué es | Identidad | `package.json` | Procedencia |
 |---|---|---|---|---|
-| **A** | `main` del repo, lo que hoy publica GitHub Pages | commit `259ef732683745713f50deae7e786e888f8e484e` (2026-10-12 10:26 -03) | `0.2.1` | Código = `dentistapp-mvp-v0.2.1.zip` (sha256 `74dcca35…3f88e`) = carpeta `dentistapp-mvp 4` (árbol idéntico, hash de manifiesto `c7653b5e6669cf64`). Se agregaron `pages.yml`, `basePath` en `next.config.ts`, un `.gitignore` distinto y `tsconfig.tsbuildinfo` versionado. |
-| **B** | «v0.3 local» con roles | `dentistapp-mvp-v0.3.zip` sha256 `40f16f971f45ea1ddcf43671fd0c95d01892334a70e27da291985b9ea9208ba2` (bytes idénticos a `dentistapp-mvp.zip`) · hash de manifiesto `d4b3b2c636738d98` | `0.3.0` | `/Users/chelpa/.codex/.chatgpt-projects/g-p-6aa8215c87e88191acb0ff85381ddc9d/`. ZIP escrito 10:13 -03; fuentes 10:03–10:13 -03. Sin git. |
-| **B′** | Carpeta de trabajo de B | `…/dentistapp-mvp/` · hash de manifiesto `f2aae68e3727c383` | `0.3.0` | = B + 6 archivos que modifiqué después para el script de despliegue (`next.config.ts`, `package.json`, `README.md`, `PUBLISH_DEMO.md`, `scripts/deploy-github.sh`, `.github/workflows/deploy-pages.yml`). No es una versión distinta del producto. |
-| **C** | PR #1 `feature/uncle-feedback-v02-20261012`, titulado «DentistApp v0.3 candidate · agenda diaria, aranceles y presupuestos» | HEAD `aaa83077c462b4de8b7a509ee76946ce69fdc89a` (verificado con `git ls-remote` a las 19:51Z). Draft, abierto, base `main`, 5 commits | `0.2.1` | Parte de A. Commits `f8aa3e3`, `4da1c34`, `cdf09f3`, `a2dc24d`, `aaa8307` (Next 15.5.27). |
+| **MAIN** | `main`, lo que publica GitHub Pages | `259ef732683745713f50deae7e786e888f8e484e` (10:26) | 0.2.1 | = `dentistapp-mvp-v0.2.1.zip` (sha256 `74dcca35…3f88e`) = carpeta `dentistapp-mvp 4` (manifiesto `c7653b5e6669cf64`), más `pages.yml`, `basePath`, `.gitignore` y `tsconfig.tsbuildinfo` |
+| **ROLES** | «v0.3 local» con vistas por rol | `dentistapp-mvp-v0.3.zip` sha256 `40f16f971f45ea1ddcf43671fd0c95d01892334a70e27da291985b9ea9208ba2` (= `dentistapp-mvp.zip`) · manifiesto `d4b3b2c636738d98` | 0.3.0 | `/Users/chelpa/.codex/.chatgpt-projects/g-p-6aa8215c87e88191acb0ff85381ddc9d/`. ZIP de las 10:13. Sin git |
+| ROLES′ | Carpeta de trabajo de ROLES | `…/dentistapp-mvp/` · manifiesto `f2aae68e3727c383` | 0.3.0 | = ROLES + mis 6 cambios del script de despliegue. No es otra versión del producto |
+| **PR1** | PR #1, «DentistApp v0.3 candidate · agenda diaria, aranceles y presupuestos» | `aaa83077c462b4de8b7a509ee76946ce69fdc89a`. Draft, base `main`, 5 commits | 0.2.1 | Parte de MAIN |
+| **PR2** | PR #2, «DentistApp A · agenda semanal por profesional y sillón» | `562514aa46eaddb4987ee7b72447beedabe6da8b`. Draft, **base PR1**, 2 commits (16:56 y 17:01) | 0.2.1 | Parte de PR1. Implementación y revisión de Codex |
 
-**Causa de la divergencia (EVIDENCE):** B ya existía (ZIP a las 10:13) cuando se creó el repo a las 10:26 con el árbol de la 0.2.1. Todo el trabajo del PR #1 partió de esa base anterior, y las dos líneas corrigieron por separado el mismo error de agenda. En las carpetas accesibles no hay ningún clon git (`.git`); no se pudo ubicar el clon desde el que se empujaron los commits.
+**Correspondencia con la otra nomenclatura (CLAIM tomado de `docs/calendar-001/AUDIT-PLAN.md` del PR #2):**
+- «Versión A» = la línea del repo (MAIN → PR1 → PR2).
+- La auditoría paralela «reportó B con autenticación/usuarios y C con vistas de roles». **C probablemente es ROLES** (no verificado).
+- **B «con autenticación/usuarios» no lo encontré** en las carpetas accesibles: hay que identificarlo antes de cerrar la comparación (pendiente G5 en el PR #2).
 
-**Corrección a mi informe anterior:** dije que «se publicó la versión equivocada». Lo correcto es que GitHub Pages publica `main` (A), y mantener `main` sin v0.3 fue una decisión deliberada. El sitio es coherente con esa política; no es un error de despliegue.
+**Causa raíz de la divergencia (EVIDENCE):** ROLES ya existía (10:13) cuando se creó el repo (10:26) con el árbol de la 0.2.1. PR1 y PR2 se construyeron sobre esa base anterior. ROLES y PR1 corrigieron por separado el mismo error de agenda. En las carpetas accesibles no hay ningún clon `.git`.
 
-Manifiestos por archivo (sha256) en `evidence/manifest_*.sha256`.
-
----
-
-## 2. AUDIT · Matriz de funciones realmente implementadas
-
-Cada fila se probó en navegador (Chromium 141, Playwright) sobre una compilación de cada versión, además de leer el código. Resultados en `evidence/probe_*.json`.
-
-| Función | A · main (publicada) | B · v0.3 ZIP | C · PR #1 | Objetivo de integración |
-|---|---|---|---|---|
-| Vistas por rol | ❌ Selector decorativo: los 3 roles muestran el mismo menú y título | ✅ Menú de 3/4/5 secciones, títulos distintos y filtro por profesional | ❌ Decorativo, igual que A | B, extendido a lo nuevo |
-| «Equipo y vistas» (Admin) | ❌ | ✅ | ❌ | B |
-| Agenda mensual | ✅ | ✅ | ✅ | Mantener |
-| Agenda diaria (lista) | ✅ | ✅ | ✅ | Mantener |
-| Agenda diaria en grilla de 15 min (08:00–20:00) | ❌ | ❌ | ✅ Con selector de profesional | C, respetando roles |
-| **Agenda semanal** | ❌ | ❌ | ❌ | **Nueva** |
-| Duración de cita | Fija, 45 min | Fija, 45 min | ✅ 15–240 min (10 opciones), validada en 08:00–20:00 | C |
-| Cruce con una cita «Completada» | ❌ Permite doble reserva | ✅ La rechaza | ✅ La rechaza | Rechazar |
-| Ficha y odontograma | ✅ | ✅ Edición solo para Dentista | ✅ | B |
-| Evoluciones (notas) | Autor fijo «Profesional demo» | Autor = profesional seleccionado | Autor fijo «Profesional demo» | B + **vincular a la atención** (P0 del tío) |
-| Tratamientos (estado) | ✅ | ✅ Según rol | ✅ | B |
-| Aranceles editables (CLP) | ❌ | ❌ | ✅ 5 aranceles | C, según rol |
-| Presupuestos | ❌ | ❌ | ✅ Líneas, cantidad, pieza, descuento, total. Probado: $130.000 | C, según rol |
-| Restablecer demo | `confirm()` nativo | Diálogo propio (el foco entra; Escape no cierra) | `confirm()` nativo | Diálogo propio y accesible |
-| Diálogo «Nueva cita» con teclado | ❌ El foco no entra y Escape no cierra | ❌ Igual | ❌ Igual | Foco dentro, Tab atrapado, Escape, devolver foco |
-| Contraste WCAG (nodos con falla en Inicio) | 52 | 49 | 48 | 0 |
-| Móvil 375 px, vistas probadas | Sin scroll horizontal | Sin scroll horizontal | Sin scroll horizontal (también Aranceles) | Sin scroll en todas, incluida la semanal |
-| Error de guardado en localStorage | Sin manejo | ✅ `try/catch` y aviso | Sin manejo | B |
-| Clave de almacenamiento | `…-v1` | `…-v3` (empieza limpio) | `…-v1` + migración de aranceles y presupuestos (probada) | Nueva `…-v4` (decisión D3) |
-| Next.js / auditoría prod | 15.5.26 · 4 vulnerabilidades (1 moderada, 3 altas) | 15.5.26 · 4 (igual) | 15.5.27 · 2 (postcss anidado 8.4.31) | 0 (prueba de viabilidad en §5) |
-| Subruta de GitHub Pages (`basePath`) | ✅ | ❌ En el ZIP (✅ en B′ por mis cambios) | ✅ | ✅ |
-| CI del PR (typecheck + build) | — | — | ✅ `uncle-feedback-ci.yml` | Mantener |
+**Corrección a mi informe anterior:** el sitio publica MAIN por decisión deliberada (`main` congelado). No es un error de despliegue.
 
 ---
 
-## 3. ORGANIZE · Ramas preparadas (solo locales; nada se empujó)
+## 2. AUDIT · Funciones realmente implementadas
+
+Todo se probó en navegador (Chromium 141, Playwright, es-CL, America/Santiago) sobre compilaciones locales de cada versión, salvo las celdas marcadas con †, que salen de leer el código o de la evidencia del propio PR #2. Evidencia en `evidence/probe_*.json`.
+
+| Función | MAIN (publicada) | ROLES | PR1 | PR2 | Objetivo |
+|---|---|---|---|---|---|
+| Vistas por rol | ❌ Decorativo | ✅ Menú 3/4/5, títulos distintos, filtro por profesional | ❌ | ❌ | ROLES, extendido a todo lo nuevo |
+| «Equipo y vistas» (Admin) | ❌ | ✅ | ❌ | ❌ | ROLES |
+| Agenda Mes / Día (lista) | ✅ | ✅ | ✅ | ✅ | Mantener |
+| Grilla diaria de 15 min | ❌ | ❌ | ✅ | ✅ | PR1/PR2 según rol |
+| **Agenda semanal** | ❌ | ❌ | ❌ | ✅ Lun–Dom/Lun–Vie, eje 15/30, filtros por profesional y sillón, carriles, crear desde un bloque; es la vista por defecto | PR2 según rol |
+| Sillón (recurso) | ❌ | ❌ | ❌ | ✅ Obligatorio en citas nuevas; las antiguas quedan «sin asignar»† | PR2 (D7) |
+| Duración variable | 45 fija | 45 fija | ✅ 15–240 | ✅ 15–240 | PR1/PR2 |
+| Cruces | ❌ Permite doble reserva sobre una cita Completada | ✅ Rechaza (profesional) | ✅ Rechaza (profesional) | ✅ Rechaza por profesional **o** sillón; permite citas contiguas; también con Completada | PR2 |
+| Citas en el pasado† | Permite | Permite | Permite | ✅ Rechaza (helper `isPastAppointment` y tests de PR2) | PR2 |
+| Estado «Cancelada» | ❌ | ❌ | ❌ | ✅ (libera el horario)† | PR2 |
+| Ficha y odontograma | ✅ | ✅ Edición solo Dentista | ✅ | ✅ | ROLES |
+| Evoluciones | Autor fijo | Autor = profesional | Autor fijo | Autor fijo | ROLES + vincular a la atención (P0 del tío) |
+| Aranceles y presupuestos | ❌ | ❌ | ✅ $130.000 probado | ✅ $130.000 probado | PR1 según rol |
+| Diálogo «Nueva cita» con teclado | ❌ | ❌ | ❌ | ✅ `<dialog>` nativo: foco dentro, Tab atrapado, Escape, foco devuelto | PR2, aplicado a todos los diálogos |
+| Restablecer demo | `confirm()` | Diálogo propio (sin Escape) | `confirm()` | `confirm()` | Diálogo de ROLES montado sobre `ModalDialog` de PR2 |
+| Foco visible | — | — | — | ✅ `:focus-visible` 3 px† | PR2 |
+| Contraste (nodos con falla en Inicio) | 52 | 49 | 48 | 48 | 0 |
+| Móvil 375 px | Sin scroll horizontal | Sin scroll horizontal | Sin scroll horizontal | Sin scroll horizontal (también Semana) | Igual |
+| Tests unitarios | — | — | — | ✅ 20/20 (reproducido en -03 y UTC) | Mantener y ampliar |
+| Clave de almacenamiento | v1 | v3 | v1 + migración | v1 + migración | v4 (D3) |
+| Next / auditoría prod | 15.5.26 · 4 | 15.5.26 · 4 | 15.5.27 · 2 | 15.5.27 · 2 | 0 (§5, I3) |
+| `basePath` | ✅ | ❌ ZIP (✅ ROLES′) | ✅ | ✅ | ✅ |
+
+---
+
+## 3. ORGANIZE · Ramas locales (nada empujado)
 
 ```
-main 259ef73 (A)
- └─ import/v0.3-local-zip 134fd46   «import: v0.3 local (roles) snapshot, verbatim from ZIP»  (B sobre A, con procedencia en el mensaje)
-     └─ (propuesta) integration/dentistapp-v0.4  ← merge de origin/feature/uncle-feedback-v02-20261012 (C, aaa8307)
+main 259ef73 ─┬─ import/v0.3-local-zip 134fd46  (ROLES literal sobre MAIN; procedencia en el mensaje)
+              │   └─ integration/dentistapp-v0.4 45e4c7a+  (solo documentación; sin código)
+              └─ PR1 aaa8307 ── PR2 562514a
 ```
 
-- El import de B es literal: no se cambió ningún byte respecto del ZIP. Por eso `next.config.ts` pierde el `basePath` de `main`. Queda registrado y se resuelve en I2.
-- El PR #1 se fusionaría con merge (no cherry-pick), así sus 5 commits, autoría y hashes quedan en la historia. `git merge-base --is-ancestor aaa8307 HEAD` debe dar verdadero.
-- A, B y C quedan intactos: `main` y el PR no se tocan, el ZIP y la carpeta original no se modifican.
-- Entrego un `git bundle` con la rama de import y estos documentos, por si quieres revisarla en tu clon sin que yo empuje nada.
+- El import de ROLES es byte a byte el ZIP. Por eso `next.config.ts` pierde el `basePath` de MAIN; se repone en I2.
+- La integración propuesta fusiona **PR2** con un merge, lo que también trae los 5 commits de PR1. La historia y la autoría de Codex se conservan.
+- MAIN, PR1, PR2, el ZIP y la carpeta original no se tocan.
+- Entrego un `git bundle` con las dos ramas locales.
 
 ---
 
-## 4. DIRECT · Conflictos de integración
+## 4. DIRECT · Conflictos
 
-**Merge de prueba** (C sobre B; se abortó y no quedó ningún commit), en `evidence/trial_merge.txt`:
+**Merges de prueba** (abortados, sin commit; `evidence/trial_merge*.txt`):
 
-- Se combinan sin conflicto: `src/lib/demo.ts` (tipos y semillas de aranceles y presupuestos), `package.json` (Next 15.5.27 junto a la versión 0.3.0), `package-lock.json`, `UNCLE_FEEDBACK_2026-10-12.md` y `uncle-feedback-ci.yml`.
-- **Un archivo en conflicto:** `src/components/DentistApp.tsx`, con 6 bloques y 104 líneas.
+| Merge sobre ROLES | Archivos en conflicto | Bloques | Líneas |
+|---|---|---|---|
+| PR1 | `DentistApp.tsx` | 6 | 104 |
+| **PR2** (incluye PR1) | `DentistApp.tsx` | **8** | **156** |
 
-| # | Bloque | Lado B | Lado C | Resolución propuesta |
-|---|---|---|---|---|
-| 1 | `type Page` | `"team"` | `"finance"` | Ambos |
-| 2 | Menú | Equipo y vistas | Aranceles y presupuestos | Ambos, filtrados por rol |
-| 3 | `openPatient` / `openModal` / `schedule` | Protección por rol y `FormData` | Duración y validación 08:00–20:00 | Lógica de B + `name="duration"` en el formulario + validación de C |
-| 4 | Render de páginas | `viewData` filtrado por rol | Página Finance con `data` completo | Finance recibe `viewData` y rol |
-| 5 | Diálogo de cita | Cambios de B | Campo de duración | Ambos |
-| 6 | Agenda «Día» y Tratamientos | Tratamientos con rol | Grilla `DailySlots` con `data` | Grilla con `viewData`; Dentista fijo en su profesional |
+El resto se combina solo: `demo.ts`, `globals.css`, `package*.json`, los componentes nuevos (`WeeklyCalendar`, `ModalDialog`), `lib/calendar.ts`, tests, scripts y docs.
 
-**Conflictos semánticos que git no detecta.** El 1 lo comprobé compilando; los demás, leyendo el código:
+**Conflictos semánticos que git no detecta:**
 
-1. `dataForRole()` (B) devuelve un `DemoState` sin `tariffs` ni `budgets`. Con el tipo de C, que los exige, **el typecheck falla**: `src/lib/demoRoles.ts(20,3): error TS2739` (probado con los roles de B y el `demo.ts` de C).
-2. `schedule()` de B lee el formulario con `FormData`; el estado `form.duration` de C no llegaría si el campo no tiene `name`.
-3. `DailySlots` y `Finance` de C leen `data` completo. Sin ajuste, un Dentista vería la agenda y los presupuestos de otros profesionales.
-4. Clave de almacenamiento: B usa `v3` y C migra sobre `v1`. Hay que elegir una sola (D3).
-5. Despliegue: `main` y C usan `pages.yml`; B′ tiene `deploy-pages.yml`. Hay que dejar uno (D4).
+1. `dataForRole()` de ROLES no incluye `tariffs` ni `budgets`. Con los tipos de PR1 o PR2, **`tsc` falla**: `src/lib/demoRoles.ts(20,3): error TS2739`. Lo comprobé en los dos casos.
+2. `schedule()` de ROLES usa `FormData`; PR2 usa el estado `form` (duración, sillón) y helpers propios (`validAppointmentTime`, `isPastAppointment`, `findConflict`). Hay que quedarse con la lógica de PR2 y conservar las protecciones por rol de ROLES.
+3. `WeeklyCalendar`, `DailySlots` y `Finance` reciben `data` completo. Sin ajuste, un Dentista vería la agenda y los presupuestos de otros. Deben recibir `viewData`. **Ojo:** la detección de conflictos debe seguir usando `data` completo, como exige PR2.
+4. El diálogo de restablecer de ROLES no usa `ModalDialog`.
+5. La clave de almacenamiento y el workflow de despliegue difieren entre versiones (D3, D4).
 
 ---
 
-## 5. PLAN · Propuesta de integración (se ejecuta solo si apruebas)
+## 5. PLAN · Integración (solo si apruebas)
 
-Rama `integration/dentistapp-v0.4`, creada desde `import/v0.3-local-zip`. Un commit por paso, cada uno con su verificación.
+Rama `integration/dentistapp-v0.4`. Un commit por paso, cada uno verificado.
 
-| Paso | Contenido | Verificación del paso |
+| Paso | Contenido | Verificación |
 |---|---|---|
-| I1 | Merge de C (aaa8307). Resolver los 6 bloques y los conflictos semánticos 1–3. Aranceles, presupuestos, grilla y duración, conscientes del rol | typecheck + build + sonda de la §2 |
-| I2 | Recuperar `basePath` de `main`. Un solo workflow de Pages (acciones actuales, con typecheck) más el CI del PR | Build con `/dentistapp-demo` servido en subruta, 0 respuestas 4xx |
-| I3 | Seguridad: Next 15.5.27 (de C) + `overrides: { next: { postcss: "8.5.28" } }`, regenerando solo esa entrada del lock | Viabilidad ya probada sobre C: `npm audit --omit=dev` = 0, CSS idéntico byte a byte (sha `35c0e077…`), `npm ci` OK |
-| I4 | Clave `dentistapp-mvp-demo-v4` y normalización defensiva de datos guardados | Recargar y restablecer |
-| I5 | **Agenda semanal** (lunes a domingo, por profesional, bloques según duración) | Prueba e2e y móvil |
-| I6 | **Evolución vinculada a una atención:** campo opcional «Atención» con las citas del paciente; autor = profesional | Prueba e2e |
-| I7 | Accesibilidad: tokens `teal #0e8f86 → #0a7a71` (5,2:1) y `muted #718193 → #5f6f80` (5,16:1), números de piezas; foco y Escape en los dos diálogos con devolución del foco; `aria-current` en el menú; pestañas con semántica; foco visible y texto completo en el selector de rol en móvil | axe = 0 en todas las vistas + prueba de teclado |
-| I8 | Suite e2e (la sonda convertida en prueba) y axe en el CI del PR | CI verde |
-| I9 | Versión `0.4.0`, README, AUDIT_NOTE y CHANGELOG con procedencia A/B/C | Revisión |
+| I0 | Revalidar identidades: `git ls-remote`. Si PR1 o PR2 cambiaron, repetir el merge de prueba sobre los HEAD nuevos | Hashes registrados |
+| I1 | Merge de PR2 resolviendo los 8 bloques y los conflictos semánticos 1–4. Lo nuevo (semana, grilla, sillón, aranceles, presupuestos) queda consciente del rol; los conflictos se siguen calculando sobre todas las citas | `npm test` 20/20 + typecheck + build + sonda |
+| I2 | Recuperar `basePath`. Un solo workflow de Pages más el CI de PR, con tests | Build en subruta, 0 respuestas 4xx |
+| I3 | Override de postcss para Next (`8.5.28`), regenerando solo esa entrada del lock | Viabilidad ya probada sobre PR1: audit prod = 0, CSS idéntico byte a byte |
+| I4 | Clave `…-v4`, con normalización defensiva | Recargar y restablecer |
+| I5 | Evolución vinculada a una atención (campo «Atención»), autor = profesional | e2e |
+| I6 | Accesibilidad: tokens `teal → #0a7a71` (5,2:1) y `muted → #5f6f80` (5,16:1), grises manuales; restablecer con `ModalDialog`; `aria-current`; pestañas; selector de rol legible en móvil | axe = 0 en todas las vistas, prueba de teclado |
+| I7 | Pruebas: suite de PR2 + e2e por rol (la sonda) + axe en CI | CI verde |
+| I8 | Versión `0.4.0`, README, AUDIT_NOTE y CHANGELOG con procedencia | Revisión |
 
-Después de I9 me detengo: abro un PR en borrador `integration → main` (si autorizas el push) y espero tu revisión. **El PR #1 no se fusiona por separado**; queda como fuente y se cierra cuando lo decidas, marcado como incorporado.
+Después de I8 me detengo y, si autorizas el push, abro un PR en borrador `integration → main`. PR1 y PR2 no se fusionan por separado.
 
-**Fuera de alcance:** migrar a Tailwind 4 (requerido para cerrar 7 alertas de herramientas de desarrollo), backend, autenticación real, firma de evoluciones y concurrencia.
+**Fuera de alcance:** Tailwind 4 (7 alertas de desarrollo), backend, autenticación real, firma de evoluciones, concurrencia entre pestañas (riesgo A17 de PR2) y la versión «B con autenticación» hasta identificarla.
 
 ---
 
 ## 6. DIRECT · Criterios de aceptación
 
-| ID | Criterio | Cómo se verifica |
+| ID | Criterio | Verificación |
 |---|---|---|
-| AC1 | Procedencia: la historia contiene el import de B (sha del ZIP en el mensaje) y los 5 commits de C | `git log`; `git merge-base --is-ancestor aaa8307 HEAD` |
-| AC2 | `npm ci`, `typecheck` y `build:static` pasan con `DENTISTAPP_BASE_PATH=/dentistapp-demo`; servido en subruta sin respuestas 4xx | Script + servidor local |
-| AC3 | `npm audit --omit=dev` = 0; postcss efectivo ≥ 8.5.23; CSS igual al build sin override | `npm audit`, `npm ls postcss`, sha del CSS |
-| AC4 | Roles: Recepción sin ficha clínica; Dentista ve solo sus pacientes, grilla y presupuestos; Admin ve Equipo y Aranceles; aviso «simulación, no es autenticación» visible en las 3 vistas | e2e por rol |
-| AC5 | Agenda Mes/Semana/Día; grilla de 15 min 08:00–20:00; el alto del bloque es proporcional a la duración (30/60/120) | e2e (pruebas 1 y 4 del tío) |
-| AC6 | Duración 15–240 en pasos de 15; rechaza citas que terminan después de 20:00 | e2e |
-| AC7 | Rechaza cruces con el mismo profesional, también con una cita Completada; permite el mismo horario con otro profesional | e2e (pruebas 2 y 3 del tío) |
-| AC8 | Presupuesto con 2 prestaciones, cantidad y descuento da un total exacto; al cambiar el arancel, el presupuesto guardado conserva su precio | e2e (prueba 5 del tío) |
-| AC9 | Evolución vinculada a una cita del paciente, con autor = profesional, visible en la ficha | e2e |
-| AC10 | Los datos persisten al recargar; restablecer, con diálogo propio, recupera los datos iniciales | e2e (prueba 6 del tío) |
-| AC11 | axe (wcag2a/aa, 2.1aa, 2.2aa) = 0 en todas las vistas, escritorio y móvil; diálogos: el foco entra, Tab queda atrapado, Escape cierra y el foco vuelve | axe + prueba de teclado |
-| AC12 | 375 px: sin scroll horizontal en ninguna vista (incluidas Semana y Aranceles); selector de rol legible; objetivos táctiles ≥ 24 px | Sonda móvil (prueba 7 del tío) |
-| AC13 | 0 errores de consola o de página en todos los recorridos | Sonda |
-| AC14 | Ningún push a `main`, merge ni despliegue sin tu autorización explícita | Registro RADO |
+| AC1 | La historia contiene el import de ROLES (sha del ZIP) y los commits de PR1 y PR2 | `git merge-base --is-ancestor 562514a HEAD` |
+| AC2 | `npm ci`, `npm test`, `typecheck` y `build:static` (con `/dentistapp-demo`) pasan; servido en subruta sin 4xx | Script |
+| AC3 | `npm audit --omit=dev` = 0; postcss efectivo ≥ 8.5.23; CSS igual al build sin override | `npm audit`, `npm ls`, sha |
+| AC4 | Roles: Recepción sin ficha clínica; Dentista ve solo lo suyo (semana, grilla, presupuestos); Admin ve Equipo y Aranceles; aviso «simulación, no autenticación» visible | e2e por rol |
+| AC5 | Agenda Mes/Semana/Día; escenarios A01–A13 de PR2 siguen pasando | Tests + navegador |
+| AC6 | Cruces: rechaza el mismo profesional o el mismo sillón, también sobre una Completada; permite contiguas y recursos distintos (pruebas 2 y 3 del tío; A08–A10) | e2e |
+| AC7 | Presupuesto: 2 prestaciones, cantidad y descuento dan un total exacto; el presupuesto conserva su precio al cambiar el arancel (prueba 5 del tío) | e2e |
+| AC8 | Evolución vinculada a una cita, con autor = profesional | e2e |
+| AC9 | Persistencia y restablecer con diálogo accesible (prueba 6 del tío) | e2e |
+| AC10 | axe (wcag2a/aa, 2.1aa, 2.2aa) = 0 en todas las vistas, escritorio y móvil; todos los diálogos con foco dentro, Tab atrapado, Escape y foco devuelto | axe + teclado |
+| AC11 | 320/375/390/768/1440 px sin scroll horizontal; selector de rol legible | Sonda móvil |
+| AC12 | 0 errores de consola o de página | Sonda |
+| AC13 | Ningún push a `main`, merge ni despliegue sin tu autorización | RADO |
 
 ---
 
@@ -145,26 +145,29 @@ Después de I9 me detengo: abro un PR en borrador `integration → main` (si aut
 
 | ID | Riesgo | Mitigación |
 |---|---|---|
-| R1 | `DentistApp.tsx` es un archivo de unos 45 KB con líneas muy largas; resolver los conflictos a mano es propenso a errores | Sonda antes y después de cada paso; dividir el archivo después, en un PR aparte |
-| R2 | Conflictos semánticos invisibles para git (§4) | Typecheck + e2e por rol en I1 |
-| R3 | El override de postcss sale de la versión que fija Next (8.4.31) | Solo se usa al compilar; CSS idéntico verificado; repetir la prueba en cada actualización de Next |
-| R4 | Siguen 7 alertas en dependencias de desarrollo (cadena de Tailwind 3) | Se compila en CI con entrada confiable; Tailwind 4 como trabajo aparte |
-| R5 | Si alguien agrega commits al PR #1 durante la integración, las ramas vuelven a divergir | Congelar el PR #1 o reintegrar su HEAD nuevo antes del cierre |
-| R6 | El repo es público: una rama empujada expone el código y la nota del feedback; los commits muestran tu Gmail | Commits nuevos con `chelpa@users.noreply.github.com` (ya usado en la rama local) |
-| R7 | La vista semanal es código nuevo, sin versión previa | Criterios AC5 y AC12 específicos |
-| R8 | Los roles se filtran solo en el navegador: no son seguridad | Aviso visible; documentado en README |
-| R9 | Cambiar la clave de almacenamiento reinicia los datos demo de quienes ya entraron | Aceptable para una demo; se avisa en el changelog |
-| R10 | Las reglas de quién crea presupuestos dependen de la clínica | Decisión D2 (idealmente, preguntarle a tu tío) |
+| **R0** | **Dos agentes (Codex y Claude) trabajan a la vez en el mismo repo.** PR2 apareció durante esta auditoría | Un solo integrador (D0); congelar PR1/PR2 o repetir I0 justo antes de integrar |
+| R1 | `DentistApp.tsx` pasa de unos 40 a 45 KB y 8 bloques en conflicto | Tests de PR2 + sonda antes y después; dividir el archivo en un PR aparte |
+| R2 | Conflictos semánticos (§4) | Typecheck + e2e por rol |
+| R3 | El override de postcss sale de la versión que fija Next | Solo se usa al compilar; CSS idéntico verificado; repetir en cada actualización de Next |
+| R4 | 7 alertas de desarrollo (Tailwind 3) | Se compila en CI con entrada confiable; Tailwind 4 aparte |
+| R5 | La versión «B con autenticación» no está identificada | Ubicarla (D8) antes de dar la comparación por cerrada |
+| R6 | Repo público: commits con tu Gmail; notas internas visibles | Usar el correo noreply en los commits nuevos |
+| R7 | Roles filtrados solo en el navegador; localStorage sin atomicidad | Avisos visibles; documentado |
+| R8 | La clave nueva reinicia los datos demo | Aceptable; avisar en el changelog |
+| R9 | Reglas de la clínica (quién presupuesta, si se usa sillón) | D2 y D7 con tu tío |
 
 ---
 
-## 8. Decisiones que necesito antes de ejecutar
+## 8. Decisiones
 
-| ID | Decisión | Mi recomendación |
+| ID | Decisión | Recomendación |
 |---|---|---|
-| D1 | Nombre de la versión integrada | `0.4.0`, para no reutilizar «v0.3» |
-| D2 | Permisos por rol para lo nuevo | Aranceles: los edita Admin, los ve Recepción. Presupuestos: los crean Recepción y Dentista (este solo para sus pacientes); Admin ve todos. Duración: quien agenda (Recepción y Admin). Grilla y semana: todos; Dentista fijo en su profesional. Evoluciones: solo Dentista |
-| D3 | Datos guardados | Clave nueva `v4` y empezar limpio |
-| D4 | Workflow de despliegue | Un solo workflow de Pages actualizado; solo despliega desde `main` (RELEASE sigue en HOLD) |
-| D5 | Push de la rama de integración (no `main`) y PR en borrador `integration → main` | Sí, al terminar I9 |
-| D6 | Alertas de desarrollo de Tailwind 3 | Aceptarlas para la demo y planificar Tailwind 4 aparte |
+| **D0** | ¿Quién integra? | Uno solo. Si soy yo, Codex no empuja a PR1/PR2 mientras dure la integración; si es Codex, le paso este plan |
+| D1 | Versión integrada | `0.4.0` |
+| D2 | Permisos de lo nuevo | Aranceles: los edita Admin, los ve Recepción. Presupuestos: los crean Recepción y Dentista (este, de sus pacientes); Admin ve todos. Semana y grilla: todos, con Dentista fijo en su profesional. Agendar y sillón: Recepción y Admin. Evoluciones: Dentista |
+| D3 | Almacenamiento | Clave `v4`, empezar limpio |
+| D4 | Despliegue | Un solo workflow de Pages, solo desde `main` (RELEASE en HOLD) |
+| D5 | Push de la rama de integración y PR en borrador | Sí, al terminar I8 |
+| D6 | Alertas de desarrollo de Tailwind 3 | Aceptar para la demo; Tailwind 4 aparte |
+| D7 | Sillón como recurso obligatorio (PR2) | Mantenerlo y confirmarlo con tu tío |
+| D8 | Versión «B con autenticación/usuarios» | Dime dónde está, o confirma que no entra en esta integración |

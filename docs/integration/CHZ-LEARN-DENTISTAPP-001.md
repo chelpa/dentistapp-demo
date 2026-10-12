@@ -13,7 +13,7 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 
 ## L2 · Divergencia desde el origen del repositorio
 
-**Qué pasó.** El repo se creó a las 10:26 con el árbol de la 0.2.1 (idéntico al ZIP v0.2.1 y a la carpeta `dentistapp-mvp 4`), cuando el ZIP v0.3 existía desde las 10:13. Todo lo que se construyó después en GitHub (PR #1) partió de una base anterior. Las dos líneas corrigieron por separado el mismo error de agenda: un síntoma típico de trabajo duplicado.
+**Qué pasó.** El repo se creó a las 10:26 con el árbol de la 0.2.1 (idéntico al ZIP v0.2.1 y a la carpeta `dentistapp-mvp 4`), cuando el ZIP v0.3 existía desde las 10:13. Todo lo que se construyó después en GitHub (PR #1 y PR #2) partió de una base anterior. Las dos líneas corrigieron por separado el mismo error de agenda: un síntoma típico de trabajo duplicado.
 
 **Control (BASELINE COMPARISON).** Antes de crear un repo, una rama o un PR, comparar el árbol base con el último artefacto conocido del proyecto (por fecha y por versión). Si existe un artefacto más nuevo sin registrar en el repo, bloquear y pedir decisión.
 
@@ -69,7 +69,7 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 
 ## L8 · Un build exitoso no prueba el comportamiento
 
-**Qué pasó.** El PR #1 compilaba y pasaba el chequeo de tipos, pero su selector de roles era decorativo. Solo una sonda de comportamiento (cambiar el rol y comparar menú y títulos) lo mostró.
+**Qué pasó.** Los PR #1 y #2 compilaban y pasaban el chequeo de tipos (el #2, además, 20/20 tests), pero su selector de roles era decorativo. Solo una sonda de comportamiento (cambiar el rol y comparar menú y títulos) lo mostró.
 
 **Control (EVIDENCE ≠ CLAIM).** Cada candidato pasa por una sonda de comportamiento con aserciones sobre las funciones que declara. «Build PASS» cuenta como evidencia de compilación, no de funcionalidad, y no autoriza publicar.
 
@@ -78,6 +78,16 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 **Qué pasó.** Al calcular manifiestos escribí 4 archivos auxiliares dentro de la carpeta de origen. Los borré con permiso y lo dejé registrado.
 
 **Control.** Las carpetas de origen se montan o se tratan como solo lectura durante la auditoría, y los auxiliares van a un espacio temporal. Todo cambio en el origen se registra.
+
+## L10 · Agentes en paralelo y nombres que chocan
+
+**Qué pasó.** Mientras esta auditoría comparaba versiones, otro agente (Codex) empujó el PR #2 (agenda semanal), apilado sobre el PR #1. El `ls-remote` de las 19:51Z no lo mostraba; el fetch de las ~20:05Z sí. Además, cada agente usaba sus propias letras: el PR #2 llama «A» a la línea del repo y la auditoría paralela usa «B» para una versión con autenticación y «C» para la de roles; esta auditoría había usado A/B/C con otro sentido.
+
+**Controles.**
+- Registrar la identidad remota al empezar y **revalidarla justo antes de cada decisión** (paso I0 del plan).
+- Un solo integrador designado por etapa; los demás agentes congelan sus ramas o publican bajo otro prefijo.
+- Nombres de versión derivados del contenido (`ROLES@40f16f97`, `PR2@562514a`), nunca letras sueltas compartidas entre agentes.
+- Un agente que encuentra trabajo nuevo de otro no lo descarta ni lo sobrescribe: lo identifica, reproduce su evidencia y lo incorpora a la comparación.
 
 ---
 
@@ -96,4 +106,6 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 **Caso de prueba de referencia:** este incidente. Con los insumos de 2026-10-12, el control debería:
 - marcar que el alias «v0.3» apunta a dos identidades (`40f16f97…` y `aaa83077…`);
 - detectar que el repo nació de `c7653b5e…` (0.2.1) cuando ya existía `d4b3b2c6…` (0.3.0);
-- reportar 1 archivo con 6 bloques en conflicto, más un error de tipos semántico (TS2739).
+- detectar un candidato nuevo (`562514a…`) que apareció entre la auditoría y la decisión;
+- reportar, para ROLES + PR2, 1 archivo con 8 bloques en conflicto más un error de tipos semántico (TS2739);
+- dejar abierta la versión «B con autenticación», que se menciona pero no tiene identidad localizada.

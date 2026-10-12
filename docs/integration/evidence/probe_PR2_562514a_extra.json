@@ -1,0 +1,41 @@
+{
+ "date_used": "2026-10-19",
+ "base_X_10:00_Rojas_S1": {
+  "accepted": true,
+  "message": null
+ },
+ "same_dentist_other_chair_10:15": {
+  "accepted": false,
+  "message": "Conflicto de horario: el profesional ya tiene una cita activa."
+ },
+ "other_dentist_same_chair_10:15": {
+  "accepted": false,
+  "message": "Conflicto de horario: el sillón ya tiene una cita activa."
+ },
+ "other_dentist_other_chair_10:15": {
+  "accepted": true,
+  "message": null
+ },
+ "adjacent_10:45_same_dentist": {
+  "accepted": true,
+  "message": null
+ },
+ "overlap_with_completed_same_dentist": {
+  "accepted": false,
+  "message": "Conflicto de horario: el profesional ya tiene una cita activa."
+ },
+ "past_time_today_09:15": null,
+ "dialog_focus_inside": true,
+ "dialog_tab_stays_inside_after_15": true,
+ "dialog_escape_closes": true,
+ "focus_returned_to": "Nueva cita",
+ "agenda_views": [
+  "Mes",
+  "Semana",
+  "Día"
+ ],
+ "weekly_default_visible": true,
+ "role_select_changes_ui": false,
+ "page_errors": [],
+ "mobile_375_week_overflow_px": 0
+}
