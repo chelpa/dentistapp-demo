@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "rootDir": "."
+  },
+  "include": ["tests/**/*.ts", "src/lib/calendar.ts", "src/lib/demo.ts"]
+}

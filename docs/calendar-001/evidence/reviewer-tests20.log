@@ -1,0 +1,119 @@
+
+> dentistapp-mvp@0.2.1 test
+> node scripts/test.mjs
+
+TAP version 13
+# Subtest: /var/folders/11/b3jyhs9n4ng7mybmm7wjvp7h0000gn/T/dentistapp-tests-8cKQND/tests/calendar.test.js
+    # Subtest: Sunday anchors to Monday; work week excludes weekend
+    ok 1 - Sunday anchors to Monday; work week excludes weekend
+      ---
+      duration_ms: 3.704667
+      ...
+    # Subtest: week navigation crosses months and years
+    ok 2 - week navigation crosses months and years
+      ---
+      duration_ms: 0.09725
+      ...
+    # Subtest: civil date navigation does not drift across Chile daylight saving
+    ok 3 - civil date navigation does not drift across Chile daylight saving
+      ---
+      duration_ms: 0.07425
+      ...
+    # Subtest: date validation rejects empty, malformed, nonexistent and rollover dates
+    ok 4 - date validation rejects empty, malformed, nonexistent and rollover dates
+      ---
+      duration_ms: 0.126375
+      ...
+    # Subtest: valid bounds: 08:00, 19:45 plus 15 min, end exactly 20:00
+    ok 5 - valid bounds: 08:00, 19:45 plus 15 min, end exactly 20:00
+      ---
+      duration_ms: 0.164458
+      ...
+    # Subtest: reject invalid times, hours and duration granularity
+    ok 6 - reject invalid times, hours and duration granularity
+      ---
+      duration_ms: 0.254208
+      ...
+    # Subtest: same dentist conflicts even on different chair and patient
+    ok 7 - same dentist conflicts even on different chair and patient
+      ---
+      duration_ms: 0.081417
+      ...
+    # Subtest: same chair conflicts with different dentist
+    ok 8 - same chair conflicts with different dentist
+      ---
+      duration_ms: 0.050042
+      ...
+    # Subtest: adjacent appointments do not conflict; overlap by 15 minutes does
+    ok 9 - adjacent appointments do not conflict; overlap by 15 minutes does
+      ---
+      duration_ms: 0.136458
+      ...
+    # Subtest: different date or both independent resources permit simultaneous appointments
+    ok 10 - different date or both independent resources permit simultaneous appointments
+      ---
+      duration_ms: 0.152083
+      ...
+    # Subtest: cancelled appointments release resources but reactivating must recheck conflicts
+    ok 11 - cancelled appointments release resources but reactivating must recheck conflicts
+      ---
+      duration_ms: 0.063291
+      ...
+    # Subtest: waiting and completed appointments still occupy their reserved time
+    ok 12 - waiting and completed appointments still occupy their reserved time
+      ---
+      duration_ms: 0.130333
+      ...
+    # Subtest: a status update excludes its own appointment
+    ok 13 - a status update excludes its own appointment
+      ---
+      duration_ms: 0.037709
+      ...
+    # Subtest: legacy appointments keep no fabricated chair; dentist conflicts remain enforced
+    ok 14 - legacy appointments keep no fabricated chair; dentist conflicts remain enforced
+      ---
+      duration_ms: 0.284084
+      ...
+    # Subtest: resource filters combine and expose unassigned legacy bookings
+    ok 15 - resource filters combine and expose unassigned legacy bookings
+      ---
+      duration_ms: 0.083125
+      ...
+    # Subtest: simultaneous appointments occupy separate lanes
+    ok 16 - simultaneous appointments occupy separate lanes
+      ---
+      duration_ms: 7.090583
+      ...
+    # Subtest: nested and chained overlaps receive safe shared lane counts
+    ok 17 - nested and chained overlaps receive safe shared lane counts
+      ---
+      duration_ms: 0.274083
+      ...
+    # Subtest: lane calculation skips invalid entries without mutating appointments
+    ok 18 - lane calculation skips invalid entries without mutating appointments
+      ---
+      duration_ms: 0.282417
+      ...
+    # Subtest: creation rejects past time today and historical dates with injectable clock
+    ok 19 - creation rejects past time today and historical dates with injectable clock
+      ---
+      duration_ms: 0.118833
+      ...
+    # Subtest: RADO evidence logs retain the exact bytes bound by the manifest
+    ok 20 - RADO evidence logs retain the exact bytes bound by the manifest
+      ---
+      duration_ms: 1.976083
+      ...
+    1..20
+ok 1 - /var/folders/11/b3jyhs9n4ng7mybmm7wjvp7h0000gn/T/dentistapp-tests-8cKQND/tests/calendar.test.js
+  ---
+  duration_ms: 61.594875
+  ...
+1..1
+# tests 1
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 62.675042
