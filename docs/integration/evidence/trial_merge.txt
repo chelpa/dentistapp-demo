@@ -1,0 +1,5 @@
+Auto-merging package-lock.json
+Auto-merging package.json
+Auto-merging src/components/DentistApp.tsx
+CONFLICT (content): Merge conflict in src/components/DentistApp.tsx
+Automatic merge failed; fix conflicts and then commit the result.

@@ -1,0 +1,17 @@
+dentistapp-mvp@0.2.1 /tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/b/prov
++-- autoprefixer@10.6.1
+| `-- postcss@8.5.28 deduped
++-- next@15.5.27 overridden
+| `-- postcss@8.5.28 deduped
++-- postcss@8.5.28
+`-- tailwindcss@3.4.19
+  +-- postcss-import@15.1.0
+  | `-- postcss@8.5.28 deduped
+  +-- postcss-js@4.1.0
+  | `-- postcss@8.5.28 deduped
+  +-- postcss-load-config@6.0.1
+  | `-- postcss@8.5.28 deduped
+  +-- postcss-nested@6.2.0
+  | `-- postcss@8.5.28 deduped
+  `-- postcss@8.5.28 deduped
+
