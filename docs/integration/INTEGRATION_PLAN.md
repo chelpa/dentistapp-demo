@@ -252,6 +252,12 @@ Decisiones del usuario: Claude como único integrador, Codex como revisor indepe
 | I5 | `946917e` | `validateNoteLink`; 3 pruebas unitarias (5 rechazos); navegador: vínculo guardado, manipulación rechazada |
 | I6 | `ba0a6f5` | Línea base `evidence/e2e_before_I6.*` (contraste en 40/40 vistas, target-size, región desplazable, selector cortado, teclado) → corregido |
 | I7 | `b8fd67c`, `8f0a4b1` | e2e 11/11 (`evidence/e2e_after_I7.*`): axe 0 violaciones automáticas en 40 vistas, sin desbordes 320–1440 px, sin errores; unitarias 34/34 |
-| I8 | (este commit) | Versión 0.4.0, README, PUBLISH_DEMO, AUDIT_NOTE, CHANGELOG, RADO; verificación final en clon limpio |
+| I8 | `78fb241` | Versión 0.4.0, README, PUBLISH_DEMO, AUDIT_NOTE, CHANGELOG, RADO; verificación final en clon limpio (`58e5de7`) |
+| PR #3 | `db7d518` | Subido por el usuario; revisión de Codex: «requiere reparación» (RADO R-15) |
+| R1 | `1840bfd` | P2: una evolución solo se vincula a una atención ya iniciada (fecha **y** hora, reloj inyectable). Unitarias 36/36; la prueba e2e falla sobre `db7d518` y pasa aquí |
+| R2 | `5685207` | P2: los registros guardados que la interfaz no puede mostrar se apartan con sus dependientes, con respaldo y aviso; pantalla de recuperación como último recurso. Unitarias 40/40; las 2 pruebas e2e fallan sobre `db7d518` y pasan aquí |
+| R3 | `10e8e84` | Prueba de teclado del selector válida en macOS: escritura anticipada en todas las plataformas y flechas solo fuera de macOS. Clon limpio: `npm ci`, audit prod 0, 40/40, tsc, build, e2e 14/14 (RADO R-17) |
 
 Cambio de prueba de Codex a revisar: en `tests/calendar.test.ts`, la aserción «el seed no tiene sillones» pasó a «sillones conocidos y sin cruces», porque la 0.4 crea datos nuevos con sillón (D7). La regla de no inventar sillones en datos antiguos sigue cubierta por el fixture de esa prueba y por `tests/storage.test.ts`.
+
+Revisión del PR #3 (RADO R-15 a R-17): el usuario pidió reparar en la misma rama y entregar un SHA nuevo. No se exige el estado «Completada» para vincular una evolución, porque la revisión no lo pide. Consecuencia: con los datos iniciales (citas desde hoy), antes de las 09:00 no hay atención vinculable. MERGE, RELEASE y PUSH `main` siguen en HOLD.

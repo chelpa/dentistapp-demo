@@ -66,6 +66,8 @@ Seguridad de dependencias: `npm audit --omit=dev` en cero mediante `overrides` d
 
 ### Verificación de la iteración 0.4
 
-`npm test` 34/34 (incluidas las 20 de agenda del PR #2); typecheck; exportación estática en `/dentistapp-demo`; `npm run test:e2e` 11/11: matriz de permisos, reglas de reserva, presupuestos, evoluciones con rechazos, persistencia y restablecimiento en los tres roles, teclado, axe sin violaciones automáticas en 40 vistas (1280 y 375 px) y sin desbordes de 320 a 1440 px. Un axe en cero no equivale a cumplimiento integral de accesibilidad.
+`npm test` 40/40 (incluidas las 20 de agenda del PR #2); typecheck; exportación estática en `/dentistapp-demo`; `npm run test:e2e` 14/14 con reloj fijo: matriz de permisos, reglas de reserva, presupuestos, evoluciones con rechazos (incluida una cita posterior del mismo día), persistencia y restablecimiento en los tres roles, datos guardados incompletos y pantalla de recuperación, teclado, axe sin violaciones automáticas en 40 vistas (1280 y 375 px) y sin desbordes de 320 a 1440 px. Un axe en cero no equivale a cumplimiento integral de accesibilidad.
 
 Siguen pendientes, como antes: autenticación y autorización en servidor, base de datos con restricciones de agenda bajo concurrencia, privacidad de datos de salud, consentimiento, historial clínico auditable y backups.
+
+La revisión independiente del PR #3 encontró dos fallas que las pruebas no cubrían: un paciente guardado sin todos sus campos rompía la página entera, y la regla de vínculo de evoluciones comparaba solo el día. Ambas se repararon con pruebas que fallan en la versión anterior (detalle en `docs/integration/RADO_LOG.md`, R-15 a R-17).

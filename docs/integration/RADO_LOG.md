@@ -95,7 +95,7 @@ Herramientas: `evidence/toolchain.txt` (Node v22.22.0, npm 10.9.4, Chromium 141.
 ## R-09 · Revisión independiente de Codex (recibida 17:26)
 
 - **CLAIM** (Codex, «REVISION-PLAN-INTEGRACION-DENTISTAPP.md»):
-  - Bundle sha256 `2a39cb5f…c26ac0`, verificación PASS, historial completo.
+  - Bundle sha256 `2a39cb5f…da8c11ae`, verificación PASS, historial completo. *(Corregido en R-16: antes decía `2a39cb5f…c26ac0`, un error mío al abreviar. Es el valor que reporta Codex; no lo recalculé.)*
   - 24/24 archivos del import `134fd46` coinciden byte a byte con el ZIP `40f16f97…`.
   - HEAD de preparación `01f32f2`; los adjuntos coinciden con el bundle.
   - PR1 y PR2 sin cambios y congelados por Codex.
@@ -138,11 +138,11 @@ Herramientas: `evidence/toolchain.txt` (Node v22.22.0, npm 10.9.4, Chromium 141.
 
 ## R-13 · Estado y compuertas
 
-
 - **STATE:** MAIN, PR1, PR2 y ROLES sin cambios. Sitio publicado = MAIN. `integration/dentistapp-v0.4` contiene la 0.4.0 integrada (I1–I8).
 - **AUTHORITY:**
   - El usuario aceptó AUDIT, PLAN, ORGANIZE y DIRECT; autorizó leer la carpeta del proyecto ChatGPT y borrar los 4 archivos de R-07.
-  - Codex **recomienda** a Claude como integrador. Una recomendación no es autorización: falta la decisión del usuario.
+  - Integrador: el usuario **decidió** que Claude sea el único integrador y autorizó ejecutar el plan v2, subir la rama de integración y abrir un PR en borrador (R-11). Esa decisión cubre lo ejecutado aquí; no hace falta otra autorización.
+  - *Corrección (R-16): este punto decía «Codex recomienda a Claude como integrador… falta la decisión del usuario». Era texto de antes de R-11 que quedó sin actualizar y contradecía R-11.*
 - **Compuertas:** EXECUTE = HECHO · PUSH de la rama de integración + PR borrador = AUTORIZADO · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD. Que un build pase no autoriza publicar.
 
 ## R-14 · Push no realizado (21:3xZ)
@@ -151,3 +151,50 @@ Herramientas: `evidence/toolchain.txt` (Node v22.22.0, npm 10.9.4, Chromium 141.
 - **EVIDENCE:** `git push origin integration/dentistapp-v0.4` → `403`: «Claude doesn't have GitHub access to chelpa/dentistapp-demo for your organization». Ninguna ref remota cambió: `main` 259ef73, PR1 aaa8307, PR2 562514a; no existe rama `integration/*` en el remoto.
 - **Acción:** entrego un bundle verificado, el texto del PR y un script para que el usuario (o Codex) suba la rama y abra el PR en borrador. Alternativa: instalar la GitHub App de Claude para el repo y pedirme el push.
 - **Compuertas:** MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD (sin cambios).
+
+## R-15 · PR #3 y revisión de Codex (recibida 19:39)
+
+- **CLAIM** (usuario, en la conversación): subió la candidata exacta de Claude y abrió el PR #3 en borrador, conservando su historial.
+- **EVIDENCE:** `git ls-remote origin` (23:0xZ): `integration/dentistapp-v0.4` = `refs/pull/3/head` = `db7d518`. Sin cambios: `main` 259ef73, PR1 aaa8307, PR2 562514a.
+- **CLAIM** (Codex, informe para Opus y comentarios en el PR #3): «requiere reparación».
+  - P2: un paciente guardado con campos incompletos puede dejar la aplicación en error.
+  - P2: una evolución puede vincularse a una cita futura del mismo día.
+  - Pasan 34 tests, tipos, compilación, CI y auditoría de producción. La suite e2e local en macOS da 10/11: falla el selector de rol con teclado.
+  - RADO: R-13 contradice a R-11 sobre la autorización; la abreviatura del bundle en R-09 está mal.
+  - No se pide exigir el estado «Completada» para vincular.
+- **EVIDENCE (reproducción propia antes de reparar):** compilé `db7d518` y le pasé las pruebas nuevas.
+  - Paciente `{ id: "p1" }` guardado: la página muestra «Application error: a client-side exception…», con `RangeError: Invalid time value` (llega a `formatDate` sin `lastVisit`).
+  - Reloj a las 09:00 y cita a1 a las 19:45: el selector ofrece «12 oct 2026 · 19:45 · Control».
+  - Las 3 pruebas e2e nuevas (P2 mismo día, P2 paciente incompleto, pantalla de recuperación) **fallan** sobre `db7d518`.
+- **Diagnóstico del teclado:** en Chromium para macOS, las flechas sobre un `<select>` cerrado abren el menú nativo en vez de cambiar el valor; en Linux y Windows cambian el valor. No tengo macOS: **queda como diagnóstico**, sin verificar en ese sistema.
+
+## R-16 · Reparación (`1840bfd`, `5685207`, `10e8e84`)
+
+- **`1840bfd` fix(clinical):** `hasStarted(cita, ahora)` compara fecha **y hora de inicio** en hora local; las fechas u horas ilegibles nunca cuentan como iniciadas. La misma regla sirve para las opciones y para la validación al guardar, con un reloj inyectable. `DentistApp` pasa el instante actual al momento de usarla, no el día fijado al cargar. Estados: igual que antes (no cancelada); no se exige «Completada».
+- **`5685207` fix(storage):**
+  - `normalizeState` valida, por colección, cada campo que leen las pantallas: ids, fechas, horas, números, estados y líneas de presupuesto.
+  - Un registro inválido se aparta junto con lo que depende de un paciente apartado. Se cuenta, se informa al visitante y `loadState` guarda antes una copia byte a byte.
+  - Las citas legibles pero fuera de las reglas de agenda se conservan y se informan, como antes.
+  - Último recurso, `src/app/error.tsx`: pantalla de recuperación con «Guardar copia y restablecer demo» (copia la clave v4 a una clave de respaldo y borra solo la v4) y «Reintentar». Las claves `-v1` y `-v3` no se tocan.
+- **`10e8e84` test(e2e):** la prueba sigue usando el teclado real sobre el control: Tab, foco visible y luego escritura anticipada «d» → Dentista y «a» → Admin, que cambia un `<select>` cerrado en todas las plataformas. ArrowUp se comprueba solo fuera de macOS. Entre letras se espera 1,1 s, porque Chromium junta en una sola búsqueda las letras escritas en menos de 1 s.
+- **Consecuencia visible:** los datos iniciales solo tienen citas desde hoy, así que antes de las 09:00 no hay atención vinculable. La de las 09:00 de Sofía Martínez aparece a partir de esa hora. README actualizado.
+- **EVIDENCE** (Linux, Node v22.22.0, Chromium de Playwright 1.56.0, TZ America/Santiago en el navegador):
+  - Unitarias: 34 → 40, 40/40 pass. Commits intermedios: `1840bfd` 36/36 y `5685207` 40/40, con tsc 0 en ambos.
+  - e2e: 11 → 14, **14/14** sobre `10e8e84`. axe sigue en 0 en 40 vistas, sin desbordes de 320 a 1440 px y sin errores de consola fuera de la prueba de error forzado, que filtra los suyos.
+  - Las 3 pruebas nuevas fallan sobre `db7d518` y pasan sobre la reparación.
+  - La e2e usa ahora un reloj fijo (lunes 2026-10-12 12:00 -03), así que ya no depende de la hora en que se corre.
+  - Verificación en clon limpio: ver R-17.
+- **STATE:** reparación en `integration/dentistapp-v0.4` local. El remoto sigue en `db7d518` hasta que se suba. Teclado en macOS: pendiente de confirmación por Codex.
+- **AUTHORITY:** el usuario (19:39) pidió: «Opus repara esos casos y entrega un SHA nuevo para revisar». Queda dentro de lo autorizado en R-11 (rama de integración + PR en borrador); no pido otra autorización.
+- **Compuertas:** MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD (sin cambios).
+
+## R-17 · Verificación en clon limpio de `10e8e84` (23:05Z)
+
+- **Comandos:** `git clone` del repo local, `git checkout 10e8e84`, `npm ci`, `npm ls`, `npm audit --omit=dev`, `npm test`, `npm run typecheck`, `npm run build:static` con `DENTISTAPP_BASE_PATH=/dentistapp-demo` y `npm run test:e2e`.
+- **EVIDENCE** (`evidence/final_verify_10e8e84.txt`, `evidence/e2e_after_review_fix.{json,log}`):
+  - Node v22.22.0, npm 10.9.4, Playwright 1.56.0.
+  - `npm ci` OK. `npm ls` sale con 0 y postcss queda en 8.5.30 «overridden», deduplicado. Audit de producción: 0.
+  - Unitarias 40/40, typecheck 0, exportación estática OK.
+  - e2e 14/14: axe con 0 violaciones en 40 vistas, sin desbordes y sin errores.
+- **Límite:** todo corrió en Linux. El caso de macOS (selector con teclado) queda para la revisión de Codex.
+- **STATE:** el commit de documentación que sigue a `10e8e84` solo toca `docs/`, `README.md`, `CHANGELOG.md` y `AUDIT_NOTE.md`. El SHA final a revisar se informa en la conversación, porque un commit no puede contener su propio SHA.

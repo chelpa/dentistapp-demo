@@ -112,6 +112,14 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 - **Línea base antes de corregir.** Correr la suite antes de las correcciones obligó a que las pruebas toleraran la versión vieja (pestañas sin `role="tab"`), y así quedó la evidencia de «antes» completa en vez de pruebas que solo pasan después.
 - **Errores propios en la documentación.** Una afirmación sobre el contenido de `main` (archivo versionado) venía de mi directorio de trabajo, no del árbol de git. Control: toda afirmación sobre una rama se verifica con `git ls-tree`/`git show <ref>:<ruta>`, nunca con el directorio de trabajo.
 
+## L13 · Lo que enseñó la revisión del PR #3
+
+- **Validar lo que consume la interfaz, no solo la forma.** `normalizeState` comprobaba que las colecciones fueran listas, pero no los campos que cada pantalla lee. Un paciente sin `lastVisit` llegaba a `formatDate` y tumbaba toda la página. Control: un validador por colección derivado de lo que leen las pantallas, con cascada a los registros dependientes, respaldo byte a byte, aviso y una pantalla de recuperación como último recurso. Las pruebas usan registros mutilados, no solo JSON roto.
+- **Un invariante temporal se define en una sola función.** Crear una cita ya comparaba fecha y hora, pero vincular una evolución comparaba solo la fecha. Control: una función (`hasStarted`) con reloj inyectable para opciones y validación, y pruebas en los bordes (19:44, 19:45, 20:30, otro día, hora ilegible). La e2e usa un reloj fijo para no depender de la hora en que corre.
+- **La evidencia vale para el entorno donde se tomó.** 11/11 en Linux no anticipó el 10/11 en macOS: las flechas sobre un `<select>` cerrado se comportan distinto según la plataforma. Control: declarar el sistema de cada evidencia y escribir la prueba con la interacción que el control admite en todos los sistemas soportados (escritura anticipada), dejando lo específico de una plataforma condicionado y explicado.
+- **Una prueba de regresión debe fallar antes del arreglo.** Las 3 pruebas nuevas se corrieron sobre la candidata anterior (`db7d518`) y fallaron, antes de darlas por buenas sobre la reparación.
+- **Los registros también se desactualizan.** R-13 conservaba «falta la decisión del usuario» después de que R-11 registrara esa decisión. Control: al registrar una decisión, revisar las entradas de estado que la mencionan y marcar como corregido el texto anterior, en vez de borrarlo.
+
 ## Propuesta de control CHAZEWARE
 
 `SOURCE IDENTITY → BASELINE COMPARISON → DIVERGENCE DETECTION → INTEGRATION GATE → VERIFIED PROMOTION`

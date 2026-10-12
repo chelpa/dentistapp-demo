@@ -43,7 +43,7 @@ Vistas de demostración (permisos de interfaz, ver plan §5b):
 
 Las vistas cambian navegación, contenido y acciones de interfaz. **No autentican ni aplican autorización en el servidor.** Cualquier visitante puede cambiar de rol y los datos ficticios siguen en su navegador.
 
-Los cambios se guardan en `localStorage` con la clave `dentistapp-mvp-demo-v4`. La versión 0.4 empieza con datos ficticios nuevos y **no modifica ni borra** los datos de versiones anteriores (`-v1`, `-v3`); si existen, lo avisa una vez. Si los datos guardados no se pueden leer, se copia el original a una clave de respaldo antes de seguir. El botón **Restablecer demo** recupera los datos iniciales. No hay servidor de datos, cuentas ni sincronización entre personas, pestañas o dispositivos.
+Los cambios se guardan en `localStorage` con la clave `dentistapp-mvp-demo-v4`. La versión 0.4 empieza con datos ficticios nuevos y **no modifica ni borra** los datos de versiones anteriores (`-v1`, `-v3`); si existen, lo avisa una vez. Si los datos guardados no se pueden leer, o algún registro está incompleto o tiene una fecha ilegible, se guarda antes una copia sin cambios en una clave de respaldo; esos registros (y los que dependen de ellos) se apartan y la demo lo avisa. Si aun así no puede mostrarse, una pantalla de recuperación permite guardar una copia y volver a los datos iniciales. El botón **Restablecer demo** recupera los datos iniciales. No hay servidor de datos, cuentas ni sincronización entre personas, pestañas o dispositivos.
 
 ## Publicar una demo para clientes
 
@@ -82,7 +82,7 @@ Véase [AUDIT_NOTE.md](AUDIT_NOTE.md) para el contraste con el baseline y el ord
 
 1. **Recepción:** abre Agenda (vista Semana), pulsa un bloque libre y crea una cita de 30 minutos con sillón. Intenta otra cita que se cruce con el mismo profesional o sillón y muestra el rechazo.
 2. **Recepción:** en Aranceles y presupuestos arma un presupuesto con dos prestaciones, cantidad y descuento.
-3. **Dentista:** elige al profesional, abre un paciente, ve a Ficha clínica, marca una pieza y guarda una evolución vinculada a la atención de hoy.
+3. **Dentista:** elige al profesional, abre un paciente, ve a Ficha clínica, marca una pieza y guarda una evolución vinculada a una atención que ya empezó (la de las 09:00 se puede vincular desde esa hora).
 4. **Admin:** ajusta un arancel (el presupuesto guardado conserva su precio), revisa la ficha en solo lectura y abre Equipo y vistas.
 5. Usa **Restablecer demo** antes de una nueva presentación para recuperar citas relativas al día actual.
 

@@ -1,0 +1,98 @@
+
+> dentistapp-mvp@0.4.0 test:e2e
+> node --test --test-concurrency=1 tests/e2e/demo.e2e.mjs
+
+TAP version 13
+# Subtest: roles: each view matches the approved permission matrix
+ok 1 - roles: each view matches the approved permission matrix
+  ---
+  duration_ms: 5335.503374
+  type: 'test'
+  ...
+# Subtest: booking: chair and professional conflicts, adjacency, durations
+ok 2 - booking: chair and professional conflicts, adjacency, durations
+  ---
+  duration_ms: 5158.156343
+  type: 'test'
+  ...
+# Subtest: budgets: exact totals, history kept when a tariff changes, no data loss across roles
+ok 3 - budgets: exact totals, history kept when a tariff changes, no data loss across roles
+  ---
+  duration_ms: 2586.047044
+  type: 'test'
+  ...
+# Subtest: evolutions: linked to own attended appointment; tampered links rejected
+ok 4 - evolutions: linked to own attended appointment; tampered links rejected
+  ---
+  duration_ms: 4879.802578
+  type: 'test'
+  ...
+# Subtest: REVIEW P2: an appointment later the same day cannot be linked before it starts
+ok 5 - REVIEW P2: an appointment later the same day cannot be linked before it starts
+  ---
+  duration_ms: 3160.250729
+  type: 'test'
+  ...
+# Subtest: storage: v4 notice, earlier keys untouched, reload and reset in the three roles
+ok 6 - storage: v4 notice, earlier keys untouched, reload and reset in the three roles
+  ---
+  duration_ms: 11878.632587
+  type: 'test'
+  ...
+# Subtest: REVIEW P2: an incomplete saved patient is set aside, backed up and the demo stays usable
+ok 7 - REVIEW P2: an incomplete saved patient is set aside, backed up and the demo stays usable
+  ---
+  duration_ms: 1985.173137
+  type: 'test'
+  ...
+# Subtest: REVIEW P2: if rendering still fails, the error screen keeps a copy and restores the demo
+ok 8 - REVIEW P2: if rendering still fails, the error screen keeps a copy and restores the demo
+  ---
+  duration_ms: 1362.346827
+  type: 'test'
+  ...
+# Subtest: keyboard: role selector, menu, tabs and every dialog
+ok 9 - keyboard: role selector, menu, tabs and every dialog
+  ---
+  duration_ms: 5776.138984
+  type: 'test'
+  ...
+# Subtest: keyboard: mobile menu opens, traps nothing hidden, closes with Escape and returns focus
+ok 10 - keyboard: mobile menu opens, traps nothing hidden, closes with Escape and returns focus
+  ---
+  duration_ms: 1240.551528
+  type: 'test'
+  ...
+# Subtest: axe: no automated WCAG violations on any view at 1280px
+ok 11 - axe: no automated WCAG violations on any view at 1280px
+  ---
+  duration_ms: 41470.219801
+  type: 'test'
+  ...
+# Subtest: axe: no automated WCAG violations on any view at 375px
+ok 12 - axe: no automated WCAG violations on any view at 375px
+  ---
+  duration_ms: 45163.39079
+  type: 'test'
+  ...
+# Subtest: responsive: no horizontal scroll at 320–1440 px and a legible role selector
+ok 13 - responsive: no horizontal scroll at 320–1440 px and a legible role selector
+  ---
+  duration_ms: 60146.553708
+  type: 'test'
+  ...
+# Subtest: no console or page errors were recorded
+ok 14 - no console or page errors were recorded
+  ---
+  duration_ms: 0.362143
+  type: 'test'
+  ...
+1..14
+# tests 14
+# suites 0
+# pass 14
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 190655.37401

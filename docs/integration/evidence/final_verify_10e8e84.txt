@@ -1,0 +1,109 @@
+# Clean-clone verification of 10e8e84b07f068d5a6a152f3bd36e82db57b86ff · 2026-10-12T23:05:39Z
+node v22.22.0 · npm 10.9.4
+## npm ci
+
+added 112 packages in 13s
+exit 0
+## npm ls postcss
+dentistapp-mvp@0.4.0 clean_10e8e84
++-- autoprefixer@10.6.1
+| `-- postcss@8.5.30 deduped
++-- next@15.5.27
+| `-- postcss@8.5.30 deduped
++-- postcss@8.5.30 overridden
+`-- tailwindcss@3.4.19
+  +-- postcss-import@15.1.0
+  | `-- postcss@8.5.30 deduped
+  +-- postcss-js@4.1.0
+  | `-- postcss@8.5.30 deduped
+  +-- postcss-load-config@6.0.1
+  | `-- postcss@8.5.30 deduped
+  +-- postcss-nested@6.2.0
+  | `-- postcss@8.5.30 deduped
+  `-- postcss@8.5.30 deduped
+
+exit 0
+## npm audit --omit=dev
+found 0 vulnerabilities
+## npm test
+# Subtest: Sunday anchors to Monday; work week excludes weekend
+# Subtest: week navigation crosses months and years
+# Subtest: civil date navigation does not drift across Chile daylight saving
+# Subtest: date validation rejects empty, malformed, nonexistent and rollover dates
+# Subtest: valid bounds: 08:00, 19:45 plus 15 min, end exactly 20:00
+# Subtest: reject invalid times, hours and duration granularity
+# Subtest: same dentist conflicts even on different chair and patient
+# Subtest: same chair conflicts with different dentist
+# Subtest: adjacent appointments do not conflict; overlap by 15 minutes does
+# Subtest: different date or both independent resources permit simultaneous appointments
+# Subtest: cancelled appointments release resources but reactivating must recheck conflicts
+# Subtest: waiting and completed appointments still occupy their reserved time
+# Subtest: a status update excludes its own appointment
+# Subtest: legacy appointments keep no fabricated chair; dentist conflicts remain enforced
+# Subtest: resource filters combine and expose unassigned legacy bookings
+# Subtest: simultaneous appointments occupy separate lanes
+# Subtest: nested and chained overlaps receive safe shared lane counts
+# Subtest: lane calculation skips invalid entries without mutating appointments
+# Subtest: creation rejects past time today and historical dates with injectable clock
+# Subtest: RADO evidence logs retain the exact bytes bound by the manifest
+# Subtest: options: same patient and professional, not cancelled, not future, most recent first
+# Subtest: a valid link and an unlinked note are both accepted
+# Subtest: rejections: other patient, other professional, nonexistent, cancelled, future
+# Subtest: REVIEW P2: an appointment later today has not happened yet (date and start time are compared)
+# Subtest: an appointment with an unreadable date or time can never be linked
+# Subtest: presentation permissions follow the approved matrix (plan §5b)
+# Subtest: reception and admin see the whole clinic
+# Subtest: a dentist sees own agenda, linked patients, all tariffs and only their patients' budgets
+# Subtest: uses the v4 key and never the keys of earlier versions
+# Subtest: first visit with earlier data: fresh seed, a notice, and earlier keys untouched
+# Subtest: first visit without earlier data: fresh seed and no notice
+# Subtest: valid v4 data loads as is, without writes
+# Subtest: normalisation never invents chairs; renderable but out-of-hours appointments are kept and reported
+# Subtest: the fresh seed passes validation with no issues
+# Subtest: REVIEW P2: a patient missing the fields the interface uses is set aside with its records, backed up and reported
+# Subtest: REVIEW P2: invalid dates or broken references never reach the interface
+# Subtest: recovery: backupAndReset keeps the original bytes and clears only the v4 key
+# Subtest: unreadable entries are counted and the original bytes are backed up before use
+# Subtest: corrupt JSON or missing collections: seed, backup of the original, explicit notice
+# Subtest: a browser that blocks storage still gets a working demo
+# tests 40
+# suites 0
+# pass 40
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 381.2184
+## typecheck
+> tsc --noEmit
+
+exit 0
+## exit codes (direct)
+npm ls: 0
+typecheck: 0
+npm test: 0
+## build:static (DENTISTAPP_BASE_PATH=/dentistapp-demo)
+build: 0
+ ✓ Compiled successfully in 9.2s
+   Exporting (0/2) ...
+ ✓ Exporting (2/2)
+┌ ○ /                                    22.5 kB         129 kB
+## test:e2e
+e2e: 0
+ok 1 - roles: each view matches the approved permission matrix
+ok 2 - booking: chair and professional conflicts, adjacency, durations
+ok 3 - budgets: exact totals, history kept when a tariff changes, no data loss across roles
+ok 4 - evolutions: linked to own attended appointment; tampered links rejected
+ok 5 - REVIEW P2: an appointment later the same day cannot be linked before it starts
+ok 6 - storage: v4 notice, earlier keys untouched, reload and reset in the three roles
+ok 7 - REVIEW P2: an incomplete saved patient is set aside, backed up and the demo stays usable
+ok 8 - REVIEW P2: if rendering still fails, the error screen keeps a copy and restores the demo
+ok 9 - keyboard: role selector, menu, tabs and every dialog
+ok 10 - keyboard: mobile menu opens, traps nothing hidden, closes with Escape and returns focus
+ok 11 - axe: no automated WCAG violations on any view at 1280px
+ok 12 - axe: no automated WCAG violations on any view at 375px
+ok 13 - responsive: no horizontal scroll at 320–1440 px and a legible role selector
+ok 14 - no console or page errors were recorded
+# tests 14
+# pass 14
+# fail 0

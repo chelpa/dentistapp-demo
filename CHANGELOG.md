@@ -26,6 +26,9 @@ Integra tres líneas de trabajo con su historia:
 **Corregido**
 - Semana: sin botones de bloque ocultos bajo una cita (WCAG 2.5.8); las flechas saltan bloques ocupados.
 - Integración: `dataForRole` incluye aranceles y presupuestos (antes TS2739); los presupuestos se guardan sobre todos los datos, no sobre la vista filtrada.
+- Revisión del PR #3: un paciente guardado con campos incompletos ya no deja la demo en error. Los registros que la interfaz no puede mostrar se apartan con sus dependientes, con copia sin cambios y aviso, y hay una pantalla de recuperación como último recurso.
+- Revisión del PR #3: una evolución solo se vincula a una atención que ya empezó (fecha y hora), no a una cita posterior del mismo día.
+- Pruebas: reloj fijo en la suite e2e y verificación del selector de rol con teclado válida también en macOS.
 
 ## 0.3.0 · v0.3 local
 Vistas simuladas por rol, cruces que respetan citas completadas, diálogo de restablecimiento propio.
