@@ -144,3 +144,10 @@ Herramientas: `evidence/toolchain.txt` (Node v22.22.0, npm 10.9.4, Chromium 141.
   - El usuario aceptó AUDIT, PLAN, ORGANIZE y DIRECT; autorizó leer la carpeta del proyecto ChatGPT y borrar los 4 archivos de R-07.
   - Codex **recomienda** a Claude como integrador. Una recomendación no es autorización: falta la decisión del usuario.
 - **Compuertas:** EXECUTE = HECHO · PUSH de la rama de integración + PR borrador = AUTORIZADO · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD. Que un build pase no autoriza publicar.
+
+## R-14 · Push no realizado (21:3xZ)
+
+- **AUTHORITY:** el usuario autorizó subir `integration/dentistapp-v0.4` y abrir un PR en borrador.
+- **EVIDENCE:** `git push origin integration/dentistapp-v0.4` → `403`: «Claude doesn't have GitHub access to chelpa/dentistapp-demo for your organization». Ninguna ref remota cambió: `main` 259ef73, PR1 aaa8307, PR2 562514a; no existe rama `integration/*` en el remoto.
+- **Acción:** entrego un bundle verificado, el texto del PR y un script para que el usuario (o Codex) suba la rama y abra el PR en borrador. Alternativa: instalar la GitHub App de Claude para el repo y pedirme el push.
+- **Compuertas:** MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD (sin cambios).
