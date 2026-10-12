@@ -7,7 +7,10 @@ export type Treatment = { id: string; patientId: string; name: string; tooth: nu
 export type ClinicalNote = { id: string; patientId: string; text: string; date: string; author: string };
 export type ToothRecord = { patientId: string; tooth: number; status: ToothStatus };
 export type ToothEvent = { id: string; patientId: string; tooth: number; status: ToothStatus; date: string; author: string };
-export type DemoState = { patients: Patient[]; appointments: Appointment[]; treatments: Treatment[]; notes: ClinicalNote[]; teeth: ToothRecord[]; toothEvents: ToothEvent[] };
+export type Tariff = { id: string; name: string; price: number };
+export type BudgetLine = { tariffId: string; quantity: number; tooth: number | null; unitPrice: number };
+export type Budget = { id: string; patientId: string; date: string; lines: BudgetLine[]; discount: number; status: "Borrador" | "Entregado" | "Aceptado" };
+export type DemoState = { patients: Patient[]; appointments: Appointment[]; treatments: Treatment[]; notes: ClinicalNote[]; teeth: ToothRecord[]; toothEvents: ToothEvent[]; tariffs: Tariff[]; budgets: Budget[] };
 export const dentists = ["Dra. Valentina Rojas", "Dr. Tomás Fuentes", "Dra. Camila Muñoz"];
 export const treatmentTypes = ["Evaluación", "Limpieza dental", "Control", "Restauración", "Endodoncia", "Ortodoncia"];
 export const toDay = (date: Date) => `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
@@ -43,6 +46,14 @@ export const seedDemo = (): DemoState => ({
     { id:"n2", patientId:"p3", text:"Se revisa pieza 16. Plan de restauración conversado en esta simulación.", date:dayOffset(-12), author:dentists[0] }
   ],
   toothEvents: [],
+  tariffs: [
+    {id:"tar1",name:"Evaluación inicial",price:25000},
+    {id:"tar2",name:"Profilaxis",price:32000},
+    {id:"tar3",name:"Restauración simple",price:55000},
+    {id:"tar4",name:"Endodoncia",price:160000},
+    {id:"tar5",name:"Radiografía dental",price:15000}
+  ],
+  budgets: [],
   teeth: [
     { patientId:"p3", tooth:16, status:"Observación" },
     { patientId:"p3", tooth:26, status:"Tratado" },
