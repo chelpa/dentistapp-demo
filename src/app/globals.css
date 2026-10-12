@@ -13,7 +13,7 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   .card { @apply rounded-[22px] border border-line bg-white shadow-card; }
   .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-xl bg-teal px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-tealDark; }
   .btn-soft { @apply inline-flex items-center justify-center gap-2 rounded-xl border border-line bg-white px-4 py-2.5 text-sm font-semibold text-ink transition hover:border-teal hover:text-teal; }
-  .field { @apply w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition focus:border-teal focus:ring-2 focus:ring-teal/10; }
+  .field { @apply w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition focus:border-teal focus:ring-2 focus:ring-teal/40; }
   .label { @apply mb-1.5 block text-xs font-semibold uppercase tracking-[.08em] text-muted; }
   .eyebrow { @apply text-[11px] font-bold uppercase tracking-[.16em] text-teal; }
 }

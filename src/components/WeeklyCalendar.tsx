@@ -33,21 +33,29 @@ export default function WeeklyCalendar({ data, selected, onSelect, onSlot, onSta
   const slots = Array.from({ length: (DAY_END - DAY_START) / step }, (_, i) => DAY_START + i * step);
   const rowHeight = step === 15 ? 36 : 72;
   const height = (DAY_END - DAY_START) / step * rowHeight;
+  const covered = (date: string, minute: number) => filtered.some(a => a.date === date && a.status !== "Cancelada" && validAppointmentTime(a) && minutes(a.time) < minute + step && minutes(a.time) + a.duration > minute);
   const createSlot = (date: string, time: string) => onSlot({ date, time, dentist: dentist || undefined, chair: chairs.includes(chair) ? chair : undefined });
   const renderDay = (date: string) => <div key={date} className="relative border-l border-line" style={{ height }}>
     {!canCreate && slots.map((minute, i) => <div key={minute} aria-hidden="true" className="absolute left-0 w-full border-t border-line" style={{ top: i * rowHeight, height: rowHeight }}/>)}
-    {canCreate && slots.map((minute, i) => <button key={minute} type="button" className="calendar-slot absolute left-0 w-full border-t border-line text-left hover:bg-pale"
+    {canCreate && slots.map((minute, i) => covered(date, minute)
+      // A booking covers this slot: it is not a usable target (WCAG 2.5.8), so no button is rendered.
+      ? <div key={minute} aria-hidden="true" className="absolute left-0 w-full border-t border-line" style={{ top: i * rowHeight, height: rowHeight }}/>
+      : <button key={minute} type="button" className="calendar-slot absolute left-0 w-full border-t border-line text-left hover:bg-pale"
       style={{ top: i * rowHeight, height: rowHeight }} data-calendar-slot={`${date}/${minute}`} onKeyDown={event => {
-        let targetDate = date; let targetMinute = minute;
-        if (event.key === "ArrowUp") targetMinute -= step;
-        else if (event.key === "ArrowDown") targetMinute += step;
-        else if (event.key === "ArrowLeft") targetDate = addDays(date, -1);
-        else if (event.key === "ArrowRight") targetDate = addDays(date, 1);
-        else if (event.key === "Home") targetMinute = DAY_START;
-        else if (event.key === "End") targetMinute = DAY_END - step;
-        else return;
+        const moves: Record<string, [number, number]> = { ArrowUp: [0, -step], ArrowDown: [0, step], ArrowLeft: [-1, 0], ArrowRight: [1, 0], Home: [0, step], End: [0, -step] };
+        const move = moves[event.key];
+        if (!move) return;
         event.preventDefault();
-        event.currentTarget.parentElement?.parentElement?.querySelector<HTMLButtonElement>(`[data-calendar-slot="${targetDate}/${targetMinute}"]`)?.focus();
+        const grid = event.currentTarget.parentElement?.parentElement;
+        let targetDate = date; let targetMinute = event.key === "Home" ? DAY_START : event.key === "End" ? DAY_END - step : minute;
+        if (event.key !== "Home" && event.key !== "End") { targetDate = addDays(targetDate, move[0]); targetMinute += move[1]; }
+        // Skip slots hidden under bookings, in the same direction, until a free one is found.
+        for (let i = 0; i < 64 && targetMinute >= DAY_START && targetMinute < DAY_END; i++) {
+          const next = grid?.querySelector<HTMLButtonElement>(`[data-calendar-slot="${targetDate}/${targetMinute}"]`);
+          if (next) { next.focus(); return; }
+          if (!grid?.querySelector(`[data-calendar-slot^="${targetDate}/"]`)) return;
+          targetDate = addDays(targetDate, move[0]); targetMinute += move[0] ? 0 : move[1];
+        }
       }} aria-label={`Nueva cita ${shortDate(date)} a las ${clockTime(minute)}${dentist ? `, ${dentist}` : ""}${chairs.includes(chair) ? `, ${chair}` : ""}`}
       onClick={() => createSlot(date, clockTime(minute))}><span className="sr-only">Crear cita</span></button>)}
     {appointmentLanes(filtered.filter(a => a.date === date)).map(({ appointment: a, lane, lanes }) => {

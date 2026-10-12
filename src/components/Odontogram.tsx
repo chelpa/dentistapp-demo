@@ -9,9 +9,9 @@ const quadrants = [
   { label: "Inferior izquierda", teeth: [31,32,33,34,35,36,37,38] }
 ];
 const statusStyle: Record<ToothStatus,string> = {
-  Sano: "border-line bg-white text-[#8a9bab] hover:border-teal",
-  "Observación": "border-[#ecd59e] bg-[#fff6e4] text-[#c28a31]",
-  Tratado: "border-[#b7deca] bg-[#e8f6ed] text-[#3f956a]"
+  Sano: "border-line bg-white text-[#63778a] hover:border-teal",
+  "Observación": "border-[#ecd59e] bg-[#fff6e4] text-[#916725]",
+  Tratado: "border-[#b7deca] bg-[#e8f6ed] text-[#347a57]"
 };
 function ToothIcon() { return <svg viewBox="0 0 36 42" aria-hidden="true" className="h-6 w-6 sm:h-8 sm:w-8" fill="none"><path d="M8 3C3.8 4.4 3 9 4.1 14.6c.8 4.2 3.3 8.6 5.4 11.1 1 1.2 1.8 3.9 2.5 7.6.5 3 1.1 5.8 3.5 5.8 2.1 0 2.4-3 2.8-6.3.3-2.3.5-3.3 1.7-3.3s1.5 1 1.8 3.3c.4 3.3.7 6.3 2.8 6.3 2.4 0 3-2.8 3.5-5.8.7-3.7 1.5-6.4 2.5-7.6 2.1-2.5 4.6-6.9 5.4-11.1C33 9 32.2 4.4 28 3c-3.3-1.1-5.6 1.2-10 1.2S11.3 1.9 8 3Z" fill="currentColor" fillOpacity=".28" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round"/><path d="M9 12c2 2 5 2.9 9 2.9s7-.9 9-2.9" stroke="currentColor" strokeOpacity=".5" strokeWidth="1.4" strokeLinecap="round"/></svg>; }
 

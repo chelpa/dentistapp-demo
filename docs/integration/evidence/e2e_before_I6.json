@@ -1,0 +1,553 @@
+{
+ "axe": {
+  "1280/reception/inicio": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 49,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/reception/agenda-semana": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 31,
+    "sample": [
+     "small",
+     ".mt-9",
+     ".bg-pale.text-teal.transition"
+    ]
+   },
+   {
+    "id": "target-size",
+    "impact": "serious",
+    "nodes": 7,
+    "sample": [
+     ".grid:nth-child(2) > .relative.border-l:nth-child(2) > .calendar-slot.hover\\:bg-pale[data-calendar-slot=\"2026-10-12/540\"]",
+     ".grid:nth-child(2) > .relative.border-l:nth-child(2) > .calendar-slot.hover\\:bg-pale[data-calendar-slot=\"2026-10-12/630\"]",
+     ".grid:nth-child(2) > .relative.border-l:nth-child(2) > .calendar-slot.hover\\:bg-pale[data-calendar-slot=\"2026-10-12/660\"]"
+    ]
+   }
+  ],
+  "1280/reception/agenda-mes": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 50,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".w-full.bg-pale.px-3"
+    ]
+   }
+  ],
+  "1280/reception/agenda-dia": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 64,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/reception/pacientes": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 38,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/reception/perfil": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 20,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale.transition.w-full"
+    ]
+   }
+  ],
+  "1280/reception/aranceles": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 18,
+    "sample": [
+     "small",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/reception/dialogo-cita": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 10,
+    "sample": [
+     ".items-start.justify-between.flex > div > .eyebrow",
+     ".items-start.justify-between.flex > div > .mt-1.text-sm.text-muted",
+     "label[for=\"patient\"]"
+    ]
+   }
+  ],
+  "1280/reception/dialogo-restablecer": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 50,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/reception/dialogo-detalle": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 2,
+    "sample": [
+     "label[for=\"weekly-status\"]",
+     ".btn-primary.mt-5[type=\"button\"]"
+    ]
+   }
+  ],
+  "1280/dentist/inicio": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 40,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/dentist/agenda-semana": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 30,
+    "sample": [
+     "small",
+     ".mt-9",
+     ".bg-pale.text-teal.transition"
+    ]
+   }
+  ],
+  "1280/dentist/ficha": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 73,
+    "sample": [
+     "small",
+     ".mt-9",
+     ".bg-pale.py-3.text-left"
+    ]
+   }
+  ],
+  "1280/dentist/perfil-tratamientos": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 20,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale.transition.w-full"
+    ]
+   }
+  ],
+  "1280/dentist/tratamientos": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 26,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/dentist/aranceles": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 19,
+    "sample": [
+     "small",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/admin/inicio": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 49,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/admin/aranceles": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 14,
+    "sample": [
+     "small",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "1280/admin/ficha-lectura": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 62,
+    "sample": [
+     "small",
+     ".mt-9",
+     ".bg-pale.text-teal.w-full"
+    ]
+   }
+  ],
+  "1280/admin/equipo": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 59,
+    "sample": [
+     "small",
+     ".mt-9",
+     ".bg-pale.w-full.px-3"
+    ]
+   }
+  ],
+  "375/reception/inicio": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 34,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/reception/agenda-semana": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 22,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".border-\\[\\#cce6df\\] > div > .text-\\[\\#68837e\\]"
+    ]
+   },
+   {
+    "id": "target-size",
+    "impact": "serious",
+    "nodes": 3,
+    "sample": [
+     ".grid-cols-\\[56px_1fr\\] > .relative.border-l > .calendar-slot.hover\\:bg-pale[data-calendar-slot=\"2026-10-12/540\"]",
+     ".grid-cols-\\[56px_1fr\\] > .relative.border-l > .calendar-slot.hover\\:bg-pale[data-calendar-slot=\"2026-10-12/630\"]",
+     ".grid-cols-\\[56px_1fr\\] > .relative.border-l > .calendar-slot.hover\\:bg-pale[data-calendar-slot=\"2026-10-12/660\"]"
+    ]
+   }
+  ],
+  "375/reception/agenda-mes": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 36,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".border-\\[\\#cce6df\\] > div > .text-\\[\\#68837e\\]"
+    ]
+   }
+  ],
+  "375/reception/agenda-dia": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 52,
+    "sample": [
+     ".min-w-0.flex-1 > .font-medium.text-xs",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/reception/pacientes": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 19,
+    "sample": [
+     ".min-w-0.flex-1 > .font-medium.text-muted",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/reception/perfil": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 13,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/reception/aranceles": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 11,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/reception/dialogo-cita": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 11,
+    "sample": [
+     ".items-start.justify-between.flex > div > .eyebrow",
+     ".items-start.justify-between.flex > div > .mt-1.text-sm.text-muted",
+     "label[for=\"patient\"]"
+    ]
+   }
+  ],
+  "375/reception/dialogo-restablecer": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 41,
+    "sample": [
+     ".-mt-0\\.5",
+     ".mt-9",
+     ".bg-pale"
+    ]
+   }
+  ],
+  "375/reception/dialogo-detalle": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 2,
+    "sample": [
+     "label[for=\"weekly-status\"]",
+     ".btn-primary.mt-5[type=\"button\"]"
+    ]
+   }
+  ],
+  "375/dentist/inicio": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 29,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/dentist/agenda-semana": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 21,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".border-\\[\\#cce6df\\] > div:nth-child(1) > .text-\\[\\#68837e\\]"
+    ]
+   }
+  ],
+  "375/dentist/ficha": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 66,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1.text-xs"
+    ]
+   }
+  ],
+  "375/dentist/perfil-tratamientos": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 13,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/dentist/tratamientos": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 16,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/dentist/aranceles": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 12,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/admin/inicio": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 34,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/admin/aranceles": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 7,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/admin/ficha-lectura": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 55,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   }
+  ],
+  "375/admin/equipo": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 42,
+    "sample": [
+     ".font-medium",
+     ".border-\\[\\#f1dfbb\\]",
+     ".text-\\[\\#68837e\\].mt-1"
+    ]
+   },
+   {
+    "id": "scrollable-region-focusable",
+    "impact": "serious",
+    "nodes": 1,
+    "sample": [
+     ".overflow-x-auto"
+    ]
+   }
+  ]
+ },
+ "overflow": {
+  "320/reception/inicio": 0,
+  "320/reception/semana": 0,
+  "320/reception/mes": 0,
+  "320/reception/dia": 0,
+  "320/reception/aranceles": 0,
+  "320/dentist/ficha": 0,
+  "320/dentist/tratamientos": 0,
+  "320/admin/equipo": 0,
+  "375/reception/inicio": 0,
+  "375/reception/semana": 0,
+  "375/reception/mes": 0,
+  "375/reception/dia": 0,
+  "375/reception/aranceles": 0,
+  "375/dentist/ficha": 0,
+  "375/dentist/tratamientos": 0,
+  "375/admin/equipo": 0,
+  "390/reception/inicio": 0,
+  "390/reception/semana": 0,
+  "390/reception/mes": 0,
+  "390/reception/dia": 0,
+  "390/reception/aranceles": 0,
+  "390/dentist/ficha": 0,
+  "390/dentist/tratamientos": 0,
+  "390/admin/equipo": 0,
+  "768/reception/inicio": 0,
+  "768/reception/semana": 0,
+  "768/reception/mes": 0,
+  "768/reception/dia": 0,
+  "768/reception/aranceles": 0,
+  "768/dentist/ficha": 0,
+  "768/dentist/tratamientos": 0,
+  "768/admin/equipo": 0,
+  "1440/reception/inicio": 0,
+  "1440/reception/semana": 0,
+  "1440/reception/mes": 0,
+  "1440/reception/dia": 0,
+  "1440/reception/aranceles": 0,
+  "1440/dentist/ficha": 0,
+  "1440/dentist/tratamientos": 0,
+  "1440/admin/equipo": 0
+ },
+ "errors": []
+}
