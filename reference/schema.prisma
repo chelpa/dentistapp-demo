@@ -1,0 +1,628 @@
+// Portal Web Dental — Fase 4: schema.prisma
+// Generado a partir del modelo conceptual aprobado en basededatos-fase3.md
+// No se agregaron entidades nuevas respecto a ese documento.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// 1. Identidad y usuarios
+// ─────────────────────────────────────────────
+
+enum Role {
+  PATIENT
+  DENTIST
+  RECEPTIONIST
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id              String     @id @default(cuid())
+  email           String     @unique
+  passwordHash    String?
+  name            String
+  phone           String
+  role            Role
+  status          UserStatus @default(ACTIVE)
+  emailVerifiedAt DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  patient      Patient?
+  dentist      Dentist?
+  receptionist Receptionist?
+  admin        Admin?
+
+  createdAppointments           Appointment[]            @relation("AppointmentCreatedBy")
+  notifications                 Notification[]
+  auditLogs                     AuditLog[]               @relation("AuditActor")
+  uploadedDocuments              Document[]               @relation("DocumentUploadedBy")
+  clinicalRecordUpdates          ClinicalRecord[]         @relation("ClinicalRecordLastUpdatedBy")
+  availabilityExceptionsCreated AvailabilityException[]  @relation("AvailabilityExceptionCreatedBy")
+
+  @@index([role])
+}
+
+// Auth.js — esquema estándar, sin cambios respecto a lo que la librería espera.
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Sede {
+  id        String   @id @default(cuid())
+  name      String
+  address   String
+  comuna    String
+  city      String
+  phone     String
+  email     String
+  lat       Float?
+  lng       Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  dentistSedes           DentistSede[]
+  receptionistSedes      ReceptionistSede[]
+  adminSedes             AdminSede[]
+  treatmentPrices        TreatmentPrice[]
+  availabilities         DentistAvailability[]
+  availabilityExceptions AvailabilityException[]
+  appointments           Appointment[]
+  patientDentists        PatientDentist[]
+  budgets                Budget[]
+}
+
+model Patient {
+  id                     String   @id @default(cuid())
+  userId                 String   @unique
+  rut                    String   @unique
+  birthDate              DateTime
+  gender                 String?
+  address                String?
+  emergencyContactName   String?
+  emergencyContactPhone  String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dentists       PatientDentist[]
+  appointments   Appointment[]
+  clinicalRecord ClinicalRecord?
+  evolutions     ClinicalEvolution[]
+  toothRecords   ToothRecord[]
+  radiographs    Radiograph[]
+  documents      Document[]
+  budgets        Budget[]
+  payments       Payment[]
+}
+
+model Dentist {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  rut           String   @unique
+  licenseNumber String   @unique
+  specialty     String?
+  bio           String?
+  photoUrl      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  sedes                  DentistSede[]
+  patients               PatientDentist[]
+  availabilities         DentistAvailability[]
+  availabilityExceptions AvailabilityException[]
+  appointments           Appointment[]
+  evolutions             ClinicalEvolution[]
+  toothRecords           ToothRecord[] @relation("ToothRecordRecordedBy")
+  radiographs            Radiograph[]  @relation("RadiographUploadedBy")
+  budgets                Budget[]
+}
+
+model Receptionist {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  rut       String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sedes ReceptionistSede[]
+}
+
+model Admin {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  fullAccess Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user  User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sedes AdminSede[]
+}
+
+// ─────────────────────────────────────────────
+// 2. Asignación a sedes (multi-sede)
+// ─────────────────────────────────────────────
+
+model DentistSede {
+  dentistId String
+  sedeId    String
+  active    Boolean @default(true)
+
+  dentist Dentist @relation(fields: [dentistId], references: [id], onDelete: Cascade)
+  sede    Sede    @relation(fields: [sedeId], references: [id], onDelete: Cascade)
+
+  @@id([dentistId, sedeId])
+  @@index([sedeId])
+}
+
+model ReceptionistSede {
+  receptionistId String
+  sedeId         String
+  active         Boolean @default(true)
+
+  receptionist Receptionist @relation(fields: [receptionistId], references: [id], onDelete: Cascade)
+  sede         Sede         @relation(fields: [sedeId], references: [id], onDelete: Cascade)
+
+  @@id([receptionistId, sedeId])
+  @@index([sedeId])
+}
+
+model AdminSede {
+  adminId String
+  sedeId  String
+
+  admin Admin @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  sede  Sede  @relation(fields: [sedeId], references: [id], onDelete: Cascade)
+
+  @@id([adminId, sedeId])
+  @@index([sedeId])
+}
+
+model PatientDentist {
+  patientId String
+  dentistId String
+  sedeId    String
+  startedAt DateTime @default(now())
+  active    Boolean  @default(true)
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  dentist Dentist @relation(fields: [dentistId], references: [id], onDelete: Cascade)
+  sede    Sede    @relation(fields: [sedeId], references: [id], onDelete: Restrict)
+
+  @@id([patientId, dentistId])
+  @@index([dentistId])
+}
+
+// ─────────────────────────────────────────────
+// 3. Catálogo de tratamientos
+// ─────────────────────────────────────────────
+
+model Treatment {
+  id                     String   @id @default(cuid())
+  name                   String
+  description            String?
+  defaultDurationMinutes Int
+  active                 Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  prices       TreatmentPrice[]
+  appointments Appointment[]
+  budgetItems  BudgetItem[]
+}
+
+model TreatmentPrice {
+  treatmentId String
+  sedeId      String
+  price       Decimal @db.Decimal(10, 2)
+  currency    String  @default("CLP")
+
+  treatment Treatment @relation(fields: [treatmentId], references: [id], onDelete: Cascade)
+  sede      Sede      @relation(fields: [sedeId], references: [id], onDelete: Cascade)
+
+  @@id([treatmentId, sedeId])
+}
+
+// ─────────────────────────────────────────────
+// 4. Agenda y disponibilidad
+// ─────────────────────────────────────────────
+
+model DentistAvailability {
+  id        String @id @default(cuid())
+  dentistId String
+  sedeId    String
+  dayOfWeek Int
+  startTime String
+  endTime   String
+
+  dentist Dentist @relation(fields: [dentistId], references: [id], onDelete: Cascade)
+  sede    Sede    @relation(fields: [sedeId], references: [id], onDelete: Cascade)
+
+  @@index([dentistId, dayOfWeek])
+}
+
+enum AvailabilityExceptionType {
+  VACATION
+  LICENSE
+  HOLIDAY
+  MANUAL_BLOCK
+}
+
+model AvailabilityException {
+  id            String                     @id @default(cuid())
+  dentistId     String?
+  sedeId        String?
+  startDateTime DateTime
+  endDateTime   DateTime
+  type          AvailabilityExceptionType
+  reason        String?
+  createdById   String
+  createdAt     DateTime                   @default(now())
+
+  dentist   Dentist? @relation(fields: [dentistId], references: [id], onDelete: Cascade)
+  sede      Sede?    @relation(fields: [sedeId], references: [id], onDelete: Cascade)
+  createdBy User     @relation("AvailabilityExceptionCreatedBy", fields: [createdById], references: [id])
+
+  @@index([dentistId, startDateTime])
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+model Appointment {
+  id                    String            @id @default(cuid())
+  patientId             String
+  dentistId             String
+  sedeId                String
+  treatmentId           String
+  startDateTime         DateTime
+  endDateTime           DateTime
+  status                AppointmentStatus @default(SCHEDULED)
+  assignedAutomatically Boolean           @default(false)
+  createdById           String
+  cancelReason          String?
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  patient   Patient   @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  dentist   Dentist   @relation(fields: [dentistId], references: [id], onDelete: Restrict)
+  sede      Sede      @relation(fields: [sedeId], references: [id], onDelete: Restrict)
+  treatment Treatment @relation(fields: [treatmentId], references: [id], onDelete: Restrict)
+  createdBy User      @relation("AppointmentCreatedBy", fields: [createdById], references: [id])
+
+  evolutions    ClinicalEvolution[]
+  toothRecords  ToothRecord[]
+  radiographs   Radiograph[]
+  notifications Notification[]
+
+  @@index([dentistId, startDateTime])
+  @@index([patientId, startDateTime])
+}
+
+// ─────────────────────────────────────────────
+// 5. Ficha clínica
+// ─────────────────────────────────────────────
+
+model ClinicalRecord {
+  id                 String    @id @default(cuid())
+  patientId          String    @unique
+  allergies          String?
+  currentMedications String?
+  medicalConditions  String?
+  generalNotes       String?
+  lastUpdatedById    String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  patient       Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  lastUpdatedBy User?   @relation("ClinicalRecordLastUpdatedBy", fields: [lastUpdatedById], references: [id])
+}
+
+model ClinicalEvolution {
+  id            String   @id @default(cuid())
+  patientId     String
+  dentistId     String
+  appointmentId String?
+  date          DateTime @default(now())
+  notes         String
+  createdAt     DateTime @default(now())
+
+  patient     Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  dentist     Dentist      @relation(fields: [dentistId], references: [id], onDelete: Restrict)
+  appointment Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+
+  @@index([patientId, date])
+}
+
+enum ToothCondition {
+  HEALTHY
+  CARIES
+  FILLED
+  CROWN
+  EXTRACTED
+  IMPLANT
+  ROOT_CANAL
+  OTHER
+}
+
+model ToothRecord {
+  id            String         @id @default(cuid())
+  patientId     String
+  toothNumber   Int
+  surface       String?
+  condition     ToothCondition
+  recordedById  String
+  recordedAt    DateTime       @default(now())
+  appointmentId String?
+  notes         String?
+
+  patient     Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  recordedBy  Dentist      @relation("ToothRecordRecordedBy", fields: [recordedById], references: [id], onDelete: Restrict)
+  appointment Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+
+  @@index([patientId, toothNumber, recordedAt])
+}
+
+// ─────────────────────────────────────────────
+// 6. Radiografías y documentos
+// ─────────────────────────────────────────────
+
+model Radiograph {
+  id            String    @id @default(cuid())
+  patientId     String
+  uploadedById  String
+  appointmentId String?
+  storageKey    String
+  fileType      String
+  description   String?
+  takenAt       DateTime?
+  uploadedAt    DateTime  @default(now())
+
+  patient     Patient      @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  uploadedBy  Dentist      @relation("RadiographUploadedBy", fields: [uploadedById], references: [id], onDelete: Restrict)
+  appointment Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+
+  @@index([patientId])
+}
+
+enum DocumentType {
+  CONSENT
+  ID_COPY
+  INSURANCE
+  OTHER
+}
+
+model Document {
+  id                String       @id @default(cuid())
+  patientId         String
+  type              DocumentType
+  storageKey        String
+  fileName          String
+  requiresSignature Boolean      @default(false)
+  signedAt          DateTime?
+  uploadedById      String
+  uploadedAt        DateTime     @default(now())
+
+  patient    Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  uploadedBy User    @relation("DocumentUploadedBy", fields: [uploadedById], references: [id])
+
+  @@index([patientId, type])
+}
+
+// ─────────────────────────────────────────────
+// 7. Presupuestos y pagos
+// ─────────────────────────────────────────────
+
+enum BudgetStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+model Budget {
+  id                      String       @id @default(cuid())
+  patientId               String
+  dentistId               String
+  sedeId                  String
+  status                  BudgetStatus @default(DRAFT)
+  insuranceProvider       String?
+  insuranceCoverageAmount Decimal?     @db.Decimal(10, 2)
+  validUntil              DateTime?
+  createdAt               DateTime     @default(now())
+  updatedAt               DateTime     @updatedAt
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  dentist Dentist @relation(fields: [dentistId], references: [id], onDelete: Restrict)
+  sede    Sede    @relation(fields: [sedeId], references: [id], onDelete: Restrict)
+
+  items    BudgetItem[]
+  payments Payment[]
+
+  @@index([patientId, status])
+}
+
+model BudgetItem {
+  id          String  @id @default(cuid())
+  budgetId    String
+  treatmentId String
+  quantity    Int     @default(1)
+  unitPrice   Decimal @db.Decimal(10, 2)
+  subtotal    Decimal @db.Decimal(10, 2)
+
+  budget    Budget    @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  treatment Treatment @relation(fields: [treatmentId], references: [id], onDelete: Restrict)
+
+  @@index([budgetId])
+}
+
+enum PaymentMethod {
+  WEBPAY
+  CASH
+  TRANSFER
+  OTHER
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+model Payment {
+  id                    String        @id @default(cuid())
+  budgetId              String
+  patientId             String
+  amount                Decimal       @db.Decimal(10, 2)
+  method                PaymentMethod
+  status                PaymentStatus @default(PENDING)
+  providerTransactionId String?       @unique
+  paidAt                DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  budget  Budget   @relation(fields: [budgetId], references: [id], onDelete: Restrict)
+  patient Patient  @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  invoice Invoice?
+
+  @@index([status])
+  @@index([patientId])
+}
+
+enum SiiStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Invoice {
+  id                String    @id @default(cuid())
+  paymentId         String    @unique
+  folio             String?
+  documentType      String    @default("BOLETA_ELECTRONICA")
+  siiStatus         SiiStatus @default(PENDING)
+  providerReference String?
+  pdfStorageKey     String?
+  issuedAt          DateTime?
+  createdAt         DateTime  @default(now())
+
+  payment Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+}
+
+// ─────────────────────────────────────────────
+// 8. Notificaciones y auditoría
+// ─────────────────────────────────────────────
+
+enum NotificationChannel {
+  EMAIL
+  WHATSAPP
+  SMS
+}
+
+enum NotificationType {
+  APPOINTMENT_REMINDER_24H
+  APPOINTMENT_REMINDER_2H
+  APPOINTMENT_CONFIRMATION
+  PAYMENT_CONFIRMATION
+  BUDGET_READY
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+model Notification {
+  id                    String              @id @default(cuid())
+  userId                String
+  channel               NotificationChannel
+  type                  NotificationType
+  relatedAppointmentId  String?
+  status                NotificationStatus  @default(PENDING)
+  scheduledFor          DateTime
+  sentAt                DateTime?
+  createdAt             DateTime            @default(now())
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointment Appointment? @relation(fields: [relatedAppointmentId], references: [id], onDelete: SetNull)
+
+  @@index([status, scheduledFor])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId String
+  action      String
+  entityType  String
+  entityId    String
+  metadata    Json?
+  ipAddress   String?
+  createdAt   DateTime @default(now())
+
+  actor User @relation("AuditActor", fields: [actorUserId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([actorUserId, createdAt])
+}
