@@ -1,0 +1,5 @@
+
+> dentistapp-mvp@0.2.1 build:static
+> node scripts/build-static.mjs
+
+You are using Node.js 18.14.0. For Next.js, Node.js version "^18.18.0 || ^19.8.0 || >= 20.0.0" is required.

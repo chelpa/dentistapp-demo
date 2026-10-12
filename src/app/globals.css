@@ -17,3 +17,7 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   .label { @apply mb-1.5 block text-xs font-semibold uppercase tracking-[.08em] text-muted; }
   .eyebrow { @apply text-[11px] font-bold uppercase tracking-[.16em] text-teal; }
 }
+
+button:focus-visible, [tabindex]:focus-visible { outline: 3px solid #178a73; outline-offset: 2px; }
+.calendar-slot:focus-visible, .calendar-booking:focus-visible { z-index: 30; outline-offset: -3px; }
+dialog::backdrop { background: rgb(23 39 57 / .45); }

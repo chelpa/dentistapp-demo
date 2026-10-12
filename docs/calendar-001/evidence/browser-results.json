@@ -1,0 +1,91 @@
+{
+  "timestamp": "2026-10-12T19:52:03.114Z",
+  "url": "http://127.0.0.1:8765/dentistapp-demo/",
+  "timezone": "America/Santiago",
+  "fixtures": "Solo datos ficticios; seed persistido y seis citas fixture controladas",
+  "results": [
+    {
+      "name": "Legacy + semana completa",
+      "result": "PASS",
+      "details": "6 citas visibles; legacy conserva ausencia de chair"
+    },
+    {
+      "name": "Carriles y duración",
+      "result": "PASS",
+      "details": "Dos citas 09:00 separadas; proporción 30/60 minutos"
+    },
+    {
+      "name": "Intervalo 15/30",
+      "result": "PASS",
+      "details": "Alturas invariantes; cita de 15 min visible"
+    },
+    {
+      "name": "Laboral y navegación",
+      "result": "PASS",
+      "details": "5 citas laborales, domingo conservado, ±7 días"
+    },
+    {
+      "name": "Slot y accesibilidad modal",
+      "result": "PASS",
+      "details": "Enter precarga recursos/hora, 14 Tab dentro, Escape devuelve foco"
+    },
+    {
+      "name": "Conflictos globales",
+      "result": "PASS",
+      "details": "Mismo dentista o sillón rechazado pese a filtros activos"
+    },
+    {
+      "name": "Adyacencia y límite horario",
+      "result": "PASS",
+      "details": "09:30 después de 09–09:30 y 19:45–20 permitidos"
+    },
+    {
+      "name": "Cancelación/reactivación",
+      "result": "PASS",
+      "details": "Cancelada libera recursos; reactivar con cruce rechazado"
+    },
+    {
+      "name": "Recarga",
+      "result": "PASS",
+      "details": "IDs, chair ausente y citas nuevas persisten"
+    },
+    {
+      "name": "Regresión Mes/Día",
+      "result": "PASS",
+      "details": "Vistas y navegación mensual siguen disponibles"
+    },
+    {
+      "name": "Responsive 320px",
+      "result": "PASS",
+      "details": "Sin desborde horizontal de documento; grilla móvil usa día seleccionable"
+    },
+    {
+      "name": "Responsive 390px",
+      "result": "PASS",
+      "details": "Sin desborde horizontal de documento; grilla móvil usa día seleccionable"
+    },
+    {
+      "name": "Responsive 768px",
+      "result": "PASS",
+      "details": "Sin desborde horizontal de documento; grilla móvil usa día seleccionable"
+    },
+    {
+      "name": "Responsive 1440px",
+      "result": "PASS",
+      "details": "Sin desborde horizontal de documento; grilla móvil usa día seleccionable"
+    },
+    {
+      "name": "Hoy",
+      "result": "PASS",
+      "details": "Fecha civil del navegador America/Santiago"
+    },
+    {
+      "name": "Runtime",
+      "result": "PASS",
+      "details": "Sin pageerror durante escenarios"
+    }
+  ],
+  "errors": [],
+  "sourceDigest": "880a254e754397883ab18aab1587dd7fa43c146a9d94d60412e0df2e702baab3",
+  "binding": "Source files compared with final review hashes and manifest after browser execution; no application source change during browser checks"
+}

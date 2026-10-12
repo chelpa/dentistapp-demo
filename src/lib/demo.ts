@@ -1,8 +1,8 @@
-export type AppointmentStatus = "Confirmada" | "En espera" | "Completada";
+export type AppointmentStatus = "Confirmada" | "En espera" | "Completada" | "Cancelada";
 export type TreatmentStatus = "Planificado" | "En curso" | "Finalizado";
 export type ToothStatus = "Sano" | "Observación" | "Tratado";
 export type Patient = { id: string; name: string; initials: string; age: number; phone: string; email: string; lastVisit: string; note: string; color: string };
-export type Appointment = { id: string; patientId: string; date: string; time: string; duration: number; dentist: string; type: string; status: AppointmentStatus };
+export type Appointment = { id: string; patientId: string; date: string; time: string; duration: number; dentist: string; chair?: string; type: string; status: AppointmentStatus };
 export type Treatment = { id: string; patientId: string; name: string; tooth: number | null; status: TreatmentStatus; dentist: string; date: string };
 export type ClinicalNote = { id: string; patientId: string; text: string; date: string; author: string };
 export type ToothRecord = { patientId: string; tooth: number; status: ToothStatus };

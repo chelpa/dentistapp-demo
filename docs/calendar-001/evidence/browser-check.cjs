@@ -1,0 +1,58 @@
+const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const fs = require('fs');
+const assert = require('node:assert/strict');
+const path = require('path');
+const root=process.cwd(), evidence=path.join(root,'docs/calendar-001/evidence');
+const results=[], errors=[];
+const check=(name,details)=>results.push({name,result:'PASS',details});
+const store='dentistapp-mvp-demo-v1';
+(async()=>{
+ const browser=await chromium.launch({headless:true});
+ const context=await browser.newContext({viewport:{width:1440,height:1000},timezoneId:'America/Santiago'});
+ const page=await context.newPage(); page.on('pageerror',e=>errors.push(e.message));
+ await page.goto(process.env.CALENDAR_PREVIEW_URL || 'http://127.0.0.1:8765/dentistapp-demo/');
+ await page.getByRole('navigation').getByRole('button',{name:/Agenda/}).click();
+ await page.getByRole('region',{name:'Agenda semanal'}).waitFor();
+ const seed=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)),store);
+ const dates=await page.evaluate(()=>{const d=new Date();d.setDate(d.getDate()+14);d.setDate(d.getDate()-((d.getDay()+6)%7));return Array.from({length:7},(_,i)=>{const v=new Date(d);v.setDate(v.getDate()+i);return `${v.getFullYear()}-${String(v.getMonth()+1).padStart(2,'0')}-${String(v.getDate()).padStart(2,'0')}`;});});
+ const dentist=['Dra. Valentina Rojas','Dr. Tomás Fuentes','Dra. Camila Muñoz'];
+ const make=(id,day,time,duration,d,chair)=>({id,patientId:`p${(Number(id.slice(1))%6)+1}`,date:dates[day],time,duration,dentist:dentist[d],type:'Control',status:'Confirmada',...(chair?{chair}:{} )});
+ seed.appointments=[make('a1',0,'09:00',30,0,'Sillón 1'),make('a2',0,'09:00',60,1,'Sillón 2'),make('a3',1,'11:00',45,2),make('a4',2,'10:00',120,0,'Sillón 1'),make('a5',3,'08:30',15,1,'Sillón 2'),make('a6',6,'09:30',60,2,'Sillón 3')];
+ await page.evaluate(({key,seed})=>localStorage.setItem(key,JSON.stringify(seed)),{key:store,seed});await page.reload();
+ await page.getByRole('navigation').getByRole('button',{name:/Agenda/}).click();
+ await page.getByLabel('Fecha de semana').fill(dates[0]);
+ const region=page.getByRole('region',{name:'Agenda semanal'});
+ assert.equal(await region.locator('.calendar-booking:visible').count(),6);check('Legacy + semana completa','6 citas visibles; legacy conserva ausencia de chair');
+ const first=region.locator('.calendar-booking:visible').filter({hasText:'09:00'});
+ const boxes=await first.evaluateAll(nodes=>nodes.map(n=>({left:n.getBoundingClientRect().left,width:n.getBoundingClientRect().width,height:n.getBoundingClientRect().height})));
+ assert.equal(boxes.length,2);assert.ok(boxes[0].left+boxes[0].width<=boxes[1].left+1);assert.ok(Math.abs((boxes[1].height+2)/(boxes[0].height+2)-2)<0.01);check('Carriles y duración','Dos citas 09:00 separadas; proporción 30/60 minutos');
+ const heights=await region.locator('.calendar-booking:visible').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().height));
+ await region.getByRole('combobox',{name:/^Intervalo/}).selectOption('15');assert.deepEqual(await region.locator('.calendar-booking:visible').evaluateAll(nodes=>nodes.map(n=>n.getBoundingClientRect().height)),heights);check('Intervalo 15/30','Alturas invariantes; cita de 15 min visible');
+ await region.getByRole('combobox',{name:/^Días visibles/}).selectOption('work');assert.equal(await region.locator('.calendar-booking:visible').count(),5);await region.getByRole('combobox',{name:/^Días visibles/}).selectOption('all');
+ await page.getByRole('button',{name:'Semana siguiente'}).click();assert.equal(await region.locator('.calendar-booking:visible').count(),0);await page.getByRole('button',{name:'Semana anterior'}).click();assert.equal(await page.getByLabel('Fecha de semana').inputValue(),dates[0]);check('Laboral y navegación','5 citas laborales, domingo conservado, ±7 días');
+ await region.getByRole('combobox',{name:/^Profesional/}).selectOption(dentist[0]);await region.getByRole('combobox',{name:/^Sillón/}).selectOption('Sillón 1');assert.equal(await region.locator('.calendar-booking:visible').count(),2);
+ const slot=region.locator('.calendar-slot:visible').filter({has:page.locator('span')}).first();
+ await slot.focus();await page.keyboard.press('Enter');
+ const dialog=page.getByRole('dialog',{name:'Nueva cita'});await dialog.waitFor();
+ assert.equal(await dialog.getByLabel('Fecha',{exact:true}).inputValue(),dates[0]);assert.equal(await dialog.getByLabel('Hora',{exact:true}).inputValue(),'08:00');assert.equal(await dialog.getByLabel('Profesional',{exact:true}).inputValue(),dentist[0]);assert.equal(await dialog.getByLabel('Sillón',{exact:true}).inputValue(),'Sillón 1');
+ for(let i=0;i<14;i++){await page.keyboard.press('Tab');assert.ok(await dialog.evaluate(el=>el.contains(document.activeElement)));}
+ await page.keyboard.press('Escape');assert.ok(await slot.evaluate(el=>el===document.activeElement));check('Slot y accesibilidad modal','Enter precarga recursos/hora, 14 Tab dentro, Escape devuelve foco');
+ async function create(time,duration,d,chair){await page.getByRole('button',{name:'Nueva cita',exact:true}).click();const modal=page.getByRole('dialog',{name:'Nueva cita'});await modal.getByLabel('Fecha',{exact:true}).fill(dates[0]);await modal.getByLabel('Hora',{exact:true}).fill(time);await modal.getByLabel('Duración de la atención').selectOption(String(duration));await modal.getByLabel('Profesional',{exact:true}).selectOption(dentist[d]);await modal.getByLabel('Sillón',{exact:true}).selectOption(chair);await modal.getByRole('button',{name:'Crear cita demo'}).click();return modal;}
+ let m=await create('09:15',15,0,'Sillón 3');assert.match(await m.getByRole('alert').innerText(),/profesional/);await page.keyboard.press('Escape');
+ m=await create('09:15',15,2,'Sillón 1');assert.match(await m.getByRole('alert').innerText(),/sillón/);await page.keyboard.press('Escape');
+ check('Conflictos globales','Mismo dentista o sillón rechazado pese a filtros activos');
+ await create('09:30',15,0,'Sillón 1');await page.getByRole('dialog').waitFor({state:'hidden'});
+ await create('19:45',15,2,'Sillón 3');await page.getByRole('dialog').waitFor({state:'hidden'});check('Adyacencia y límite horario','09:30 después de 09–09:30 y 19:45–20 permitidos');
+ await region.locator('.calendar-booking:visible').filter({hasText:'09:00'}).first().click();await page.getByLabel('Estado de la cita').selectOption('Cancelada');await page.keyboard.press('Escape');
+ await create('09:00',30,0,'Sillón 1');await page.getByRole('dialog').waitFor({state:'hidden'});
+ const cancelled=region.locator('.calendar-booking:visible').filter({hasText:'Cancelada'}).first();await cancelled.click();await page.getByLabel('Estado de la cita').selectOption('Confirmada');assert.match(await page.getByRole('dialog').getByRole('alert').innerText(),/conflicto/);await page.keyboard.press('Escape');check('Cancelación/reactivación','Cancelada libera recursos; reactivar con cruce rechazado');
+ await region.getByRole('combobox',{name:/^Profesional/}).selectOption('');await region.getByRole('combobox',{name:/^Sillón/}).selectOption('');
+ await page.screenshot({path:path.join(evidence,'agenda-semanal-escritorio.png'),fullPage:true});
+ const before=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).appointments,store);await page.reload();await page.getByRole('navigation').getByRole('button',{name:/Agenda/}).click();const after=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).appointments,store);assert.deepEqual(after,before);check('Recarga','IDs, chair ausente y citas nuevas persisten');
+ await page.getByRole('button',{name:'Mes',exact:true}).click();await page.getByRole('button',{name:'Mes siguiente'}).click();await page.getByRole('button',{name:'Día',exact:true}).click();await page.getByRole('heading',{name:/Horas del día/}).waitFor();check('Regresión Mes/Día','Vistas y navegación mensual siguen disponibles');
+ await page.getByRole('button',{name:'Semana',exact:true}).click();await page.getByLabel('Fecha de semana').fill(dates[0]);
+ for(const width of [320,390,768,1440]){await page.setViewportSize({width,height:900});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));if(width<640){await page.getByLabel('Día de la semana').selectOption(dates[6]);assert.equal(await region.locator('.calendar-booking:visible').count(),1);await page.getByLabel('Día de la semana').selectOption(dates[0]);}check(`Responsive ${width}px`,'Sin desborde horizontal de documento; grilla móvil usa día seleccionable');if(width===390)await page.screenshot({path:path.join(evidence,'agenda-semanal-movil.png'),fullPage:true});}
+ await page.getByRole('button',{name:'Hoy',exact:true}).click();const now=await page.evaluate(()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;});assert.equal(await page.getByLabel('Fecha de semana').inputValue(),now);check('Hoy','Fecha civil del navegador America/Santiago');
+ assert.deepEqual(errors,[]);check('Runtime','Sin pageerror durante escenarios');
+ await browser.close();fs.writeFileSync(path.join(evidence,'browser-results.json'),JSON.stringify({timestamp:new Date().toISOString(),url:process.env.CALENDAR_PREVIEW_URL || 'http://127.0.0.1:8765/dentistapp-demo/',timezone:'America/Santiago',fixtures:'Solo datos ficticios; seed persistido y seis citas fixture controladas',results,errors},null,2));console.log(JSON.stringify(results));
+})().catch(e=>{fs.writeFileSync(path.join(evidence,'browser-failure.json'),JSON.stringify({results,errors,error:e.stack},null,2));console.error(e);process.exit(1);});
