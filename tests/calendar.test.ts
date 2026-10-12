@@ -1,5 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { addDays, appointmentLanes, filterAppointments, findConflict, isPastAppointment, minutes, validAppointmentTime, validDate, weekDays } from "../src/lib/calendar";
 import { type Appointment, seedDemo } from "../src/lib/demo";
 
@@ -103,4 +105,12 @@ test("creation rejects past time today and historical dates with injectable cloc
   assert.equal(isPastAppointment(booking({ date: "2026-10-11", time: "19:45" }), now), true);
   assert.equal(isPastAppointment(booking({ date: "2026-10-13", time: "08:00" }), now), false);
   assert.equal(isPastAppointment(booking({ time: "invalid" }), now), true);
+});
+
+test("RADO evidence logs retain the exact bytes bound by the manifest", () => {
+  const directory = "docs/calendar-001/evidence/";
+  const manifest = JSON.parse(readFileSync(`${directory}manifest.json`, "utf8")) as { sourceDigest: string; sources: { path: string; sha256: string }[]; runs: { log: string; logSha256: string }[] };
+  const digest = (bytes: string | Buffer) => createHash("sha256").update(bytes).digest("hex");
+  assert.equal(digest(JSON.stringify(manifest.sources)), manifest.sourceDigest);
+  for (const run of manifest.runs) assert.equal(digest(readFileSync(`${directory}${run.log}`)), run.logSha256, run.log);
 });

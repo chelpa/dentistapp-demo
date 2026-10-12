@@ -2,30 +2,31 @@
 > dentistapp-mvp@0.2.1 test
 > node scripts/test.mjs
 
-✔ Sunday anchors to Monday; work week excludes weekend (2.30825ms)
-✔ week navigation crosses months and years (0.495541ms)
-✔ civil date navigation does not drift across Chile daylight saving (0.0855ms)
-✔ date validation rejects empty, malformed, nonexistent and rollover dates (0.168375ms)
-✔ valid bounds: 08:00, 19:45 plus 15 min, end exactly 20:00 (0.190083ms)
-✔ reject invalid times, hours and duration granularity (0.155333ms)
-✔ same dentist conflicts even on different chair and patient (0.099333ms)
-✔ same chair conflicts with different dentist (0.058667ms)
-✔ adjacent appointments do not conflict; overlap by 15 minutes does (0.071709ms)
-✔ different date or both independent resources permit simultaneous appointments (0.099042ms)
-✔ cancelled appointments release resources but reactivating must recheck conflicts (0.0685ms)
-✔ waiting and completed appointments still occupy their reserved time (0.065542ms)
-✔ a status update excludes its own appointment (0.043375ms)
-✔ legacy appointments keep no fabricated chair; dentist conflicts remain enforced (0.216ms)
-✔ resource filters combine and expose unassigned legacy bookings (0.096458ms)
-✔ simultaneous appointments occupy separate lanes (7.4415ms)
-✔ nested and chained overlaps receive safe shared lane counts (0.121792ms)
-✔ lane calculation skips invalid entries without mutating appointments (0.104375ms)
-✔ creation rejects past time today and historical dates with injectable clock (0.074584ms)
-ℹ tests 19
+✔ Sunday anchors to Monday; work week excludes weekend (2.005916ms)
+✔ week navigation crosses months and years (0.097542ms)
+✔ civil date navigation does not drift across Chile daylight saving (0.084916ms)
+✔ date validation rejects empty, malformed, nonexistent and rollover dates (0.149834ms)
+✔ valid bounds: 08:00, 19:45 plus 15 min, end exactly 20:00 (0.155333ms)
+✔ reject invalid times, hours and duration granularity (0.150709ms)
+✔ same dentist conflicts even on different chair and patient (0.095667ms)
+✔ same chair conflicts with different dentist (0.05725ms)
+✔ adjacent appointments do not conflict; overlap by 15 minutes does (0.070875ms)
+✔ different date or both independent resources permit simultaneous appointments (0.102584ms)
+✔ cancelled appointments release resources but reactivating must recheck conflicts (0.49075ms)
+✔ waiting and completed appointments still occupy their reserved time (0.08125ms)
+✔ a status update excludes its own appointment (0.047708ms)
+✔ legacy appointments keep no fabricated chair; dentist conflicts remain enforced (0.221792ms)
+✔ resource filters combine and expose unassigned legacy bookings (0.092625ms)
+✔ simultaneous appointments occupy separate lanes (7.5955ms)
+✔ nested and chained overlaps receive safe shared lane counts (0.11725ms)
+✔ lane calculation skips invalid entries without mutating appointments (0.074291ms)
+✔ creation rejects past time today and historical dates with injectable clock (0.074875ms)
+✔ RADO evidence logs retain the exact bytes bound by the manifest (1.751333ms)
+ℹ tests 20
 ℹ suites 0
-ℹ pass 19
+ℹ pass 20
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 63.689125
+ℹ duration_ms 66.121167

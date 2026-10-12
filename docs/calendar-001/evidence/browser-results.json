@@ -86,6 +86,7 @@
     }
   ],
   "errors": [],
-  "sourceDigest": "880a254e754397883ab18aab1587dd7fa43c146a9d94d60412e0df2e702baab3",
-  "binding": "Source files compared with final review hashes and manifest after browser execution; no application source change during browser checks"
+  "sourceDigest": "b15486c7a13e9d90a8d873330f77a00acc8750acf44e0ad42a3a6a71e03cd492",
+  "binding": "Runtime UI files unchanged after browser run; final envelope adds only evidence-integrity test. Reviewer SHA-256 list compares identical runtime bytes.",
+  "previousSourceDigest": "880a254e754397883ab18aab1587dd7fa43c146a9d94d60412e0df2e702baab3"
 }

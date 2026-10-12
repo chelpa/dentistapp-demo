@@ -1,6 +1,6 @@
 {
   "case": "DENTISTAPP-CALENDAR-001",
-  "capturedAt": "2026-10-12T19:53:51.710Z",
+  "capturedAt": "2026-10-12T19:59:37.731Z",
   "baseline": "aaa83077c462b4de8b7a509ee76946ce69fdc89a",
   "checkoutHead": "aaa83077c462b4de8b7a509ee76946ce69fdc89a",
   "branch": "feature/weekly-calendar-chz-001-20261012",
@@ -9,7 +9,7 @@
     "npm": "11.19.1",
     "timezone": "America/Santiago"
   },
-  "sourceDigest": "880a254e754397883ab18aab1587dd7fa43c146a9d94d60412e0df2e702baab3",
+  "sourceDigest": "b15486c7a13e9d90a8d873330f77a00acc8750acf44e0ad42a3a6a71e03cd492",
   "sources": [
     {
       "path": ".github/workflows/pages.yml",
@@ -97,7 +97,7 @@
     },
     {
       "path": "tests/calendar.test.ts",
-      "sha256": "25ac3e6174740abee877232381cb0bcbd6c21a3ec54dde0ff2730acd410c0f53"
+      "sha256": "e91e98b49f2a4f3bb0f1496fc51989274e1cbb7da4a0bd3c3ada4f218f060aeb"
     },
     {
       "path": "tsconfig.json",
@@ -113,18 +113,18 @@
     {
       "name": "tests",
       "command": "npm test",
-      "startedAt": "2026-10-12T19:53:38.691Z",
-      "endedAt": "2026-10-12T19:53:39.723Z",
+      "startedAt": "2026-10-12T19:59:23.996Z",
+      "endedAt": "2026-10-12T19:59:25.022Z",
       "exitCode": 0,
       "signal": null,
       "log": "tests.log",
-      "logSha256": "7ff48a0286413ddd49d115207c458d8a7a52a5f62bb98153e705cabd81b4bb24"
+      "logSha256": "e6356d5d2c0a6a94375405b0d876975796629595407fb5c9d7ef62fff70cd4c0"
     },
     {
       "name": "typecheck",
       "command": "npm run typecheck",
-      "startedAt": "2026-10-12T19:53:39.724Z",
-      "endedAt": "2026-10-12T19:53:40.584Z",
+      "startedAt": "2026-10-12T19:59:25.023Z",
+      "endedAt": "2026-10-12T19:59:26.059Z",
       "exitCode": 0,
       "signal": null,
       "log": "typecheck.log",
@@ -133,18 +133,18 @@
     {
       "name": "static-build",
       "command": "npm run build:static",
-      "startedAt": "2026-10-12T19:53:40.584Z",
-      "endedAt": "2026-10-12T19:53:50.323Z",
+      "startedAt": "2026-10-12T19:59:26.059Z",
+      "endedAt": "2026-10-12T19:59:36.170Z",
       "exitCode": 0,
       "signal": null,
       "log": "static-build.log",
-      "logSha256": "4d5b284a6cbad6179371dd0c0892a1c002da4e2dec209cebd9394c8358465cd3"
+      "logSha256": "2a74b760660e16cb55c0f7362b4ff638a9b5e6e128d06612efdfd230b19b556f"
     },
     {
       "name": "dependency-tree",
       "command": "npm ls next postcss sharp source-map-js",
-      "startedAt": "2026-10-12T19:53:50.324Z",
-      "endedAt": "2026-10-12T19:53:50.750Z",
+      "startedAt": "2026-10-12T19:59:36.170Z",
+      "endedAt": "2026-10-12T19:59:36.643Z",
       "exitCode": 0,
       "signal": null,
       "log": "dependency-tree.log",
@@ -153,8 +153,8 @@
     {
       "name": "production-audit",
       "command": "npm audit --omit=dev --json",
-      "startedAt": "2026-10-12T19:53:50.750Z",
-      "endedAt": "2026-10-12T19:53:51.685Z",
+      "startedAt": "2026-10-12T19:59:36.643Z",
+      "endedAt": "2026-10-12T19:59:37.705Z",
       "exitCode": 1,
       "signal": null,
       "log": "production-audit.log",
@@ -163,8 +163,8 @@
     {
       "name": "diff-check",
       "command": "git diff --check",
-      "startedAt": "2026-10-12T19:53:51.685Z",
-      "endedAt": "2026-10-12T19:53:51.707Z",
+      "startedAt": "2026-10-12T19:59:37.706Z",
+      "endedAt": "2026-10-12T19:59:37.728Z",
       "exitCode": 0,
       "signal": null,
       "log": "diff-check.log",

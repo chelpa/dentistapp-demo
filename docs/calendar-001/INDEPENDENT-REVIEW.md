@@ -43,3 +43,11 @@ c8e175dd58666191241bbb360818899ec94621d9c29536b4c665c6aabcdec5c2  src/components
 e629150624f9e85e0e54686c8ed4bf2b0cd08ef53d1e525dc402a1727d7a09a0  src/lib/calendar.ts
 0495e21bbcbec2ce1ef72db0d2e9f914705086a7ef4a53395c09981b27884ffe  src/lib/demo.ts
 ```
+
+## Independent delta review · evidence integrity
+
+The separate reviewer repeated npm test after test20 was added: exit0, 20/20 cases PASS; evidence `evidence/reviewer-tests20.log`. Source hash tests/calendar.test.ts: `e91e98b49f2a4f3bb0f1496fc51989274e1cbb7da4a0bd3c3ada4f218f060aeb`. All five application hashes above remain identical. Final sourceDigest: `b15486c7a13e9d90a8d873330f77a00acc8750acf44e0ad42a3a6a71e03cd492`.
+
+Independent negative check: static-build.log contains three CR bytes. Raw bytes match manifest SHA-256 `2a74b760660e16cb55c0f7362b4ff638a9b5e6e128d06612efdfd230b19b556f`; normalizing CR changes it to `d145c32bd63332a8efc285cea8b3e7cd7a26a314b85d763bc57d24a858376192`, so test20 detects the transfer incident. Test20 binds log bytes and the source-list digest; it does not authenticate the manifest or individually revalidate current source files. No new finding. REVIEW_PASS_LIMITED maintained.
+
+This addendum records the independent reviewer's final message; application behavior and UI evidence remain those of the unchanged runtime files.
