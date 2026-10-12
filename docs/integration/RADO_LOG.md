@@ -114,10 +114,33 @@ Herramientas: `evidence/toolchain.txt` (Node v22.22.0, npm 10.9.4, Chromium 141.
   - `npm install` + `npm dedupe`, o `npm install` + `npm update postcss` (mismo lock): 8.5.28, `npm ls` exit 0, audit prod 0. Además sube el postcss de raíz a 8.5.29 y cambia metadatos de plataforma según la versión de npm.
 - **STATE:** técnica candidata. G3 de la candidata integrada no está cerrado: se repite sobre ella (plan §5c).
 
-## R-11 · Estado y compuertas
+## R-11 · Decisión del usuario (17:3x)
 
-- **STATE:** MAIN, PR1, PR2 y ROLES sin cambios. Sitio publicado = MAIN. Rama local `integration/dentistapp-v0.4` con el plan v2, sin código.
+- **AUTHORITY** (respuesta del usuario en la conversación): Claude es el único integrador; se ejecuta el plan v2 en `integration/dentistapp-v0.4`; se sube solo esa rama con un PR en borrador; matriz §5b aprobada tal cual; presupuestos del Dentista = los de sus pacientes; sillón obligatorio. MERGE y RELEASE siguen en HOLD.
+
+## R-12 · Ejecución I0–I8
+
+- **I0** 20:40:24Z `git ls-remote`: refs sin cambios.
+- **I1** `5ef915a`: `git merge --no-ff --no-commit 562514a`; `DentistApp.tsx` reescrito a partir de PR2 con la lógica de roles de ROLES.
+  - Conflictos semánticos resueltos: TS2739; pantallas con `viewData` y cruces con `data`; semana/día fijos al profesional del Dentista; sin bloques de reserva para quien no agenda.
+  - **Hallazgo nuevo:** `Finance` de PR1 guardaba con `onChange({...viewData,...})`. En la vista Dentista eso habría reemplazado todos los datos por la vista filtrada. Ahora usa callbacks del padre (`addBudget`, `updateTariff`) sobre todos los datos.
+  - **EVIDENCE:** tsc 0; `npm test` 20/20; build; prueba de roles en navegador conforme a §5b.
+- **I2** `5880af1`: subruta servida sin 4xx; actionlint OK.
+  - **ERROR PROPIO corregido:** había escrito que `main` versionaba `tsconfig.tsbuildinfo`. `git ls-tree -r 259ef73` muestra que no: era un archivo de mi compilación local. Corregido en el plan; el mensaje del commit `134fd46` conserva la frase errónea (historia sin reescribir).
+- **I3** `903de95`: evidencia completa en `evidence/I3_postcss_candidate.txt`.
+  - Entre la prueba de las 17:2x y esta, el registro npm publicó postcss 8.5.30: el resultado depende de la fecha y queda registrado.
+  - La comparación de JS exige compilar en la misma ruta, porque los hash de chunks dependen de la ruta absoluta.
+- **I4** `09f73fd`, **I5** `946917e`: pruebas unitarias 28 → 31; verificación en navegador del aviso v4 (v1 intacta) y del vínculo de evoluciones.
+- **I6** `ba0a6f5`: línea base guardada antes de corregir (`evidence/e2e_before_I6.*`).
+- **I7** `b8fd67c`, `8f0a4b1`: e2e 11/11, unitarias 34/34; Playwright 1.56.0 y axe-core 4.10.3 fijados.
+  - Defecto propio en la suite, corregido: la prueba de almacenamiento recargaba antes de leer el aviso v4.
+- **I8:** versión 0.4.0 y documentación; verificación final en clon limpio (R-13).
+
+## R-13 · Estado y compuertas
+
+
+- **STATE:** MAIN, PR1, PR2 y ROLES sin cambios. Sitio publicado = MAIN. `integration/dentistapp-v0.4` contiene la 0.4.0 integrada (I1–I8).
 - **AUTHORITY:**
   - El usuario aceptó AUDIT, PLAN, ORGANIZE y DIRECT; autorizó leer la carpeta del proyecto ChatGPT y borrar los 4 archivos de R-07.
   - Codex **recomienda** a Claude como integrador. Una recomendación no es autorización: falta la decisión del usuario.
-- **Compuertas:** EXECUTE = PENDIENTE (decisión humana) · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD · PUSH de la rama de integración = PENDIENTE. Que un build pase no autoriza publicar.
+- **Compuertas:** EXECUTE = HECHO · PUSH de la rama de integración + PR borrador = AUTORIZADO · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD. Que un build pase no autoriza publicar.

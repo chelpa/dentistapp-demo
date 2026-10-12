@@ -55,3 +55,17 @@ Los controles de interfaz y filtros sirven para explicar el producto, no para pr
 ### Verificación de la iteración 0.3
 
 Probada en navegador con la exportación estática: Recepción sin ficha clínica, creación de cita con la hora elegida, rechazo de solapamiento incluso con una cita completada, Dentista filtrado por profesional, cambio de pieza 16, guardado de nota con autor elegido, actualización de tratamiento, Admin en consulta sin controles de edición clínica, equipo y restablecimiento de demo. Se comprobó la navegación móvil y ausencia de desbordamiento horizontal del documento a 390 px. Los cambios ficticios de prueba se restablecieron.
+
+## Iteración 0.4 · integración de líneas paralelas
+
+El 2026-10-12 coexistían tres versiones de la demo: `main` publicado (0.2.1), la v0.3 local con vistas por rol (ZIP sha256 `40f16f97…`) y los PR #1/#2 con agenda diaria y semanal, sillones, duración variable, aranceles y presupuestos. La 0.4 las integra en la rama `integration/dentistapp-v0.4`, conservando la historia de las tres. Procedencia, decisiones y evidencia en [docs/integration/](docs/integration/INTEGRATION_PLAN.md).
+
+Cambios de producto: permisos de interfaz por vista para todo lo nuevo (las pantallas usan datos filtrados; los cruces se calculan sobre todos los datos), evoluciones vinculadas a una atención con validación, almacenamiento `v4` que no toca datos anteriores, y correcciones de accesibilidad (contraste por tokens, diálogos nativos, menú, pestañas, foco visible, objetivos táctiles en la semana).
+
+Seguridad de dependencias: `npm audit --omit=dev` en cero mediante `overrides` de npm para el PostCSS anidado de Next, verificado con una compilación controlada (JS y CSS idénticos byte a byte). Persisten 7 alertas en herramientas de desarrollo (Tailwind 3).
+
+### Verificación de la iteración 0.4
+
+`npm test` 34/34 (incluidas las 20 de agenda del PR #2); typecheck; exportación estática en `/dentistapp-demo`; `npm run test:e2e` 11/11: matriz de permisos, reglas de reserva, presupuestos, evoluciones con rechazos, persistencia y restablecimiento en los tres roles, teclado, axe sin violaciones automáticas en 40 vistas (1280 y 375 px) y sin desbordes de 320 a 1440 px. Un axe en cero no equivale a cumplimiento integral de accesibilidad.
+
+Siguen pendientes, como antes: autenticación y autorización en servidor, base de datos con restricciones de agenda bajo concurrencia, privacidad de datos de salud, consentimiento, historial clínico auditable y backups.

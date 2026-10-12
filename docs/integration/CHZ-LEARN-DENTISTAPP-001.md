@@ -104,6 +104,14 @@ Cada lección dice qué pasó, por qué importa y el control concreto que CHAZEW
 
 **Control.** En los informes, separar «indexación» de «acceso». Una demo «privada» exige protección en el hosting (autenticación o enlace restringido), no metaetiquetas.
 
+## L12 · Lo que enseñó la ejecución
+
+- **Conflictos semánticos de escritura.** Filtrar datos para una vista es seguro para leer, pero no para escribir: un componente que guarda `{...vistaFiltrada, cambio}` borra lo que esa vista no ve. Control: las vistas filtradas se pasan como solo lectura y las escrituras pasan por funciones que operan sobre el estado completo; una prueba e2e cruza roles (crear como Dentista y contar como Admin).
+- **Evidencia que depende del tiempo.** El mismo comando npm dio postcss 8.5.29 a las 17:2x y 8.5.30 una hora después. Control: registrar fecha, versión de npm y lock resultante, y repetir sobre la candidata exacta justo antes de decidir.
+- **Comparaciones de artefactos controladas.** Los hash de chunks de Next dependen de la ruta absoluta y el buildId es aleatorio. Control: compilar con y sin el cambio en la misma ruta y comparar JS/CSS; el HTML se compara ignorando el buildId.
+- **Línea base antes de corregir.** Correr la suite antes de las correcciones obligó a que las pruebas toleraran la versión vieja (pestañas sin `role="tab"`), y así quedó la evidencia de «antes» completa en vez de pruebas que solo pasan después.
+- **Errores propios en la documentación.** Una afirmación sobre el contenido de `main` (archivo versionado) venía de mi directorio de trabajo, no del árbol de git. Control: toda afirmación sobre una rama se verifica con `git ls-tree`/`git show <ref>:<ruta>`, nunca con el directorio de trabajo.
+
 ## Propuesta de control CHAZEWARE
 
 `SOURCE IDENTITY → BASELINE COMPARISON → DIVERGENCE DETECTION → INTEGRATION GATE → VERIFIED PROMOTION`

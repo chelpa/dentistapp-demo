@@ -4,8 +4,8 @@ Fecha: 2026-10-12 (America/Santiago) · Preparado por Claude (Opus 5.5) en una s
 
 **Plan v2:** incorpora la revisión independiente de Codex del 2026-10-12 (§9). Sigue sin ejecutarse.
 
-**Autorizaciones:** EXECUTE = PENDIENTE · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD · PUSH rama de integración = PENDIENTE.
-Este documento cubre AUDIT, PLAN, ORGANIZE y DIRECT. No se implementó ninguna función ni se escribió nada en GitHub.
+**Autorizaciones (actualizado tras la decisión del usuario, 17:3x):** EXECUTE = AUTORIZADO y ejecutado (I0–I8, §10) · PUSH rama de integración + PR borrador = AUTORIZADO · MERGE = HOLD · RELEASE = HOLD · PUSH `main` = HOLD.
+Las secciones 1–9 son el plan aprobado (AUDIT, PLAN, ORGANIZE, DIRECT). La sección 10 registra la ejecución.
 
 > **Cambio durante la auditoría.** A las 16:56–17:01 apareció en GitHub el PR #2 (`562514a`, agenda semanal, de Codex), apilado sobre el PR #1. Lo incorporé: lo identifiqué, reproduje sus pruebas y lo sondeé en navegador. Es la evidencia de que hay dos agentes trabajando a la vez en el mismo repo (ver D0).
 
@@ -17,7 +17,7 @@ No uso letras A/B/C, porque el PR #2 ya llama «A» a la línea del repo y la au
 
 | ID | Qué es | Identidad | `package.json` | Procedencia |
 |---|---|---|---|---|
-| **MAIN** | `main`, lo que publica GitHub Pages | `259ef732683745713f50deae7e786e888f8e484e` (10:26) | 0.2.1 | = `dentistapp-mvp-v0.2.1.zip` (sha256 `74dcca35…3f88e`) = carpeta `dentistapp-mvp 4` (manifiesto `c7653b5e6669cf64`), más `pages.yml`, `basePath`, `.gitignore` y `tsconfig.tsbuildinfo` |
+| **MAIN** | `main`, lo que publica GitHub Pages | `259ef732683745713f50deae7e786e888f8e484e` (10:26) | 0.2.1 | = `dentistapp-mvp-v0.2.1.zip` (sha256 `74dcca35…3f88e`) = carpeta `dentistapp-mvp 4` (manifiesto `c7653b5e6669cf64`), más `pages.yml`, `basePath` y `.gitignore` (añade `out`). *Corrección: antes decía que también versionaba `tsconfig.tsbuildinfo`; era un artefacto de mi compilación local, no está en `main`.* |
 | **ROLES** | «v0.3 local» con vistas por rol | `dentistapp-mvp-v0.3.zip` sha256 `40f16f971f45ea1ddcf43671fd0c95d01892334a70e27da291985b9ea9208ba2` (= `dentistapp-mvp.zip`) · manifiesto `d4b3b2c636738d98` | 0.3.0 | `/Users/chelpa/.codex/.chatgpt-projects/g-p-6aa8215c87e88191acb0ff85381ddc9d/`. ZIP de las 10:13. Sin git |
 | ROLES′ | Carpeta de trabajo de ROLES | `…/dentistapp-mvp/` · manifiesto `f2aae68e3727c383` | 0.3.0 | = ROLES + mis 6 cambios del script de despliegue. No es otra versión del producto |
 | **PR1** | PR #1, «DentistApp v0.3 candidate · agenda diaria, aranceles y presupuestos» | `aaa83077c462b4de8b7a509ee76946ce69fdc89a`. Draft, base `main`, 5 commits | 0.2.1 | Parte de MAIN |
@@ -235,3 +235,23 @@ G3 se decide aparte, con esa evidencia.
 | 5 | axe cero ≠ cumplimiento; teclado de selector, menú, pestañas y diálogos; herramientas fijadas | I6, I7, §5d, AC10 |
 | 6 | `v4` sin borrar `v1`/`v3`; sin sillones inventados ni pérdidas silenciosas; probar los 3 roles | I4, AC9 |
 | 7 | Gates separados; audit cero no es seguridad global | Fuera de alcance, AC3 |
+
+---
+
+## 10. Ejecución (EXECUTE) · 2026-10-12
+
+Decisiones del usuario: Claude como único integrador, Codex como revisor independiente; matriz §5b tal cual; presupuestos del Dentista filtrados por sus pacientes (D2b); sillón obligatorio (D7); push de la rama de integración y PR en borrador. MERGE y RELEASE siguen en HOLD.
+
+| Paso | Commit | Verificación |
+|---|---|---|
+| I0 | — | `git ls-remote` 20:40Z: `main` 259ef73, PR1 aaa8307, PR2 562514a sin cambios |
+| I1 | `5ef915a` merge de PR2 (incluye PR1) | 8 bloques resueltos; TS2739 corregido; conflicto semántico nuevo corregido: `Finance` guardaba con `onChange(viewData)` y habría borrado datos ocultos al Dentista. tsc OK, 20/20, build, prueba de roles |
+| I2 | `5880af1` | `basePath` restaurado; `pages.yml` solo desde `main` con pruebas; `ci.yml`. Subruta sin 4xx; actionlint |
+| I3 | `903de95` | Sobre la candidata exacta 5880af1: `postcss ^8.5.23` + `overrides {"postcss":"$postcss"}` + `npm install`. `npm ls` 0, audit prod 0, JS/CSS idénticos byte a byte en compilación controlada (`evidence/I3_postcss_candidate.txt`) |
+| I4 | `09f73fd` | Clave v4, `normalizeState`/`loadState`; 8 pruebas unitarias |
+| I5 | `946917e` | `validateNoteLink`; 3 pruebas unitarias (5 rechazos); navegador: vínculo guardado, manipulación rechazada |
+| I6 | `ba0a6f5` | Línea base `evidence/e2e_before_I6.*` (contraste en 40/40 vistas, target-size, región desplazable, selector cortado, teclado) → corregido |
+| I7 | `b8fd67c`, `8f0a4b1` | e2e 11/11 (`evidence/e2e_after_I7.*`): axe 0 violaciones automáticas en 40 vistas, sin desbordes 320–1440 px, sin errores; unitarias 34/34 |
+| I8 | (este commit) | Versión 0.4.0, README, PUBLISH_DEMO, AUDIT_NOTE, CHANGELOG, RADO; verificación final en clon limpio |
+
+Cambio de prueba de Codex a revisar: en `tests/calendar.test.ts`, la aserción «el seed no tiene sillones» pasó a «sillones conocidos y sin cruces», porque la 0.4 crea datos nuevos con sillón (D7). La regla de no inventar sillones en datos antiguos sigue cubierta por el fixture de esa prueba y por `tests/storage.test.ts`.
