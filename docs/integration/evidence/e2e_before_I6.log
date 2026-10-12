@@ -8,7 +8,7 @@ not ok 1 - roles: each view matches the approved permission matrix
   ---
   duration_ms: 1727.80849
   type: 'test'
-  location: '/tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:104:1'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:104:1'
   failureType: 'testCodeFailure'
   error: |-
     reception has no clinical tabs
@@ -26,7 +26,7 @@ not ok 1 - roles: each view matches the approved permission matrix
   actual:
   operator: 'deepStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:114:10)
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:114:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
   ...
@@ -53,7 +53,7 @@ not ok 5 - storage: v4 notice, earlier keys untouched, reload and reset in the t
   ---
   duration_ms: 2965.791625
   type: 'test'
-  location: '/tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:238:1'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:238:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected values to be strictly equal:
@@ -66,7 +66,7 @@ not ok 5 - storage: v4 notice, earlier keys untouched, reload and reset in the t
   actual: 1
   operator: 'strictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:259:12)
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:259:12)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
@@ -75,7 +75,7 @@ not ok 6 - keyboard: role selector, menu, tabs and every dialog
   ---
   duration_ms: 661.10739
   type: 'test'
-  location: '/tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:273:1'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:273:1'
   failureType: 'testCodeFailure'
   error: 'role selector shows focus'
   code: 'ERR_ASSERTION'
@@ -84,7 +84,7 @@ not ok 6 - keyboard: role selector, menu, tabs and every dialog
   actual: false
   operator: '=='
   stack: |-
-    TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:278:10)
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:278:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
@@ -93,7 +93,7 @@ not ok 7 - keyboard: mobile menu opens, traps nothing hidden, closes with Escape
   ---
   duration_ms: 664.342615
   type: 'test'
-  location: '/tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:328:1'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:328:1'
   failureType: 'testCodeFailure'
   error: |-
     closed off-canvas menu is not focusable
@@ -106,7 +106,7 @@ not ok 7 - keyboard: mobile menu opens, traps nothing hidden, closes with Escape
   actual: false
   operator: 'strictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:330:10)
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:330:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
@@ -115,7 +115,7 @@ not ok 8 - axe: no automated WCAG violations on any view at 1280px
   ---
   duration_ms: 36707.88246
   type: 'test'
-  location: '/tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:365:3'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:365:3'
   failureType: 'testCodeFailure'
   error: |-
     Expected values to be strictly deep-equal:
@@ -171,7 +171,7 @@ not ok 8 - axe: no automated WCAG violations on any view at 1280px
     19: 'admin/equipo: color-contrast×59'
   operator: 'deepStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:376:12)
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:376:12)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
@@ -180,7 +180,7 @@ not ok 9 - axe: no automated WCAG violations on any view at 375px
   ---
   duration_ms: 40800.739526
   type: 'test'
-  location: '/tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:365:3'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:365:3'
   failureType: 'testCodeFailure'
   error: |-
     Expected values to be strictly deep-equal:
@@ -236,7 +236,7 @@ not ok 9 - axe: no automated WCAG violations on any view at 375px
     19: 'admin/equipo: color-contrast×42, scrollable-region-focusable×1'
   operator: 'deepStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:376:12)
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:376:12)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...
@@ -245,7 +245,7 @@ not ok 10 - responsive: no horizontal scroll at 320–1440 px and a legible role
   ---
   duration_ms: 60221.733411
   type: 'test'
-  location: '/tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:381:1'
+  location: '<scratch>/integ/tests/e2e/demo.e2e.mjs:381:1'
   failureType: 'testCodeFailure'
   error: |-
     Expected values to be strictly deep-equal:
@@ -303,7 +303,7 @@ not ok 10 - responsive: no horizontal scroll at 320–1440 px and a legible role
     20: '390px dentist/tratamientos: role selector text clipped'
   operator: 'deepStrictEqual'
   stack: |-
-    TestContext.<anonymous> (file:///tmp/claude-0/-home-claude/9340b22e-bb2b-5529-b41a-322843efdc94/scratchpad/integ/tests/e2e/demo.e2e.mjs:396:10)
+    TestContext.<anonymous> (file://<scratch>/integ/tests/e2e/demo.e2e.mjs:396:10)
     async Test.run (node:internal/test_runner/test:1054:7)
     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
   ...

@@ -32,3 +32,15 @@ jobs:
         env:
           DENTISTAPP_BASE_PATH: /dentistapp-demo
           NEXT_TELEMETRY_DISABLED: "1"
+      # End-to-end: roles, booking rules, budgets, evolutions, storage, keyboard,
+      # axe (WCAG 2.2 AA automated rules) and 320–1440 px layouts.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+        env:
+          E2E_REPORT: e2e-report.json
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-report
+          path: e2e-report.json
+          if-no-files-found: ignore
