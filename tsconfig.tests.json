@@ -6,8 +6,16 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "rootDir": "."
   },
-  "include": ["tests/**/*.ts", "src/lib/calendar.ts", "src/lib/demo.ts"]
+  "include": [
+    "tests/**/*.ts",
+    "src/lib/calendar.ts",
+    "src/lib/demo.ts",
+    "src/lib/demoRoles.ts",
+    "src/lib/storage.ts"
+  ]
 }

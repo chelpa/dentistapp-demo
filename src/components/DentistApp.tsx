@@ -7,6 +7,7 @@ import { appointmentStatuses, chairs, findConflict, isPastAppointment, type Slot
 import MonthlyCalendar from "@/components/MonthlyCalendar";
 import Odontogram from "@/components/Odontogram";
 import DemoTeam from "@/components/DemoTeam";
+import { type KeyValueStore, STORE_KEY, loadState } from "@/lib/storage";
 import { type DemoRole, demoRoles, canSchedule, canEditClinical, canViewClinical, canEditTreatments, canViewTreatments, canEditTariffs, canCreateBudget, canViewTeam, dataForRole } from "@/lib/demoRoles";
 import {
   Activity, ArrowLeft, ArrowRight, CalendarDays, Check, ChevronDown, ChevronLeft, ChevronRight,
@@ -20,7 +21,6 @@ import {
 
 type Page = "dashboard" | "patients" | "agenda" | "treatments" | "finance" | "team";
 type ProfileTab = "overview" | "clinical" | "treatments";
-const STORE = "dentistapp-mvp-demo-v3";
 const nav: { id: Page; label: string; icon: typeof LayoutDashboard }[] = [
   { id:"dashboard", label:"Inicio", icon:LayoutDashboard },
   { id:"agenda", label:"Agenda", icon:CalendarDays },
@@ -64,13 +64,17 @@ export default function DentistApp() {
   const [form,setForm] = useState({ patientId:"p1", date:"", time:"09:00", dentist:dentists[0], type:treatmentTypes[0],duration:45,chair:"" });
   const today = dayOffset(0);
   useEffect(() => {
-    try { const saved=localStorage.getItem(STORE); const parsed=saved ? JSON.parse(saved) as DemoState : seedDemo(); setData({...parsed, toothEvents: Array.isArray(parsed.toothEvents) ? parsed.toothEvents : [],tariffs:Array.isArray(parsed.tariffs)?parsed.tariffs:seedDemo().tariffs,budgets:Array.isArray(parsed.budgets)?parsed.budgets:[]}); }
-    catch { setData(seedDemo()); }
+    // v4 key; earlier keys (v1, v3) are only read to inform, never modified (plan I4).
+    let store: KeyValueStore | null = null;
+    try { store = window.localStorage; } catch { store = null; }
+    const loaded = store ? loadState(store) : { state: seedDemo(), notices: ["El navegador no permite guardar datos: los cambios durarán esta sesión."] };
+    setData(loaded.state);
+    if (loaded.notices.length) setNotice(loaded.notices.join(" "));
     setAgendaDate(dayOffset(0));
     setForm(f=>({...f,date:dayOffset(0)}));
   },[]);
-  useEffect(() => { if(data) { try { localStorage.setItem(STORE,JSON.stringify(data)); } catch { setNotice("El navegador no permite guardar. Los cambios durarán esta sesión."); } } },[data]);
-  useEffect(() => { if(notice) { const timer=setTimeout(()=>setNotice(""),4000); return ()=>clearTimeout(timer); } },[notice]);
+  useEffect(() => { if(data) { try { localStorage.setItem(STORE_KEY,JSON.stringify(data)); } catch { setNotice("El navegador no permite guardar. Los cambios durarán esta sesión."); } } },[data]);
+  useEffect(() => { if(notice) { const timer=setTimeout(()=>setNotice(""),Math.max(4000,notice.length*70)); return ()=>clearTimeout(timer); } },[notice]);
   // Screens use viewData (filtered by role); booking conflicts always use the full data.
   const viewData = useMemo(() => data ? dataForRole(data, role, professional) : null, [data, role, professional]);
   const selected = viewData?.patients.find(p=>p.id===selectedId) ?? null;
