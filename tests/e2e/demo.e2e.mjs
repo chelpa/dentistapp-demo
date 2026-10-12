@@ -334,12 +334,27 @@ test("REVIEW P2: if rendering still fails, the error screen keeps a copy and res
 // ── AC10 · keyboard (plan §5d) ──────────────────────────────────────────────
 test("keyboard: role selector, menu, tabs and every dialog", async () => {
   const { page, errors, close } = await open();
-  // Role selector: reachable with Tab, visible focus, arrows change the view
-  for (let i = 0; i < 30 && !(await page.evaluate(() => document.activeElement?.getAttribute("aria-label") === "Rol de demostración")); i++) await page.keyboard.press("Tab");
+  // Role selector: reachable with Tab, visible focus, operable from the keyboard.
+  const focusSelector = async () => { for (let i = 0; i < 30 && !(await page.evaluate(() => document.activeElement?.getAttribute("aria-label") === "Rol de demostración")); i++) await page.keyboard.press("Tab"); };
+  await focusSelector();
   const ring = await page.evaluate(() => { const s = getComputedStyle(document.activeElement); return { outline: s.outlineStyle !== "none" && !s.outlineColor.endsWith(", 0)") && s.outlineColor !== "transparent" && parseFloat(s.outlineWidth) > 0, shadow: s.boxShadow !== "none" }; });
   assert.ok(ring.outline || ring.shadow, "role selector shows focus");
-  await page.keyboard.press("ArrowDown");
-  assert.equal(await page.getByLabel("Rol de demostración").inputValue(), "dentist");
+  const value = () => page.getByLabel("Rol de demostración").inputValue();
+  // Type-ahead (first letter of the option) changes a closed <select> on every platform.
+  await page.keyboard.press("d");
+  assert.equal(await value(), "dentist", "type-ahead D -> Dentista");
+  // Chromium joins letters typed within 1 s into one search ("da" matches nothing).
+  await page.waitForTimeout(1100);
+  await focusSelector();
+  await page.keyboard.press("a");
+  assert.equal(await value(), "admin", "type-ahead A -> Admin");
+  // Arrow keys change the value in place on Linux/Windows; on macOS Chromium they open the
+  // native menu instead (platform behaviour of <select>, seen in the Codex review run).
+  if (process.platform !== "darwin") {
+    await focusSelector();
+    await page.keyboard.press("ArrowUp");
+    assert.equal(await value(), "dentist", "ArrowUp -> Dentista");
+  }
   await setRole(page, "reception");
   // Desktop navigation marks the current section
   await go(page, "Agenda");
