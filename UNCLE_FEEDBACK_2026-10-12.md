@@ -1,7 +1,7 @@
 # DentistApp · Feedback de dentista · 2026-10-12
 
 ## Fuente
-Mensajes proporcionados por el usuario (su tío, dentista), más capturas de la agenda Dentidesk. No se usaron fichas clínicas ni datos de pacientes reales de las capturas.
+Mensajes y descripciones de flujo de trabajo clínico proporcionados por el usuario (su tío, dentista). No se utilizaron fichas clínicas ni datos de pacientes reales en el análisis de estos requisitos.
 
 ## Requisitos
 - P0: Agenda diaria dividida por intervalos horarios; duración por paciente configurable.
